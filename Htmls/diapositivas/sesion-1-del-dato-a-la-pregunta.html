@@ -1,0 +1,2655 @@
+<!DOCTYPE html>
+<html lang="es" data-tema="ucompensar">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Presentación de clase: Sesión 1 (Del dato a la pregunta), Análisis Estadístico de la Información.">
+    <meta name="generator" content="diapositivas-clase · construir.py">
+    <title>Diapositivas · Sesión 1 — Del dato a la pregunta · Análisis Estadístico de la Información</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400&family=Roboto:ital,wght@0,300;0,400;0,500;0,700;0,900;1,400&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" rel="stylesheet">
+
+    <!-- Prism, las mismas gramáticas que carga LP-CORE. `manual` antes del
+         núcleo: el resaltado lo dispara el visor cuando el mazo ya existe. -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css" rel="stylesheet">
+    <script>window.Prism = window.Prism || {}; window.Prism.manual = true;</script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-python.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-bash.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-docker.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-yaml.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-sql.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-toml.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-json.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-r.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-basic.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-visual-basic.min.js"></script>
+    <script>
+        window.MathJax = { tex: { inlineMath: [['\\(', '\\)']], displayMath: [['$$', '$$'], ['\\[', '\\]']] }, svg: { fontCache: 'global', mtextInheritFont: true } };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
+    <style>
+        /* ============================================================
+           PALETA LP-CORE — la misma del material del curso
+        ============================================================ */
+        :root {
+            --primary: #3D008D;
+            --primary-rgb: 61, 0, 141;
+            --secondary: #ED1E79;
+            --secondary-rgb: 237, 30, 121;
+            --secondary-texto: #ED1E79;   /* el secundario como texto sobre blanco */
+            --navy: #001A4D;
+            --navy-2: #002868;
+            --gold: #FDB913;
+            --teal: #0E7490;
+            --bg: #F8FAFC;
+            --texto: #1E293B;
+            --tinta: #0F172A;
+            --gris: #64748B;
+            --gris-claro: #94A3B8;
+            --borde: #E2E8F0;
+            --lila: #F5F0FA;
+            --grad: linear-gradient(140deg, #3D008D 0%, #ED1E79 100%);
+            --grad-navy: linear-gradient(180deg, #001A4D 0%, #002868 100%);
+            --sombra: 0 4px 20px rgba(0, 0, 0, 0.08);
+            --fuente: 'Montserrat', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+            --W: 1280px;
+            --H: 720px;
+        }
+
+        /* ============================================================
+           TEMA EL BOSQUE — verde #012820 y naranja #FF6600, como el
+           material de Series de tiempo, Muestreo y Estadística espacial.
+           Mismas tipografías y mismos degradados; solo cambian los colores.
+        ============================================================ */
+        :root[data-tema="elbosque"] {
+            --primary: #012820;
+            --primary-rgb: 1, 40, 32;
+            --secondary: #FF6600;
+            --secondary-rgb: 255, 102, 0;
+            --secondary-texto: #C2410C;   /* #FF6600 sobre blanco no llega a 4.5:1 */
+            --navy: #012820;
+            --navy-2: #001F18;
+            --gold: #FFC24B;
+            --lila: #F0FDF4;
+            --grad: linear-gradient(140deg, #012820 0%, #FF6600 100%);
+            --grad-navy: linear-gradient(180deg, #012820 0%, #001F18 100%);
+        }
+        /* El degradado se reparte en la caja del número: a lo ancho de la
+           diapositiva, a los dígitos solo les tocaría el verde casi negro. */
+        :root[data-tema="elbosque"] .numero-grande { width: fit-content; padding-right: 0.04em; }
+
+        /* ============================================================
+           TEMA UCOMPENSAR — morado #691E7A y naranja #F46201, como el
+           material de Procesamiento de Datos (Esp. Big Data). El ámbar
+           #FAA012 solo sobre morado; el naranja como texto, #B84A00.
+           Su material usa Roboto: la presentación también.
+        ============================================================ */
+        :root[data-tema="ucompensar"] {
+            --primary: #691E7A;
+            --primary-rgb: 105, 30, 122;
+            --secondary: #F46201;
+            --secondary-rgb: 244, 98, 1;
+            --secondary-texto: #B84A00;   /* #F46201 sobre blanco da 3,2:1 */
+            --navy: #3A0F47;
+            --navy-2: #4B1558;
+            --gold: #FAA012;
+            --lila: #F7F0FA;
+            --grad: linear-gradient(140deg, #691E7A 0%, #F46201 100%);
+            --grad-navy: linear-gradient(180deg, #3A0F47 0%, #4B1558 100%);
+            --fuente: 'Roboto', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+        }
+        /* Contraste (WCAG 2.1) e identidad del material de UCompensar: pie en
+           pizarra, etiquetas más opacas, degradado de texto naranja (#B84A00)
+           donde va texto blanco encima, ítem activo morado con filete naranja
+           y títulos en 700 (Roboto no carga el 800). */
+        :root[data-tema="ucompensar"] .numero-grande { width: fit-content; padding-right: 0.04em; }
+        :root[data-tema="ucompensar"] .idea .etq-idea,
+        :root[data-tema="ucompensar"] .ra-caja .etq { color: rgba(var(--primary-rgb), 0.85); }
+        :root[data-tema="ucompensar"] .pie { color: #566B7F; }
+        :root[data-tema="ucompensar"] .cierre .pie { color: rgba(255, 255, 255, 0.62); }
+        :root[data-tema="ucompensar"] .item-seccion.hecha { color: rgba(255, 255, 255, 0.6); }
+        :root[data-tema="ucompensar"] .item-seccion.actual,
+        :root[data-tema="ucompensar"] #indice .item-seccion.actual,
+        :root[data-tema="ucompensar"] #indice .item-seccion.actual:hover {
+            background: linear-gradient(135deg, #691E7A, #8A2E9E);
+            box-shadow: inset 4px 0 0 #F46201, 0 8px 18px rgba(105, 30, 122, 0.3);
+        }
+        :root[data-tema="ucompensar"] .portada .chip-semana,
+        :root[data-tema="ucompensar"] .btn-nav.sig { background: linear-gradient(140deg, #691E7A 0%, #B84A00 100%); }
+        :root[data-tema="ucompensar"] .codigo.con-foco .linea.foco { background: rgba(var(--secondary-rgb), 0.10); }
+        :root[data-tema="ucompensar"] .diapo.idea { background: linear-gradient(135deg, rgba(105, 30, 122, 0.06), rgba(244, 98, 1, 0.08)), #fff; }
+        :root[data-tema="ucompensar"] .portada h1,
+        :root[data-tema="ucompensar"] .principal h2 { font-weight: 700; }
+        :root[data-tema="ucompensar"] .cierre .cuerpo h3 { color: var(--gold); }
+        :root[data-tema="ucompensar"] .caja.warn { border-color: #B84A00; background: #FFF7ED; }
+        :root[data-tema="ucompensar"] .caja.warn .caja-etiqueta { background: #B84A00; }
+
+        * { box-sizing: border-box; }
+
+        html, body {
+            margin: 0;
+            height: 100%;
+            overflow: hidden;
+            font-family: var(--fuente);
+            color: var(--texto);
+            background: #E9EDF3;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* Sin ligaduras: Fira Code dibuja `<=` como «≤» y `!=` como «≠», y un
+           estudiante que copia a mano lo proyectado escribe un carácter que
+           Python no acepta. */
+        code, pre, kbd { font-family: 'Fira Code', monospace; font-variant-ligatures: none; font-feature-settings: "liga" 0, "calt" 0; }
+
+        button { font-family: inherit; }
+
+        button:focus-visible, a:focus-visible {
+            outline: 2px solid var(--secondary);
+            outline-offset: 2px;
+        }
+
+        ::-webkit-scrollbar { width: 8px; height: 8px; }
+        ::-webkit-scrollbar-track { background: #f1f5f9; }
+        ::-webkit-scrollbar-thumb { background: linear-gradient(180deg, var(--primary), var(--secondary)); border-radius: 4px; }
+
+        .lp-gradient { background: var(--grad); }
+        .lp-header { background: var(--grad-navy); }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* ============================================================
+           ESCENARIO — un lienzo fijo de 1280 × 720 que se escala
+        ============================================================ */
+        #escenario { position: fixed; inset: 0; }
+
+        #mazo {
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            width: var(--W);
+            height: var(--H);
+            transform-origin: center center;
+            box-shadow: 0 20px 60px rgba(0, 26, 77, 0.18);
+            background: #fff;
+            overflow: hidden;
+        }
+
+        .diapo {
+            position: absolute;
+            inset: 0;
+            background: #fff;
+            visibility: hidden;
+            opacity: 0;
+            --k: 1;
+        }
+
+        .diapo.activa {
+            visibility: visible;
+            opacity: 1;
+            z-index: 2;
+        }
+
+        .diapo.activa > .marco { animation: fadeIn 0.4s ease-out both; }
+
+        .marco {
+            position: absolute;
+            inset: 0;
+            padding: 42px 72px 58px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* --- Cabecera: la de `SectionHeader` del material ------------- */
+        .cabecera {
+            display: flex;
+            align-items: center;
+            gap: 18px;
+            padding-bottom: 16px;
+            margin-bottom: 24px;
+            border-bottom: 1px solid var(--borde);
+            flex-shrink: 0;
+        }
+
+        .ficha-icono {
+            width: 50px;
+            height: 50px;
+            border-radius: 13px;
+            background: var(--grad);
+            color: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 12px rgba(var(--primary-rgb), 0.25);
+            flex-shrink: 0;
+        }
+
+        .ficha-icono svg { width: 26px; height: 26px; }
+
+        .antetitulo {
+            font-size: 12.5px;
+            font-weight: 700;
+            letter-spacing: 0.14em;
+            text-transform: uppercase;
+            color: var(--secondary-texto);
+            margin-bottom: 4px;
+        }
+
+        .cabecera h2 {
+            margin: 0;
+            font-size: 33px;
+            line-height: 1.18;
+            font-weight: 700;
+            color: var(--tinta);
+            letter-spacing: -0.01em;
+        }
+
+        /* --- Cuerpo ---------------------------------------------------- */
+        /* El cuerpo centra en vertical lo que lleva: una diapositiva corta no
+           se queda colgada del título. El margen negativo con su relleno deja
+           sitio a las sombras de tarjetas y bloques, que `overflow: hidden`
+           cortaría en el borde. */
+        .cuerpo {
+            flex: 1;
+            min-height: 0;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            justify-content: safe center;
+            padding: 10px 14px 14px;
+            margin: -10px -14px -14px;
+            font-size: calc(23px * var(--k));
+            line-height: 1.5;
+            color: var(--texto);
+        }
+
+        .diapo.arriba .cuerpo { justify-content: flex-start; }
+
+        /* Ningún bloque cede altura: si no cabe, que desborde y lo vea el
+           ajuste. Con el encogimiento por defecto de flex, un bloque de código
+           se recortaba por abajo en silencio y el cuerpo «cabía». */
+        .cuerpo > * { flex-shrink: 0; }
+
+        .cuerpo > :first-child, .col > :first-child, .caja-cuerpo > :first-child { margin-top: 0; }
+        .cuerpo > :last-child, .col > :last-child, .caja-cuerpo > :last-child { margin-bottom: 0; }
+
+        .cuerpo p { margin: 0 0 0.65em; }
+        .cuerpo strong { color: var(--tinta); font-weight: 700; }
+        .cuerpo em { font-style: italic; }
+        .cuerpo a { color: var(--primary); text-decoration: underline; text-decoration-color: rgba(var(--secondary-rgb), 0.5); text-underline-offset: 3px; }
+
+        .cuerpo h3 {
+            color: var(--secondary-texto);
+            font-weight: 600;
+            font-size: 1.1em;
+            margin: 0.9em 0 0.35em;
+            line-height: 1.25;
+        }
+
+        .cuerpo h4 {
+            color: var(--navy);
+            font-weight: 700;
+            font-size: 0.98em;
+            margin: 0.8em 0 0.3em;
+        }
+
+        .cuerpo ul, .cuerpo ol { margin: 0 0 0.7em; padding-left: 1.25em; }
+        .cuerpo li { margin: 0 0 0.38em; padding-left: 0.2em; }
+        .cuerpo li::marker { color: var(--secondary); font-weight: 700; }
+        .cuerpo li > ul, .cuerpo li > ol { margin: 0.3em 0 0.2em; font-size: 0.9em; }
+
+        .cuerpo code:not(pre code) {
+            background: #F1F5F9;
+            color: var(--tinta);
+            padding: 0.08em 0.36em;
+            border-radius: 5px;
+            font-size: 0.86em;
+        }
+
+        .cuerpo kbd {
+            display: inline-block;
+            padding: 0.05em 0.45em;
+            border: 1px solid #CBD5E1;
+            border-bottom-width: 3px;
+            border-radius: 6px;
+            background: #fff;
+            font-size: 0.8em;
+            color: var(--tinta);
+        }
+
+        .cuerpo mark { background: rgba(253, 185, 19, 0.35); color: inherit; padding: 0 0.15em; border-radius: 3px; }
+
+        .cita {
+            margin: 0.4em 0 0.8em;
+            padding: 0.1em 0 0.1em 0.9em;
+            border-left: 4px solid var(--secondary);
+            color: var(--primary);
+            font-weight: 600;
+            font-size: 1.08em;
+            line-height: 1.4;
+        }
+
+        .cita p { margin: 0 0 0.3em; }
+
+        /* --- Tablas: las de `prose-lp` -------------------------------- */
+        .cuerpo table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.82em;
+            margin: 0.2em 0 0.8em;
+            background: #fff;
+        }
+
+        .cuerpo th {
+            background: var(--lila);
+            color: var(--navy);
+            text-align: left;
+            padding: 0.5em 0.75em;
+            border: 1px solid var(--borde);
+            font-weight: 700;
+        }
+
+        .cuerpo td {
+            padding: 0.5em 0.75em;
+            border: 1px solid var(--borde);
+            vertical-align: top;
+        }
+
+        /* --- Columnas -------------------------------------------------- */
+        .columnas {
+            display: grid;
+            gap: 40px;
+            align-items: start;
+        }
+
+        .columnas.centradas { align-items: center; }
+        .col { min-width: 0; }
+
+        /* --- Cajas: `Box` de LP-CORE ----------------------------------- */
+        .caja {
+            border-left: 5px solid var(--primary);
+            background: var(--lila);
+            border-radius: 14px;
+            padding: 0.7em 1em 0.75em;
+            margin: 0.3em 0 0.8em;
+            font-size: 0.9em;
+        }
+
+        .caja-etiqueta {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5em;
+            font-size: 0.6em;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            font-weight: 700;
+            color: #fff;
+            background: var(--primary);
+            border-radius: 5px;
+            padding: 0.25em 0.7em;
+            margin-bottom: 0.55em;
+        }
+
+        .caja.tip { border-color: #15803D; background: #F0FDF4; }
+        .caja.tip .caja-etiqueta { background: #15803D; }
+        .caja.warn { border-color: #B45309; background: #FFFBEB; }
+        .caja.warn .caja-etiqueta { background: #B45309; }
+        .caja.danger { border-color: #B91C1C; background: #FEF2F2; }
+        .caja.danger .caja-etiqueta { background: #B91C1C; }
+        /* Una fórmula en bloque suele ser la idea de la diapositiva: más grande
+           que el texto, para que se lea desde el fondo del aula. */
+        .cuerpo mjx-container[display="true"] { font-size: 138%; margin: 0.5em 0 !important; }
+        .caja mjx-container[display="true"], .tarjeta mjx-container[display="true"], td mjx-container[display="true"] { font-size: 112%; }
+        .caja.definicion { border-color: var(--primary); background: var(--lila); }
+        .caja.definicion .caja-etiqueta { background: var(--primary); }
+        .caja.ejemplo { border-color: var(--teal); background: #F0F9FF; }
+        .caja.ejemplo .caja-etiqueta { background: var(--teal); }
+        .caja p { margin-bottom: 0.4em; }
+
+        /* --- La motivación del material, en pequeño --------------------- */
+        .idea-caja {
+            border-radius: 18px;
+            border: 1px solid rgba(var(--primary-rgb), 0.15);
+            background: linear-gradient(135deg, rgba(var(--primary-rgb), 0.055) 0%, rgba(14, 116, 144, 0.05) 45%, rgba(var(--secondary-rgb), 0.10) 100%);
+            padding: 0.8em 1.1em;
+            margin: 0.3em 0 0.8em;
+            display: flex;
+            gap: 0.8em;
+        }
+
+        .idea-caja .punto {
+            width: 1.7em;
+            height: 1.7em;
+            border-radius: 999px;
+            background: var(--grad);
+            color: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8em;
+            flex-shrink: 0;
+            margin-top: 0.1em;
+        }
+
+        .idea-caja .texto { color: var(--primary); font-weight: 600; line-height: 1.4; }
+        .idea-caja .texto p { margin: 0 0 0.3em; }
+
+        /* --- Tarjetas (`lp-card`) y flujo (`Pipeline`) ------------------ */
+        .tarjetas {
+            display: grid;
+            grid-template-columns: repeat(var(--n, 2), minmax(0, 1fr));
+            gap: 22px;
+            margin: 0.2em 0 0.8em;
+        }
+
+        .tarjeta {
+            background: #fff;
+            border-radius: 16px;
+            box-shadow: var(--sombra);
+            border: 1px solid #EEF2F7;
+            border-top: 4px solid var(--primary);
+            padding: 0.8em 1em 0.7em;
+            font-size: 0.86em;
+            transition: all 0.3s ease;
+        }
+
+        .tarjeta:nth-child(even) { border-top-color: var(--secondary); }
+        .tarjeta:hover { box-shadow: 0 12px 35px rgba(0, 0, 0, 0.12); transform: translateY(-4px); }
+
+        .tarjeta h3 {
+            color: var(--navy);
+            font-size: 1.1em;
+            font-weight: 700;
+            margin: 0 0 0.45em;
+        }
+
+        .tarjeta ul { padding-left: 1.1em; }
+
+        .flujo {
+            display: flex;
+            align-items: stretch;
+            gap: 10px;
+            margin: 0.3em 0 0.9em;
+        }
+
+        .paso-flujo {
+            flex: 1;
+            min-width: 0;
+            background: #fff;
+            border: 1px solid var(--borde);
+            border-top: 4px solid var(--primary);
+            border-radius: 14px;
+            padding: 0.75em 0.7em 0.7em;
+            text-align: center;
+            font-size: 0.74em;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+        }
+
+        .paso-flujo .num {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 1.7em;
+            height: 1.7em;
+            border-radius: 999px;
+            background: var(--primary);
+            color: #fff;
+            font-weight: 700;
+            font-size: 0.85em;
+            margin-bottom: 0.35em;
+        }
+
+        .paso-flujo .t { display: block; font-weight: 700; color: var(--navy); margin-bottom: 0.25em; font-size: 1.08em; line-height: 1.25; }
+        .paso-flujo .d { color: #475569; line-height: 1.35; display: block; }
+        .flecha-flujo { align-self: center; color: var(--secondary); font-weight: 800; font-size: 1.1em; }
+
+        /* --- Bloques de código: `lp-code-wrapper` ----------------------- */
+        .codigo {
+            position: relative;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 6px 16px -4px rgba(15, 23, 42, 0.25);
+            margin: 0.2em 0 0.8em;
+            background: #1E293B;
+            font-size: calc(18px * var(--k) * var(--kc, 1));
+        }
+
+        .codigo-cabecera {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 12px;
+            padding: 9px 16px;
+            background: linear-gradient(135deg, #0F172A 0%, #1E293B 100%);
+            border-bottom: 1px solid #334155;
+        }
+
+        .codigo-cabecera.flotante {
+            position: absolute;
+            top: 8px;
+            right: 10px;
+            padding: 0;
+            background: none;
+            border: 0;
+            opacity: 0;
+            transition: opacity 0.2s;
+        }
+
+        .codigo:hover .codigo-cabecera.flotante { opacity: 1; }
+
+        .codigo-titulo {
+            font-family: var(--fuente);
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--gris-claro);
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .codigo-titulo i { margin-right: 8px; }
+        .codigo-titulo .fa-python { color: #FACC15; }
+        .codigo-titulo .fa-terminal { color: #4ADE80; }
+        .codigo-titulo .fa-docker { color: #60A5FA; }
+
+        .btn-copiar {
+            background: rgba(255, 255, 255, 0.1);
+            border: none;
+            color: #CBD5E1;
+            padding: 5px 11px;
+            border-radius: 6px;
+            font-size: 11.5px;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            transition: all 0.2s;
+            flex-shrink: 0;
+        }
+
+        .btn-copiar:hover { background: rgba(255, 255, 255, 0.2); color: #fff; }
+        .btn-copiar.copiado { background: rgba(34, 197, 94, 0.3); color: #4ADE80; }
+
+        .codigo pre {
+            margin: 0;
+            padding: 16px 20px;
+            background: #1E293B !important;
+            color: #F3F4F6;
+            font-size: 1em;
+            line-height: 1.55;
+            overflow: hidden;
+            white-space: pre;
+            tab-size: 4;
+        }
+
+        .codigo pre code { font-size: inherit; background: none; padding: 0; color: inherit; text-shadow: none; }
+        .codigo .token { display: inline; }
+        .codigo .linea { display: inline-block; min-width: 100%; }
+        .codigo.con-foco .linea { opacity: 0.42; transition: opacity 0.3s; }
+
+        .codigo.con-foco .linea.foco {
+            opacity: 1;
+            background: rgba(var(--secondary-rgb), 0.16);
+            box-shadow: inset 3px 0 0 var(--secondary);
+            margin: 0 -20px;
+            padding: 0 20px;
+            min-width: calc(100% + 40px);
+        }
+
+        /* Salida dentro del código (`#>`), como en LP-CORE */
+        .lp-salida, .lp-salida .token { color: #7DD3FC !important; font-style: normal !important; }
+        .lp-salida { background: rgba(125, 211, 252, 0.07); }
+
+        /* --- Figuras: diagramas, imágenes y gráficas -------------------- */
+        .figura { margin: 0.1em 0 0.6em; text-align: center; }
+
+        .figura .lienzo {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #fff;
+            border-radius: 14px;
+        }
+
+        /* El alto de una figura también se encoge con el ajuste (`--k`): si no,
+           una diapositiva con figura no cabría nunca y el ajuste no podría hacer
+           nada por ella. */
+        .figura svg, .figura img { max-width: 100%; height: auto; max-height: calc(var(--alto, 470px) * var(--k)); }
+        .figura .grafica { width: 100%; height: calc(var(--alto, 440px) * var(--k)); }
+
+        .figura figcaption {
+            margin-top: 0.5em;
+            font-size: 0.66em;
+            color: var(--gris);
+            font-style: italic;
+        }
+
+        /* --- Revelado paso a paso --------------------------------------- */
+        .paso { opacity: 0; transform: translateY(10px); transition: opacity 0.4s ease-out, transform 0.4s ease-out; }
+        .paso.visto { opacity: 1; transform: none; }
+
+        .respuesta { border-left-color: #15803D; background: #F0FDF4; }
+        .respuesta .caja-etiqueta { background: #15803D; }
+
+        /* --- Pie de cada diapositiva ------------------------------------- */
+        .pie {
+            position: absolute;
+            left: 72px;
+            right: 72px;
+            bottom: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 11.5px;
+            color: var(--gris-claro);
+            letter-spacing: 0.02em;
+        }
+
+        .pie .num { font-weight: 700; color: var(--gris); font-variant-numeric: tabular-nums; }
+        .pie .sello { display: inline-flex; align-items: center; gap: 10px; }
+        .pie .sello::before { content: ''; width: 22px; height: 3px; border-radius: 3px; background: var(--grad); }
+
+        /* ============================================================
+           PORTADA
+        ============================================================ */
+        .diapo.portada { background: var(--grad-navy); color: #fff; }
+
+        .portada .brillo {
+            position: absolute;
+            inset: 0;
+            background:
+                radial-gradient(640px 420px at 100% 0%, rgba(var(--secondary-rgb), 0.30), transparent 70%),
+                radial-gradient(560px 480px at 0% 100%, rgba(var(--primary-rgb), 0.55), transparent 70%);
+            pointer-events: none;
+        }
+
+        .portada .marco { padding: 58px 84px 64px; justify-content: space-between; }
+        .portada .institucion { font-size: 13px; font-weight: 700; letter-spacing: 0.22em; text-transform: uppercase; color: var(--gold); }
+        .portada .asignatura { font-size: 17px; color: rgba(255, 255, 255, 0.72); margin-top: 6px; font-weight: 500; }
+
+        .portada .chip-semana {
+            display: inline-block;
+            background: var(--grad);
+            color: #fff;
+            font-weight: 700;
+            font-size: 13.5px;
+            letter-spacing: 0.16em;
+            text-transform: uppercase;
+            padding: 7px 16px;
+            border-radius: 999px;
+            box-shadow: 0 6px 18px rgba(var(--secondary-rgb), 0.35);
+        }
+
+        .portada h1 {
+            margin: 22px 0 14px;
+            font-size: 62px;
+            line-height: 1.06;
+            font-weight: 800;
+            letter-spacing: -0.02em;
+            max-width: 980px;
+        }
+
+        .portada .subtitulo { font-size: 25px; font-weight: 300; color: rgba(255, 255, 255, 0.82); max-width: 900px; }
+        .portada .temas { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 26px; }
+
+        .portada .temas span {
+            font-size: 14.5px;
+            padding: 6px 15px;
+            border-radius: 999px;
+            background: rgba(255, 255, 255, 0.09);
+            border: 1px solid rgba(255, 255, 255, 0.16);
+            color: rgba(255, 255, 255, 0.92);
+        }
+
+        .portada .base { display: flex; justify-content: space-between; align-items: flex-end; gap: 40px; }
+
+        .portada .lema {
+            max-width: 640px;
+            font-size: 17px;
+            font-style: italic;
+            color: rgba(255, 255, 255, 0.78);
+            border-left: 3px solid var(--secondary);
+            padding-left: 16px;
+            line-height: 1.45;
+        }
+
+        .portada .firma { text-align: right; font-size: 14px; color: rgba(255, 255, 255, 0.62); line-height: 1.5; }
+        .portada .firma strong { color: #fff; font-weight: 600; display: block; font-size: 15.5px; }
+
+        .barra-grad { position: absolute; left: 0; right: 0; bottom: 0; height: 6px; background: var(--grad); }
+
+        /* ============================================================
+           HOJA DE RUTA y DIVISOR DE SECCIÓN — la barra lateral del material
+        ============================================================ */
+        .dividida .marco { padding: 0; flex-direction: row; }
+
+        .dividida .lateral {
+            width: 410px;
+            flex-shrink: 0;
+            background: var(--grad-navy);
+            color: #fff;
+            padding: 44px 26px 30px 30px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .lateral .institucion { font-size: 10.5px; font-weight: 700; letter-spacing: 0.2em; text-transform: uppercase; color: var(--gold); }
+        .lateral .asignatura { font-size: 16px; font-weight: 700; margin-top: 4px; line-height: 1.25; }
+        .lateral .capitulo { font-size: 12px; color: rgba(255, 255, 255, 0.6); margin-top: 4px; }
+        .lateral .capitulo span { color: var(--secondary); font-weight: 600; }
+        .lateral hr { border: 0; border-top: 1px solid rgba(255, 255, 255, 0.1); margin: 20px -26px 14px -30px; }
+
+        .lista-secciones { display: flex; flex-direction: column; gap: 5px; flex: 1; min-height: 0; }
+        /* Más de 14 secciones (p. ej., una sesión de 17 módulos): filas más bajas para que quepan todas */
+        .lista-secciones.compacta { gap: 2px; }
+        .lista-secciones.compacta .item-seccion { padding: 4px 11px; font-size: 12.5px; }
+
+        .item-seccion {
+            display: flex;
+            align-items: flex-start;
+            gap: 11px;
+            padding: 8px 11px;
+            border-radius: 9px;
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 13.5px;
+            font-weight: 500;
+            line-height: 1.25;
+        }
+
+        .item-seccion svg { width: 16px; height: 16px; flex-shrink: 0; margin-top: 1px; }
+        .item-seccion.hecha { color: rgba(255, 255, 255, 0.38); }
+        .item-seccion.actual { background: var(--grad); color: #fff; box-shadow: 0 8px 18px rgba(var(--secondary-rgb), 0.28); }
+
+        .dividida .principal { flex: 1; position: relative; padding: 64px 72px 60px; display: flex; flex-direction: column; justify-content: center; }
+
+        .numero-grande {
+            font-size: 128px;
+            font-weight: 800;
+            line-height: 0.9;
+            letter-spacing: -0.04em;
+            background: var(--grad);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            margin-bottom: 18px;
+        }
+
+        .principal h2 { margin: 0; font-size: 46px; line-height: 1.1; font-weight: 800; color: var(--tinta); letter-spacing: -0.015em; }
+        .principal .gancho { margin-top: 26px; font-size: 22px; line-height: 1.45; color: var(--primary); font-weight: 600; border-left: 3px solid var(--secondary); padding-left: 16px; }
+        .principal .gancho p { margin: 0 0 0.3em; }
+
+        .enlace-material {
+            position: absolute;
+            left: 72px;
+            bottom: 30px;
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--gris);
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 6px 12px;
+            margin-left: -12px;
+            border-radius: 999px;
+            transition: all 0.2s;
+        }
+
+        .enlace-material:hover { background: var(--lila); color: var(--primary); }
+
+        .ra-caja { margin-top: 8px; }
+        .ra-caja .etq { font-size: 11px; text-transform: uppercase; letter-spacing: 0.16em; font-weight: 700; color: rgba(var(--primary-rgb), 0.62); margin-bottom: 8px; }
+        .ra-caja .ra { font-size: 26px; line-height: 1.35; color: var(--primary); font-weight: 600; border-left: 3px solid var(--secondary); padding-left: 16px; }
+
+        .chips { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 26px; }
+        .chips span { font-size: 14px; padding: 5px 13px; border-radius: 999px; background: rgba(var(--primary-rgb), 0.08); color: var(--primary); font-weight: 500; }
+
+        /* ============================================================
+           IDEA CLAVE, PREGUNTA y CIERRE
+        ============================================================ */
+        .diapo.idea {
+            background: linear-gradient(135deg, rgba(var(--primary-rgb), 0.055) 0%, rgba(14, 116, 144, 0.05) 45%, rgba(var(--secondary-rgb), 0.10) 100%), #fff;
+        }
+
+        .idea .marco { justify-content: center; padding: 60px 110px 70px; }
+        .idea .etq-idea { display: flex; align-items: center; gap: 12px; font-size: 12.5px; text-transform: uppercase; letter-spacing: 0.18em; font-weight: 700; color: rgba(var(--primary-rgb), 0.62); margin-bottom: 26px; }
+        .idea .etq-idea .punto { width: 38px; height: 38px; border-radius: 999px; background: var(--grad); color: #fff; display: flex; align-items: center; justify-content: center; font-size: 15px; box-shadow: 0 4px 12px rgba(var(--primary-rgb), 0.25); }
+        .idea h2 { margin: 0; font-size: 46px; line-height: 1.2; font-weight: 700; color: var(--primary); border-left: 6px solid var(--secondary); padding-left: 30px; letter-spacing: -0.01em; }
+        .idea .cuerpo { flex: 0 1 auto; margin-top: 28px; padding-left: 36px; color: #475569; font-size: calc(24px * var(--k)); }
+
+        .chip-ejercicio {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 11.5px;
+            text-transform: uppercase;
+            letter-spacing: 0.12em;
+            font-weight: 700;
+            color: #fff;
+            border-radius: 6px;
+            padding: 5px 11px;
+            background: var(--primary);
+            margin-bottom: 8px;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.12);
+        }
+
+        .pregunta .cabecera h2 { font-size: 31px; }
+
+        .diapo.cierre { background: var(--grad-navy); color: #fff; }
+        .cierre .brillo { position: absolute; inset: 0; background: radial-gradient(700px 400px at 100% 100%, rgba(var(--secondary-rgb), 0.22), transparent 70%); pointer-events: none; }
+        .cierre .cabecera { border-bottom-color: rgba(255, 255, 255, 0.12); }
+        .cierre .cabecera h2 { color: #fff; }
+        .cierre .antetitulo { color: var(--gold); }
+        .cierre .cuerpo { color: rgba(255, 255, 255, 0.88); }
+        .cierre .cuerpo strong { color: #fff; }
+        .cierre .cuerpo h3 { color: #F472B6; }
+        .cierre .cuerpo code:not(pre code) { background: rgba(255, 255, 255, 0.12); color: #fff; }
+        .cierre .cuerpo ul { list-style: none; padding-left: 0; }
+        .cierre .cuerpo ul > li { position: relative; padding-left: 1.7em; margin-bottom: 0.55em; }
+        .cierre .cuerpo ul > li::before {
+            content: '\f00c';
+            font-family: 'Font Awesome 6 Free';
+            font-weight: 900;
+            position: absolute;
+            left: 0;
+            top: 0.2em;
+            width: 1.15em;
+            height: 1.15em;
+            border-radius: 999px;
+            background: var(--grad);
+            color: #fff;
+            font-size: 0.72em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .cierre .caja { color: var(--texto); }
+        .cierre .pie { color: rgba(255, 255, 255, 0.45); }
+        .cierre .pie .num { color: rgba(255, 255, 255, 0.7); }
+
+        .cierre .firma-cierre { margin-top: auto; padding-top: 18px; font-size: 13.5px; color: rgba(255, 255, 255, 0.6); font-style: italic; flex-shrink: 0; }
+
+        /* Variantes de maquetación que se piden desde la fuente */
+        .diapo.centro .cuerpo { text-align: center; align-items: center; }
+        .diapo.denso .cuerpo { font-size: calc(20px * var(--k)); }
+        .diapo.codigo-grande .codigo { --kc: 1.18; }
+
+        /* ============================================================
+           CONTROLES — los del material: progreso, menú, anterior/siguiente
+        ============================================================ */
+        #progreso { position: fixed; top: 0; left: 0; right: 0; height: 6px; background: rgba(226, 232, 240, 0.7); z-index: 20; }
+        #progreso > div { height: 100%; background: var(--grad); transition: width 0.5s ease; width: 0; }
+
+        .btn-redondo {
+            position: fixed;
+            z-index: 60;
+            width: 42px;
+            height: 42px;
+            border-radius: 999px;
+            border: 0;
+            color: #fff;
+            cursor: pointer;
+            box-shadow: 0 6px 16px rgba(var(--primary-rgb), 0.3);
+            transition: transform 0.2s, opacity 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 15px;
+        }
+
+        .btn-redondo:hover { transform: scale(1.1); }
+        #btn-menu { top: 16px; left: 16px; }
+
+        #controles {
+            position: fixed;
+            right: 18px;
+            bottom: 16px;
+            z-index: 30;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(255, 255, 255, 0.92);
+            backdrop-filter: blur(6px);
+            padding: 6px 6px 6px 16px;
+            border-radius: 999px;
+            box-shadow: 0 6px 22px rgba(0, 26, 77, 0.16);
+            transition: opacity 0.35s;
+        }
+
+        #contador { font-size: 11px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--secondary-texto); margin-right: 6px; white-space: nowrap; }
+        #contador span { color: var(--gris); font-weight: 600; }
+
+        .btn-nav {
+            border: 0;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 13px;
+            font-weight: 600;
+            padding: 8px 14px;
+            border-radius: 999px;
+            transition: all 0.2s;
+        }
+
+        .btn-nav.ant { background: transparent; color: var(--navy); }
+        .btn-nav.ant:hover { background: #F1F5F9; }
+        .btn-nav.sig { background: var(--grad); color: #fff; }
+        .btn-nav.sig:hover { opacity: 0.9; }
+        .btn-nav:disabled { opacity: 0.3; cursor: default; }
+
+        body.quieto #controles, body.quieto #btn-menu { opacity: 0; pointer-events: none; }
+        body.quieto { cursor: none; }
+
+        /* Índice: la barra lateral del material, como panel */
+        #velo { position: fixed; inset: 0; background: rgba(0, 10, 30, 0.35); z-index: 40; opacity: 0; pointer-events: none; transition: opacity 0.3s; }
+        #indice {
+            position: fixed;
+            top: 0;
+            left: 0;
+            bottom: 0;
+            width: 21rem;
+            z-index: 50;
+            transform: translateX(-100%);
+            transition: transform 0.3s ease;
+            overflow-y: auto;
+            color: #fff;
+            display: flex;
+            flex-direction: column;
+        }
+
+        body.con-indice #indice { transform: none; }
+        body.con-indice #velo { opacity: 1; pointer-events: auto; }
+        #indice .cab { padding: 72px 24px 20px; border-bottom: 1px solid rgba(255, 255, 255, 0.1); }
+        #indice nav { padding: 14px; flex: 1; }
+        #indice .item-seccion { cursor: pointer; margin-bottom: 4px; border: 0; background: transparent; width: 100%; text-align: left; font-family: inherit; }
+        #indice .item-seccion:hover { color: #fff; background: rgba(255, 255, 255, 0.1); }
+        #indice .item-seccion.actual, #indice .item-seccion.actual:hover { background: var(--grad); color: #fff; box-shadow: 0 8px 18px rgba(var(--secondary-rgb), 0.28); }
+        body.con-indice #btn-menu { opacity: 1; pointer-events: auto; }
+        #indice .sub { margin: 2px 0 10px 38px; display: flex; flex-direction: column; gap: 1px; }
+        #indice .sub button { background: none; border: 0; color: rgba(255, 255, 255, 0.55); text-align: left; font-size: 12.5px; padding: 5px 8px; border-radius: 6px; cursor: pointer; line-height: 1.3; }
+        #indice .sub button:hover { color: #fff; background: rgba(255, 255, 255, 0.08); }
+        #indice .sub button.actual { color: #fff; font-weight: 600; box-shadow: inset 2px 0 0 var(--secondary); }
+        #indice .pie-indice { padding: 16px 24px; font-size: 10.5px; color: rgba(255, 255, 255, 0.42); border-top: 1px solid rgba(255, 255, 255, 0.1); line-height: 1.5; }
+
+        /* Notas del presentador */
+        #notas {
+            position: fixed;
+            left: 50%;
+            bottom: 74px;
+            transform: translate(-50%, 20px);
+            width: min(900px, calc(100vw - 40px));
+            max-height: 34vh;
+            overflow-y: auto;
+            z-index: 35;
+            background: rgba(255, 255, 255, 0.97);
+            border-radius: 16px;
+            box-shadow: 0 16px 50px rgba(0, 26, 77, 0.25);
+            border-top: 4px solid var(--secondary);
+            padding: 16px 22px;
+            font-size: 15.5px;
+            line-height: 1.55;
+            opacity: 0;
+            pointer-events: none;
+            transition: all 0.3s;
+        }
+
+        body.con-notas #notas { opacity: 1; transform: translate(-50%, 0); pointer-events: auto; }
+        .etq-notas { font-size: 10.5px; text-transform: uppercase; letter-spacing: 0.14em; font-weight: 700; color: var(--secondary-texto); margin-bottom: 6px; }
+        .notas-vacias { color: var(--gris-claro); font-style: italic; }
+        #notas p, .notas p { margin: 0 0 0.55em; }
+        #notas ul, .notas ul { margin: 0 0 0.55em; padding-left: 1.2em; }
+
+        /* Ayuda y pantalla en negro */
+        #ayuda { position: fixed; inset: 0; z-index: 70; background: rgba(0, 10, 30, 0.55); display: none; align-items: center; justify-content: center; }
+        body.con-ayuda #ayuda { display: flex; }
+        #ayuda .tarjeta-ayuda { background: #fff; border-radius: 18px; padding: 26px 30px; width: min(560px, calc(100vw - 32px)); box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3); border-top: 5px solid var(--primary); }
+        #ayuda h3 { margin: 0 0 14px; color: var(--navy); font-size: 18px; }
+        #ayuda table { width: 100%; border-collapse: collapse; font-size: 14px; }
+        #ayuda td { padding: 6px 4px; border-bottom: 1px solid #F1F5F9; }
+        #ayuda td:first-child { white-space: nowrap; width: 42%; }
+        #ayuda kbd { font-family: 'Fira Code', monospace; font-size: 12px; background: #F1F5F9; border: 1px solid #CBD5E1; border-bottom-width: 2px; border-radius: 5px; padding: 1px 6px; margin-right: 3px; }
+
+        #negro { position: fixed; inset: 0; z-index: 80; background: #000; display: none; }
+        body.en-negro #negro { display: block; }
+
+        #ir-a {
+            position: fixed; top: 16px; left: 50%; transform: translateX(-50%); z-index: 65;
+            background: var(--navy); color: #fff; font-weight: 700; font-size: 15px; padding: 8px 18px;
+            border-radius: 999px; display: none; box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
+        }
+
+        body.revision #controles, body.revision #btn-menu { display: none; }
+        body.revision .paso { transition: none; }
+        body.revision .diapo.activa > .marco { animation: none; }
+
+        /* Revisión: diapositivas que no caben */
+        .aviso-revision {
+            position: absolute; top: 10px; right: 10px; z-index: 5;
+            background: #B91C1C; color: #fff; font-size: 12px; font-weight: 700;
+            padding: 4px 10px; border-radius: 6px;
+        }
+
+        /* ============================================================
+           VISTA DEL PRESENTADOR (?presentador)
+        ============================================================ */
+        body.presentador { background: #0B1330; }
+        body.presentador #btn-menu, body.presentador #controles, body.presentador #notas, body.presentador #progreso { display: none; }
+        #panel-presentador { display: none; }
+        body.presentador #panel-presentador {
+            display: grid;
+            position: fixed;
+            inset: 0;
+            grid-template-columns: 1.55fr 1fr;
+            grid-template-rows: auto 1fr;
+            gap: 18px;
+            padding: 18px;
+            color: #fff;
+            z-index: 10;
+            pointer-events: none;
+        }
+        #panel-presentador .barra { grid-column: 1 / -1; display: flex; justify-content: space-between; align-items: center; font-size: 14px; color: rgba(255, 255, 255, 0.7); }
+        #panel-presentador .reloj { font-size: 30px; font-weight: 700; color: #fff; font-variant-numeric: tabular-nums; }
+        #panel-presentador .reloj small { font-size: 13px; color: var(--gold); font-weight: 600; margin-left: 8px; letter-spacing: 0.1em; text-transform: uppercase; }
+        #panel-presentador .hueco { border-radius: 10px; }
+        #panel-presentador .derecha { display: flex; flex-direction: column; gap: 14px; min-height: 0; pointer-events: auto; }
+        #panel-presentador .etq { font-size: 11px; text-transform: uppercase; letter-spacing: 0.14em; font-weight: 700; color: var(--gold); margin-bottom: 6px; }
+        #vista-siguiente { position: relative; aspect-ratio: 16 / 9; background: #fff; border-radius: 10px; overflow: hidden; }
+        #vista-siguiente .diapo { visibility: visible; opacity: 1; transform-origin: top left; width: 1280px; height: 720px; }
+        #vista-siguiente .paso { opacity: 1; transform: none; }
+        #notas-presentador { flex: 1; min-height: 0; overflow-y: auto; background: #fff; color: var(--texto); border-radius: 12px; padding: 16px 20px; font-size: 20px; line-height: 1.5; }
+
+        /* ============================================================
+           IMPRESIÓN — una diapositiva por página, con todo revelado
+        ============================================================ */
+        @media print {
+            @page { size: 1280px 720px; margin: 0; }
+            html, body { overflow: visible; height: auto; background: #fff; }
+            #escenario { position: static; }
+            #mazo { position: static; transform: none !important; box-shadow: none; width: 1280px; height: auto; overflow: visible; }
+            .diapo { position: relative; visibility: visible; opacity: 1; width: 1280px; height: 720px; page-break-after: always; break-after: page; overflow: hidden; }
+            .diapo.activa > .marco { animation: none; }
+            .paso { opacity: 1; transform: none; }
+            #progreso, #btn-menu, #controles, #indice, #velo, #notas, #ayuda, #negro, #ir-a, #panel-presentador, .btn-copiar, .enlace-material, .aviso-revision { display: none !important; }
+            * { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+        }
+
+    </style>
+</head>
+
+<body>
+    <div id="progreso"><div></div></div>
+
+    <button id="btn-menu" class="btn-redondo lp-gradient" title="Índice (M)" aria-label="Mostrar el índice">
+        <i class="fas fa-bars"></i>
+    </button>
+
+    <div id="velo"></div>
+    <aside id="indice" class="lp-header" aria-label="Índice de la presentación"></aside>
+
+    <main id="escenario">
+        <div id="mazo">
+<section class="diapo portada" data-tipo="portada">
+    <div class="brillo"></div>
+    <div class="marco">
+        <div>
+            <div class="institucion">Fundación Universitaria Compensar</div>
+            <div class="asignatura">Análisis Estadístico de la Información</div>
+        </div>
+        <div>
+            <span class="chip-semana">Sesión 1 · 2 horas</span>
+            <h1>Del dato a la pregunta</h1>
+            <div class="subtitulo">Diagnóstico, conceptos básicos de estadística, tipos de variable y el primer DataFrame en Colab</div>
+            <div class="temas"><span>Diagnóstico</span><span>Población y muestra</span><span>Variables y escalas</span><span>Fuentes de datos</span><span>pandas en Colab</span></div>
+        </div>
+        <div class="base">
+            <div class="lema">Antes de calcular, clasifica.</div>
+            <div class="firma"><strong>Javier Mauricio Sierra</strong></div>
+        </div>
+    </div>
+    <div class="barra-grad"></div>
+</section>
+<section class="diapo dividida" data-tipo="agenda">
+    <div class="marco">
+        <div class="lateral">
+            <div class="institucion">Fundación Universitaria Compensar</div>
+            <div class="asignatura">Análisis Estadístico de la Información</div>
+            <div class="capitulo">Sesión 1 · <span>Del dato a la pregunta</span></div>
+            <hr>
+            <div class="lista-secciones"><div class="item-seccion "><i class="fas fa-door-open"></i><span>Bienvenida</span></div><div class="item-seccion "><i class="fas fa-stethoscope"></i><span>Diagnóstico</span></div><div class="item-seccion "><i class="fas fa-compass"></i><span>Estadística para decidir</span></div><div class="item-seccion "><i class="fas fa-users"></i><span>Población y muestra</span></div><div class="item-seccion "><i class="fas fa-tags"></i><span>Tipos de variable y escalas</span></div><div class="item-seccion "><i class="fas fa-database"></i><span>Fuentes de datos</span></div><div class="item-seccion "><i class="fas fa-laptop-code"></i><span>Primer contacto en Python</span></div><div class="item-seccion "><i class="fas fa-keyboard"></i><span>Práctica y cierre</span></div></div>
+        </div>
+        <div class="principal">
+            <div class="antetitulo">Hoja de ruta</div>
+            <h2 style="margin-bottom:34px">Lo que vamos a construir hoy</h2>
+            <div class="ra-caja"><div class="etq">Objetivo de la sesión</div><div class="ra">Clasificar los datos del caso Tingua por su tipo, su escala de medición y su fuente, y comprobar en Python que esa clasificación decide qué cálculos tienen sentido.</div></div>
+            <div class="chips"><span>Diagnóstico</span><span>Población y muestra</span><span>Variables y escalas</span><span>Fuentes de datos</span><span>pandas en Colab</span></div>
+            <div class="pie" style="left:72px;right:72px"><span></span><span></span><span class="num">2 / 53</span></div>
+        </div>
+    </div>
+</section>
+<section class="diapo dividida seccion" data-tipo="seccion">
+    <div class="marco">
+        <div class="lateral">
+            <div class="institucion">Fundación Universitaria Compensar</div>
+            <div class="asignatura">Análisis Estadístico de la Información</div>
+            <div class="capitulo">Sesión 1 · <span>Del dato a la pregunta</span></div>
+            <hr>
+            <div class="lista-secciones"><div class="item-seccion actual"><i class="fas fa-door-open"></i><span>Bienvenida</span></div><div class="item-seccion "><i class="fas fa-stethoscope"></i><span>Diagnóstico</span></div><div class="item-seccion "><i class="fas fa-compass"></i><span>Estadística para decidir</span></div><div class="item-seccion "><i class="fas fa-users"></i><span>Población y muestra</span></div><div class="item-seccion "><i class="fas fa-tags"></i><span>Tipos de variable y escalas</span></div><div class="item-seccion "><i class="fas fa-database"></i><span>Fuentes de datos</span></div><div class="item-seccion "><i class="fas fa-laptop-code"></i><span>Primer contacto en Python</span></div><div class="item-seccion "><i class="fas fa-keyboard"></i><span>Práctica y cierre</span></div></div>
+        </div>
+        <div class="principal">
+            <div class="numero-grande">01</div>
+            <h2>Bienvenida</h2>
+            <div class="gancho"><p>Tener muchos datos no es lo mismo que saber qué dicen.</p></div>
+            
+            <div class="pie" style="left:72px;right:72px"><span></span><span></span><span class="num">3 / 53</span></div>
+        </div>
+    </div>
+</section>
+<section class="diapo ">
+    
+    <div class="marco">
+        <div class="cabecera">
+            <div class="ficha-icono"><i class="fas fa-door-open"></i></div>
+            <div><div class="antetitulo">Bienvenida</div><h2>El curso recorre cuatro etapas, del diagnóstico al tablero</h2></div>
+        </div>
+        <div class="cuerpo"><div class="tarjetas" style="--n:4">
+<div class="tarjeta"><h3>Reconocimiento</h3><p><strong>Etapa 0</strong> · diagnóstico sin nota: hoy</p></div>
+<div class="tarjeta"><h3>Contextualización</h3><p><strong>Etapa 1</strong> · análisis exploratorio y muestreo</p></div>
+<div class="tarjeta"><h3>Profundización</h3><p><strong>Etapa 2</strong> · regresión lineal simple y múltiple</p></div>
+<div class="tarjeta"><h3>Transferencia</h3><p><strong>Etapa 3</strong> · visualización de datos e inteligencia de negocios</p></div>
+</div>
+<p><strong>24 horas</strong> con el docente y <strong>72</strong> de trabajo independiente: por cada hora de clase, tres por tu cuenta.</p></div>
+        
+    </div>
+    <div class="pie"><span class="sello">Sesión 1 · Del dato a la pregunta</span><span>Análisis Estadístico de la Información · UCompensar</span><span class="num">4 / 53</span></div>
+</section>
+<section class="diapo ">
+    
+    <div class="marco">
+        <div class="cabecera">
+            <div class="ficha-icono"><i class="fas fa-door-open"></i></div>
+            <div><div class="antetitulo">Bienvenida</div><h2>Tres criterios valoran tu desempeño, y hoy empezamos por el primero</h2></div>
+        </div>
+        <div class="cuerpo"><table><thead><tr><th>Criterio</th><th>Qué pide</th></tr></thead><tbody>
+<tr><td><strong>CR1</strong></td><td>Clasificar los datos y su fuente para tomar decisiones</td></tr>
+<tr><td><strong>CR2</strong></td><td>Comparar técnicas de minería de datos y elegir un modelo adecuado</td></tr>
+<tr><td><strong>CR3</strong></td><td>Interpretar los resultados en distintos contextos</td></tr>
+</tbody></table>
+<p>Tres miradas en la evaluación: <strong>autoevaluación</strong>, <strong>coevaluación</strong> y <strong>heteroevaluación</strong>.</p></div>
+        
+    </div>
+    <div class="pie"><span class="sello">Sesión 1 · Del dato a la pregunta</span><span>Análisis Estadístico de la Información · UCompensar</span><span class="num">5 / 53</span></div>
+</section>
+<section class="diapo ">
+    
+    <div class="marco">
+        <div class="cabecera">
+            <div class="ficha-icono"><i class="fas fa-door-open"></i></div>
+            <div><div class="antetitulo">Bienvenida</div><h2>Dos horas en seis momentos</h2></div>
+        </div>
+        <div class="cuerpo"><div class="flujo">
+<div class="paso-flujo"><span class="num">1</span><span class="t">Bienvenida</span><span class="d">8 min</span></div>
+<div class="flecha-flujo">→</div>
+<div class="paso-flujo"><span class="num">2</span><span class="t">Diagnóstico</span><span class="d">15 min, sin nota</span></div>
+<div class="flecha-flujo">→</div>
+<div class="paso-flujo"><span class="num">3</span><span class="t">Conceptos</span><span class="d">45 min</span></div>
+<div class="flecha-flujo">→</div>
+<div class="paso-flujo"><span class="num">4</span><span class="t">Python</span><span class="d">15 min en Colab</span></div>
+<div class="flecha-flujo">→</div>
+<div class="paso-flujo"><span class="num">5</span><span class="t">Práctica guiada</span><span class="d">30 min</span></div>
+<div class="flecha-flujo">→</div>
+<div class="paso-flujo"><span class="num">6</span><span class="t">Cierre</span><span class="d">7 min</span></div>
+</div>
+<p>Los conceptos de hoy: estadística, población y muestra, tipos de variable y fuentes de datos.</p></div>
+        
+    </div>
+    <div class="pie"><span class="sello">Sesión 1 · Del dato a la pregunta</span><span>Análisis Estadístico de la Información · UCompensar</span><span class="num">6 / 53</span></div>
+</section>
+<section class="diapo dividida seccion" data-tipo="seccion">
+    <div class="marco">
+        <div class="lateral">
+            <div class="institucion">Fundación Universitaria Compensar</div>
+            <div class="asignatura">Análisis Estadístico de la Información</div>
+            <div class="capitulo">Sesión 1 · <span>Del dato a la pregunta</span></div>
+            <hr>
+            <div class="lista-secciones"><div class="item-seccion hecha"><i class="fas fa-door-open"></i><span>Bienvenida</span></div><div class="item-seccion actual"><i class="fas fa-stethoscope"></i><span>Diagnóstico</span></div><div class="item-seccion "><i class="fas fa-compass"></i><span>Estadística para decidir</span></div><div class="item-seccion "><i class="fas fa-users"></i><span>Población y muestra</span></div><div class="item-seccion "><i class="fas fa-tags"></i><span>Tipos de variable y escalas</span></div><div class="item-seccion "><i class="fas fa-database"></i><span>Fuentes de datos</span></div><div class="item-seccion "><i class="fas fa-laptop-code"></i><span>Primer contacto en Python</span></div><div class="item-seccion "><i class="fas fa-keyboard"></i><span>Práctica y cierre</span></div></div>
+        </div>
+        <div class="principal">
+            <div class="numero-grande">02</div>
+            <h2>Diagnóstico</h2>
+            <div class="gancho"><p>Sin nota: sirve para saber desde dónde arrancamos, no para calificar.</p></div>
+            
+            <div class="pie" style="left:72px;right:72px"><span></span><span></span><span class="num">7 / 53</span></div>
+        </div>
+    </div>
+</section>
+<section class="diapo pregunta">
+    
+    <div class="marco">
+        <div class="cabecera">
+            <div class="ficha-icono"><i class="fas fa-stethoscope"></i></div>
+            <div><div><span class="chip-ejercicio" style="background:var(--primary)"><i class="fas fa-circle-question"></i>Diagnóstico · 1 de 6</span></div><h2>¿Qué tipo de variable es el estrato socioeconómico (1 a 6)?</h2></div>
+        </div>
+        <div class="cuerpo"><ul>
+<li><strong>A.</strong> Cuantitativa continua</li>
+<li><strong>B.</strong> Cuantitativa discreta</li>
+<li><strong>C.</strong> Cualitativa ordinal</li>
+<li><strong>D.</strong> Cualitativa nominal</li>
+</ul></div>
+        
+    </div>
+    <div class="pie"><span class="sello">Sesión 1 · Del dato a la pregunta</span><span>Análisis Estadístico de la Información · UCompensar</span><span class="num">8 / 53</span></div>
+</section>
+<section class="diapo pregunta">
+    
+    <div class="marco">
+        <div class="cabecera">
+            <div class="ficha-icono"><i class="fas fa-stethoscope"></i></div>
+            <div><div><span class="chip-ejercicio" style="background:var(--primary)"><i class="fas fa-circle-question"></i>Diagnóstico · 2 de 6</span></div><h2>20, 22, 25, 27 y 150 minutos: ¿qué describe mejor el tiempo típico?</h2></div>
+        </div>
+        <div class="cuerpo"><p>Son los tiempos de entrega de cinco pedidos.</p>
+<ul>
+<li><strong>A.</strong> La media: 48,8 min</li>
+<li><strong>B.</strong> La mediana: 25 min</li>
+<li><strong>C.</strong> El rango: 130 min</li>
+<li><strong>D.</strong> La desviación estándar</li>
+</ul></div>
+        
+    </div>
+    <div class="pie"><span class="sello">Sesión 1 · Del dato a la pregunta</span><span>Análisis Estadístico de la Información · UCompensar</span><span class="num">9 / 53</span></div>
+</section>
+<section class="diapo pregunta">
+    
+    <div class="marco">
+        <div class="cabecera">
+            <div class="ficha-icono"><i class="fas fa-stethoscope"></i></div>
+            <div><div><span class="chip-ejercicio" style="background:var(--primary)"><i class="fas fa-circle-question"></i>Diagnóstico · 3 de 6</span></div><h2>Misma media, distinta desviación estándar: ¿qué cambia?</h2></div>
+        </div>
+        <div class="cuerpo"><p>En la ciudad A los pedidos tardan en promedio 35 min, con desviación estándar de 4 min. En la ciudad B, también 35 min, pero con desviación de 15 min.</p>
+<ul>
+<li><strong>A.</strong> En B se entrega más rápido</li>
+<li><strong>B.</strong> B tiene más pedidos</li>
+<li><strong>C.</strong> Nada: con la misma media, el servicio es igual</li>
+<li><strong>D.</strong> En B los tiempos son menos predecibles</li>
+</ul></div>
+        
+    </div>
+    <div class="pie"><span class="sello">Sesión 1 · Del dato a la pregunta</span><span>Análisis Estadístico de la Información · UCompensar</span><span class="num">10 / 53</span></div>
+</section>
+<section class="diapo pregunta">
+    
+    <div class="marco">
+        <div class="cabecera">
+            <div class="ficha-icono"><i class="fas fa-stethoscope"></i></div>
+            <div><div><span class="chip-ejercicio" style="background:var(--primary)"><i class="fas fa-circle-question"></i>Diagnóstico · 4 de 6</span></div><h2>Juzgar la satisfacción solo con las reseñas: ¿cuál es el problema?</h2></div>
+        </div>
+        <div class="cuerpo"><p>Para saber qué tan satisfechos están <strong>todos</strong> sus clientes, una empresa analiza solo las reseñas que algunos dejan en la app.</p>
+<ul>
+<li><strong>A.</strong> Quienes escriben reseñas pueden no parecerse al resto</li>
+<li><strong>B.</strong> La muestra es muy pequeña</li>
+<li><strong>C.</strong> Ninguno, si las reseñas son muchas</li>
+<li><strong>D.</strong> Habría que usar la mediana</li>
+</ul></div>
+        
+    </div>
+    <div class="pie"><span class="sello">Sesión 1 · Del dato a la pregunta</span><span>Análisis Estadístico de la Información · UCompensar</span><span class="num">11 / 53</span></div>
+</section>
+<section class="diapo pregunta">
+    
+    <div class="marco">
+        <div class="cabecera">
+            <div class="ficha-icono"><i class="fas fa-stethoscope"></i></div>
+            <div><div><span class="chip-ejercicio" style="background:var(--primary)"><i class="fas fa-circle-question"></i>Diagnóstico · 5 de 6</span></div><h2>Una regresión estima tiempo = 12 + 3 × distancia. ¿Qué dice el 3?</h2></div>
+        </div>
+        <div class="cuerpo"><p>El tiempo está en minutos y la distancia en kilómetros.</p>
+<ul>
+<li><strong>A.</strong> Que un pedido tarda 3 minutos</li>
+<li><strong>B.</strong> Que la distancia explica el 3 % del tiempo</li>
+<li><strong>C.</strong> Que cada kilómetro adicional suma, en promedio, 3 minutos</li>
+<li><strong>D.</strong> Que la distancia promedio es de 3 km</li>
+</ul></div>
+        
+    </div>
+    <div class="pie"><span class="sello">Sesión 1 · Del dato a la pregunta</span><span>Análisis Estadístico de la Información · UCompensar</span><span class="num">12 / 53</span></div>
+</section>
+<section class="diapo pregunta">
+    
+    <div class="marco">
+        <div class="cabecera">
+            <div class="ficha-icono"><i class="fas fa-stethoscope"></i></div>
+            <div><div><span class="chip-ejercicio" style="background:var(--primary)"><i class="fas fa-circle-question"></i>Diagnóstico · 6 de 6</span></div><h2>En pandas, ¿qué hace <code>pedidos[&quot;ciudad&quot;].value_counts()</code>?</h2></div>
+        </div>
+        <div class="cuerpo"><ul>
+<li><strong>A.</strong> Cuenta las columnas de la tabla</li>
+<li><strong>B.</strong> Cuenta cuántos pedidos hay de cada ciudad</li>
+<li><strong>C.</strong> Ordena la tabla por ciudad</li>
+<li><strong>D.</strong> Borra las ciudades repetidas</li>
+</ul></div>
+        
+    </div>
+    <div class="pie"><span class="sello">Sesión 1 · Del dato a la pregunta</span><span>Análisis Estadístico de la Información · UCompensar</span><span class="num">13 / 53</span></div>
+</section>
+<section class="diapo ">
+    
+    <div class="marco">
+        <div class="cabecera">
+            <div class="ficha-icono"><i class="fas fa-stethoscope"></i></div>
+            <div><div class="antetitulo">Diagnóstico</div><h2>Respuestas del diagnóstico: cuenta tus aciertos</h2></div>
+        </div>
+        <div class="cuerpo"><table><thead><tr><th>Pregunta</th><th>Respuesta</th><th>Lo trabajamos en</th></tr></thead><tbody>
+<tr><td>1 · Estrato</td><td><strong>C</strong> · cualitativa ordinal</td><td>Hoy</td></tr>
+<tr><td>2 · Cinco tiempos</td><td><strong>B</strong> · la mediana: el 150 arrastra la media</td><td>Tendencia central y atípicos</td></tr>
+<tr><td>3 · Misma media</td><td><strong>D</strong> · menos predecibles</td><td>Medidas de dispersión</td></tr>
+<tr><td>4 · Solo reseñas</td><td><strong>A</strong> · quien opina no representa a todos</td><td>Muestreo</td></tr>
+<tr><td>5 · El 3</td><td><strong>C</strong> · 3 min más por kilómetro</td><td>Regresión</td></tr>
+<tr><td>6 · <code>value_counts()</code></td><td><strong>B</strong> · pedidos por ciudad</td><td>Hoy, en Python</td></tr>
+</tbody></table></div>
+        
+    </div>
+    <div class="pie"><span class="sello">Sesión 1 · Del dato a la pregunta</span><span>Análisis Estadístico de la Información · UCompensar</span><span class="num">14 / 53</span></div>
+</section>
+<section class="diapo dividida seccion" data-tipo="seccion">
+    <div class="marco">
+        <div class="lateral">
+            <div class="institucion">Fundación Universitaria Compensar</div>
+            <div class="asignatura">Análisis Estadístico de la Información</div>
+            <div class="capitulo">Sesión 1 · <span>Del dato a la pregunta</span></div>
+            <hr>
+            <div class="lista-secciones"><div class="item-seccion hecha"><i class="fas fa-door-open"></i><span>Bienvenida</span></div><div class="item-seccion hecha"><i class="fas fa-stethoscope"></i><span>Diagnóstico</span></div><div class="item-seccion actual"><i class="fas fa-compass"></i><span>Estadística para decidir</span></div><div class="item-seccion "><i class="fas fa-users"></i><span>Población y muestra</span></div><div class="item-seccion "><i class="fas fa-tags"></i><span>Tipos de variable y escalas</span></div><div class="item-seccion "><i class="fas fa-database"></i><span>Fuentes de datos</span></div><div class="item-seccion "><i class="fas fa-laptop-code"></i><span>Primer contacto en Python</span></div><div class="item-seccion "><i class="fas fa-keyboard"></i><span>Práctica y cierre</span></div></div>
+        </div>
+        <div class="principal">
+            <div class="numero-grande">03</div>
+            <h2>Estadística para decidir</h2>
+            <div class="gancho"><p>Tingua Domicilios tiene 12 000 pedidos del semestre y una gerencia con preguntas.</p></div>
+            
+            <div class="pie" style="left:72px;right:72px"><span></span><span></span><span class="num">15 / 53</span></div>
+        </div>
+    </div>
+</section>
+<section class="diapo ">
+    
+    <div class="marco">
+        <div class="cabecera">
+            <div class="ficha-icono"><i class="fas fa-compass"></i></div>
+            <div><div class="antetitulo">Estadística para decidir</div><h2>Tingua Domicilios: el caso que nos acompaña todo el curso</h2></div>
+        </div>
+        <div class="cuerpo"><div class="tarjetas" style="--n:3">
+<div class="tarjeta"><h3>12 000 pedidos</h3><p>Todos los domicilios entregados entre enero y junio de 2026.</p></div>
+<div class="tarjeta"><h3>5 ciudades</h3><p>Bogotá, Medellín, Cali, Barranquilla y Bucaramanga.</p></div>
+<div class="tarjeta"><h3>15 columnas</h3><p>De la ciudad y el estrato a la distancia, la lluvia y la calificación.</p></div>
+</div>
+<p>Tingua es una empresa <strong>ficticia</strong>: sus datos se generan con una semilla fija y no corresponden a personas ni a empresas reales.</p></div>
+        
+    </div>
+    <div class="pie"><span class="sello">Sesión 1 · Del dato a la pregunta</span><span>Análisis Estadístico de la Información · UCompensar</span><span class="num">16 / 53</span></div>
+</section>
+<section class="diapo ">
+    
+    <div class="marco">
+        <div class="cabecera">
+            <div class="ficha-icono"><i class="fas fa-compass"></i></div>
+            <div><div class="antetitulo">Estadística para decidir</div><h2>Cuatro preguntas de la gerencia ordenan el curso</h2></div>
+        </div>
+        <div class="cuerpo"><ol>
+<li>¿Cuánto tarda un pedido <strong>típico</strong>, y qué tan variable es? → <em>análisis exploratorio</em></li>
+<li>¿Qué tan <strong>satisfechos</strong> están los clientes, si no todos califican? → <em>muestreo e inferencia</em></li>
+<li>¿Cuántos minutos añade cada <strong>kilómetro</strong>, o la <strong>lluvia</strong>? → <em>regresión</em></li>
+<li>¿Cómo se lo <strong>mostramos</strong> a la gerencia cada semana? → <em>visualización e inteligencia de negocios</em></li>
+</ol></div>
+        
+    </div>
+    <div class="pie"><span class="sello">Sesión 1 · Del dato a la pregunta</span><span>Análisis Estadístico de la Información · UCompensar</span><span class="num">17 / 53</span></div>
+</section>
+<section class="diapo ">
+    
+    <div class="marco">
+        <div class="cabecera">
+            <div class="ficha-icono"><i class="fas fa-compass"></i></div>
+            <div><div class="antetitulo">Estadística para decidir</div><h2>Describir lo que hay; inferir lo que no vemos</h2></div>
+        </div>
+        <div class="cuerpo"><div class="caja definicion"><span class="caja-etiqueta"><i class="fas fa-book"></i>Análisis estadístico</span><div class="caja-cuerpo"><p>La ciencia de recolectar, explorar y presentar grandes cantidades de datos para descubrir patrones y tendencias, y así decidir con más fundamento.</p></div></div>
+<ul>
+<li><strong>Descriptiva</strong> — resume lo observado: «el 24,1 % de los pedidos del semestre se entregó con lluvia»</li>
+<li><strong>Inferencial</strong> — generaliza más allá: «con 400 encuestas estimamos la satisfacción de todos los clientes»</li>
+</ul></div>
+        
+    </div>
+    <div class="pie"><span class="sello">Sesión 1 · Del dato a la pregunta</span><span>Análisis Estadístico de la Información · UCompensar</span><span class="num">18 / 53</span></div>
+</section>
+<section class="diapo ">
+    
+    <div class="marco">
+        <div class="cabecera">
+            <div class="ficha-icono"><i class="fas fa-compass"></i></div>
+            <div><div class="antetitulo">Estadística para decidir</div><h2>Un estudio estadístico empieza por la pregunta, no por los datos</h2></div>
+        </div>
+        <div class="cuerpo"><div class="flujo">
+<div class="paso-flujo"><span class="num">1</span><span class="t">Problema</span><span class="d">¿qué queremos saber, y para decidir qué?</span></div>
+<div class="flecha-flujo">→</div>
+<div class="paso-flujo"><span class="num">2</span><span class="t">Plan</span><span class="d">qué medir, a quién y cómo</span></div>
+<div class="flecha-flujo">→</div>
+<div class="paso-flujo"><span class="num">3</span><span class="t">Datos</span><span class="d">recolectar, organizar y depurar</span></div>
+<div class="flecha-flujo">→</div>
+<div class="paso-flujo"><span class="num">4</span><span class="t">Análisis</span><span class="d">resumir, graficar y modelar</span></div>
+<div class="flecha-flujo">→</div>
+<div class="paso-flujo"><span class="num">5</span><span class="t">Conclusión</span><span class="d">responder, y decir con cuánta incertidumbre</span></div>
+</div>
+<p>Es el ciclo <strong>PPDAC</strong>, que difundieron Wild y Pfannkuch (1999): cada conclusión abre una pregunta nueva.</p></div>
+        
+    </div>
+    <div class="pie"><span class="sello">Sesión 1 · Del dato a la pregunta</span><span>Análisis Estadístico de la Información · UCompensar</span><span class="num">19 / 53</span></div>
+</section>
+<section class="diapo pregunta">
+    
+    <div class="marco">
+        <div class="cabecera">
+            <div class="ficha-icono"><i class="fas fa-compass"></i></div>
+            <div><div><span class="chip-ejercicio" style="background:var(--primary)"><i class="fas fa-circle-question"></i>Pregunta para la clase</span></div><h2>¿Descriptiva o inferencial?</h2></div>
+        </div>
+        <div class="cuerpo"><ol>
+<li>«El tiempo medio de los 12 000 pedidos del semestre fue 35,1 min».</li>
+<li>«Con una muestra de 400 clientes, estimamos que el 80 % recomendaría Tingua».</li>
+<li>«En julio, los pedidos con lluvia tardarán unos 8 minutos más».</li>
+</ol>
+<div class="paso"><div class="caja respuesta"><span class="caja-etiqueta"><i class="fas fa-check"></i>Respuesta</span><div class="caja-cuerpo"><p><strong>1, descriptiva</strong>: resume todos los pedidos. <strong>2 y 3, inferenciales</strong>: la 2 va de una muestra a todos los clientes; la 3, del semestre observado a un mes que todavía no ha pasado.</p></div></div></div></div>
+        
+    </div>
+    <div class="pie"><span class="sello">Sesión 1 · Del dato a la pregunta</span><span>Análisis Estadístico de la Información · UCompensar</span><span class="num">20 / 53</span></div>
+</section>
+<section class="diapo dividida seccion" data-tipo="seccion">
+    <div class="marco">
+        <div class="lateral">
+            <div class="institucion">Fundación Universitaria Compensar</div>
+            <div class="asignatura">Análisis Estadístico de la Información</div>
+            <div class="capitulo">Sesión 1 · <span>Del dato a la pregunta</span></div>
+            <hr>
+            <div class="lista-secciones"><div class="item-seccion hecha"><i class="fas fa-door-open"></i><span>Bienvenida</span></div><div class="item-seccion hecha"><i class="fas fa-stethoscope"></i><span>Diagnóstico</span></div><div class="item-seccion hecha"><i class="fas fa-compass"></i><span>Estadística para decidir</span></div><div class="item-seccion actual"><i class="fas fa-users"></i><span>Población y muestra</span></div><div class="item-seccion "><i class="fas fa-tags"></i><span>Tipos de variable y escalas</span></div><div class="item-seccion "><i class="fas fa-database"></i><span>Fuentes de datos</span></div><div class="item-seccion "><i class="fas fa-laptop-code"></i><span>Primer contacto en Python</span></div><div class="item-seccion "><i class="fas fa-keyboard"></i><span>Práctica y cierre</span></div></div>
+        </div>
+        <div class="principal">
+            <div class="numero-grande">04</div>
+            <h2>Población y muestra</h2>
+            <div class="gancho"><p>¿Cuánto tarda un pedido de Tingua? Depende de si miras los 12 000 o solo 100.</p></div>
+            
+            <div class="pie" style="left:72px;right:72px"><span></span><span></span><span class="num">21 / 53</span></div>
+        </div>
+    </div>
+</section>
+<section class="diapo ">
+    
+    <div class="marco">
+        <div class="cabecera">
+            <div class="ficha-icono"><i class="fas fa-users"></i></div>
+            <div><div class="antetitulo">Población y muestra</div><h2>La población es el todo; la muestra, la parte que observas</h2></div>
+        </div>
+        <div class="cuerpo"><figure class="figura" style="--alto:430px"><div class="lienzo"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 300" width="100%" role="img" aria-labelledby="pm-titulo pm-desc">
+  <title id="pm-titulo">Población, muestra, parámetro y estadístico</title>
+  <desc id="pm-desc">A la izquierda, la población: los 12 000 pedidos del semestre, cuya media de tiempo de
+    entrega es el parámetro mu, 35,1 minutos. Una flecha de muestreo aleatorio lleva a la derecha, a una
+    muestra de 100 pedidos, cuya media es el estadístico x barra, 34,4 minutos. Una flecha punteada
+    de regreso indica la inferencia: usar el estadístico para estimar el parámetro.</desc>
+  <defs>
+    <marker id="pm-flecha" markerWidth="9" markerHeight="9" refX="8" refY="3.5" orient="auto">
+      <path d="M0,0 L8,3.5 L0,7 z" fill="#566B7F" />
+    </marker>
+  </defs>
+  <rect x="12" y="14" width="350" height="272" rx="14" fill="#FAF6FB" stroke="#691E7A" stroke-width="1.8" />
+  <text x="187" y="40" text-anchor="middle" font-size="16" font-weight="700" fill="#691E7A">Población · N = 12 000 pedidos</text>
+  <circle cx="34.0" cy="62.0" r="6.2" fill="#C9B3CF" /><circle cx="54.5" cy="62.0" r="6.2" fill="#C9B3CF" /><circle cx="75.0" cy="62.0" r="6.2" fill="#C9B3CF" /><circle cx="95.5" cy="62.0" r="6.2" fill="#C9B3CF" /><circle cx="116.0" cy="62.0" r="6.2" fill="#C9B3CF" /><circle cx="136.5" cy="62.0" r="6.2" fill="#C9B3CF" /><circle cx="157.0" cy="62.0" r="6.2" fill="#F46201" /><circle cx="177.5" cy="62.0" r="6.2" fill="#F46201" /><circle cx="198.0" cy="62.0" r="6.2" fill="#C9B3CF" /><circle cx="218.5" cy="62.0" r="6.2" fill="#F46201" /><circle cx="239.0" cy="62.0" r="6.2" fill="#C9B3CF" /><circle cx="259.5" cy="62.0" r="6.2" fill="#C9B3CF" /><circle cx="280.0" cy="62.0" r="6.2" fill="#F46201" /><circle cx="300.5" cy="62.0" r="6.2" fill="#C9B3CF" /><circle cx="321.0" cy="62.0" r="6.2" fill="#C9B3CF" /><circle cx="34.0" cy="83.0" r="6.2" fill="#C9B3CF" /><circle cx="54.5" cy="83.0" r="6.2" fill="#C9B3CF" /><circle cx="75.0" cy="83.0" r="6.2" fill="#C9B3CF" /><circle cx="95.5" cy="83.0" r="6.2" fill="#C9B3CF" /><circle cx="116.0" cy="83.0" r="6.2" fill="#F46201" /><circle cx="136.5" cy="83.0" r="6.2" fill="#C9B3CF" /><circle cx="157.0" cy="83.0" r="6.2" fill="#C9B3CF" /><circle cx="177.5" cy="83.0" r="6.2" fill="#C9B3CF" /><circle cx="198.0" cy="83.0" r="6.2" fill="#C9B3CF" /><circle cx="218.5" cy="83.0" r="6.2" fill="#C9B3CF" /><circle cx="239.0" cy="83.0" r="6.2" fill="#C9B3CF" /><circle cx="259.5" cy="83.0" r="6.2" fill="#C9B3CF" /><circle cx="280.0" cy="83.0" r="6.2" fill="#C9B3CF" /><circle cx="300.5" cy="83.0" r="6.2" fill="#C9B3CF" /><circle cx="321.0" cy="83.0" r="6.2" fill="#C9B3CF" /><circle cx="34.0" cy="104.0" r="6.2" fill="#C9B3CF" /><circle cx="54.5" cy="104.0" r="6.2" fill="#C9B3CF" /><circle cx="75.0" cy="104.0" r="6.2" fill="#C9B3CF" /><circle cx="95.5" cy="104.0" r="6.2" fill="#C9B3CF" /><circle cx="116.0" cy="104.0" r="6.2" fill="#C9B3CF" /><circle cx="136.5" cy="104.0" r="6.2" fill="#C9B3CF" /><circle cx="157.0" cy="104.0" r="6.2" fill="#C9B3CF" /><circle cx="177.5" cy="104.0" r="6.2" fill="#C9B3CF" /><circle cx="198.0" cy="104.0" r="6.2" fill="#C9B3CF" /><circle cx="218.5" cy="104.0" r="6.2" fill="#C9B3CF" /><circle cx="239.0" cy="104.0" r="6.2" fill="#C9B3CF" /><circle cx="259.5" cy="104.0" r="6.2" fill="#F46201" /><circle cx="280.0" cy="104.0" r="6.2" fill="#C9B3CF" /><circle cx="300.5" cy="104.0" r="6.2" fill="#C9B3CF" /><circle cx="321.0" cy="104.0" r="6.2" fill="#C9B3CF" /><circle cx="34.0" cy="125.0" r="6.2" fill="#C9B3CF" /><circle cx="54.5" cy="125.0" r="6.2" fill="#F46201" /><circle cx="75.0" cy="125.0" r="6.2" fill="#C9B3CF" /><circle cx="95.5" cy="125.0" r="6.2" fill="#C9B3CF" /><circle cx="116.0" cy="125.0" r="6.2" fill="#C9B3CF" /><circle cx="136.5" cy="125.0" r="6.2" fill="#F46201" /><circle cx="157.0" cy="125.0" r="6.2" fill="#C9B3CF" /><circle cx="177.5" cy="125.0" r="6.2" fill="#C9B3CF" /><circle cx="198.0" cy="125.0" r="6.2" fill="#C9B3CF" /><circle cx="218.5" cy="125.0" r="6.2" fill="#C9B3CF" /><circle cx="239.0" cy="125.0" r="6.2" fill="#C9B3CF" /><circle cx="259.5" cy="125.0" r="6.2" fill="#C9B3CF" /><circle cx="280.0" cy="125.0" r="6.2" fill="#C9B3CF" /><circle cx="300.5" cy="125.0" r="6.2" fill="#C9B3CF" /><circle cx="321.0" cy="125.0" r="6.2" fill="#C9B3CF" /><circle cx="34.0" cy="146.0" r="6.2" fill="#C9B3CF" /><circle cx="54.5" cy="146.0" r="6.2" fill="#C9B3CF" /><circle cx="75.0" cy="146.0" r="6.2" fill="#C9B3CF" /><circle cx="95.5" cy="146.0" r="6.2" fill="#C9B3CF" /><circle cx="116.0" cy="146.0" r="6.2" fill="#C9B3CF" /><circle cx="136.5" cy="146.0" r="6.2" fill="#C9B3CF" /><circle cx="157.0" cy="146.0" r="6.2" fill="#C9B3CF" /><circle cx="177.5" cy="146.0" r="6.2" fill="#C9B3CF" /><circle cx="198.0" cy="146.0" r="6.2" fill="#F46201" /><circle cx="218.5" cy="146.0" r="6.2" fill="#C9B3CF" /><circle cx="239.0" cy="146.0" r="6.2" fill="#C9B3CF" /><circle cx="259.5" cy="146.0" r="6.2" fill="#C9B3CF" /><circle cx="280.0" cy="146.0" r="6.2" fill="#C9B3CF" /><circle cx="300.5" cy="146.0" r="6.2" fill="#C9B3CF" /><circle cx="321.0" cy="146.0" r="6.2" fill="#F46201" /><circle cx="34.0" cy="167.0" r="6.2" fill="#C9B3CF" /><circle cx="54.5" cy="167.0" r="6.2" fill="#C9B3CF" /><circle cx="75.0" cy="167.0" r="6.2" fill="#C9B3CF" /><circle cx="95.5" cy="167.0" r="6.2" fill="#C9B3CF" /><circle cx="116.0" cy="167.0" r="6.2" fill="#C9B3CF" /><circle cx="136.5" cy="167.0" r="6.2" fill="#C9B3CF" /><circle cx="157.0" cy="167.0" r="6.2" fill="#C9B3CF" /><circle cx="177.5" cy="167.0" r="6.2" fill="#C9B3CF" /><circle cx="198.0" cy="167.0" r="6.2" fill="#F46201" /><circle cx="218.5" cy="167.0" r="6.2" fill="#C9B3CF" /><circle cx="239.0" cy="167.0" r="6.2" fill="#C9B3CF" /><circle cx="259.5" cy="167.0" r="6.2" fill="#C9B3CF" /><circle cx="280.0" cy="167.0" r="6.2" fill="#C9B3CF" /><circle cx="300.5" cy="167.0" r="6.2" fill="#C9B3CF" /><circle cx="321.0" cy="167.0" r="6.2" fill="#C9B3CF" /><circle cx="34.0" cy="188.0" r="6.2" fill="#C9B3CF" /><circle cx="54.5" cy="188.0" r="6.2" fill="#C9B3CF" /><circle cx="75.0" cy="188.0" r="6.2" fill="#C9B3CF" /><circle cx="95.5" cy="188.0" r="6.2" fill="#C9B3CF" /><circle cx="116.0" cy="188.0" r="6.2" fill="#C9B3CF" /><circle cx="136.5" cy="188.0" r="6.2" fill="#C9B3CF" /><circle cx="157.0" cy="188.0" r="6.2" fill="#C9B3CF" /><circle cx="177.5" cy="188.0" r="6.2" fill="#C9B3CF" /><circle cx="198.0" cy="188.0" r="6.2" fill="#C9B3CF" /><circle cx="218.5" cy="188.0" r="6.2" fill="#C9B3CF" /><circle cx="239.0" cy="188.0" r="6.2" fill="#C9B3CF" /><circle cx="259.5" cy="188.0" r="6.2" fill="#C9B3CF" /><circle cx="280.0" cy="188.0" r="6.2" fill="#C9B3CF" /><circle cx="300.5" cy="188.0" r="6.2" fill="#C9B3CF" /><circle cx="321.0" cy="188.0" r="6.2" fill="#C9B3CF" /><circle cx="34.0" cy="209.0" r="6.2" fill="#F46201" /><circle cx="54.5" cy="209.0" r="6.2" fill="#C9B3CF" /><circle cx="75.0" cy="209.0" r="6.2" fill="#C9B3CF" /><circle cx="95.5" cy="209.0" r="6.2" fill="#C9B3CF" /><circle cx="116.0" cy="209.0" r="6.2" fill="#C9B3CF" /><circle cx="136.5" cy="209.0" r="6.2" fill="#C9B3CF" /><circle cx="157.0" cy="209.0" r="6.2" fill="#C9B3CF" /><circle cx="177.5" cy="209.0" r="6.2" fill="#C9B3CF" /><circle cx="198.0" cy="209.0" r="6.2" fill="#C9B3CF" /><circle cx="218.5" cy="209.0" r="6.2" fill="#C9B3CF" /><circle cx="239.0" cy="209.0" r="6.2" fill="#C9B3CF" /><circle cx="259.5" cy="209.0" r="6.2" fill="#C9B3CF" /><circle cx="280.0" cy="209.0" r="6.2" fill="#C9B3CF" /><circle cx="300.5" cy="209.0" r="6.2" fill="#C9B3CF" /><circle cx="321.0" cy="209.0" r="6.2" fill="#C9B3CF" />
+  <text x="187" y="248" text-anchor="middle" font-size="14" fill="#334155">parámetro</text>
+  <text x="187" y="272" text-anchor="middle" font-size="18" font-weight="700" fill="#691E7A">μ = 35,1 min</text>
+
+  <rect x="520" y="54" width="128" height="134" rx="14" fill="#FDF0E6" stroke="#B84A00" stroke-width="1.8" />
+  <text x="584" y="40" text-anchor="middle" font-size="16" font-weight="700" fill="#B84A00">Muestra · n = 100</text>
+  <circle cx="560" cy="96" r="6.2" fill="#F46201" /><circle cx="582" cy="96" r="6.2" fill="#F46201" /><circle cx="604" cy="96" r="6.2" fill="#F46201" /><circle cx="626" cy="96" r="6.2" fill="#F46201" /><circle cx="560" cy="118" r="6.2" fill="#F46201" /><circle cx="582" cy="118" r="6.2" fill="#F46201" /><circle cx="604" cy="118" r="6.2" fill="#F46201" /><circle cx="626" cy="118" r="6.2" fill="#F46201" /><circle cx="560" cy="140" r="6.2" fill="#F46201" /><circle cx="582" cy="140" r="6.2" fill="#F46201" /><circle cx="604" cy="140" r="6.2" fill="#F46201" /><circle cx="626" cy="140" r="6.2" fill="#F46201" />
+  <text x="584" y="218" text-anchor="middle" font-size="14" fill="#334155">estadístico</text>
+  <text x="584" y="242" text-anchor="middle" font-size="18" font-weight="700" fill="#B84A00">x̄ = 34,4 min</text>
+
+  <path d="M372,98 C420,80 470,80 510,98" fill="none" stroke="#566B7F" stroke-width="2" marker-end="url(#pm-flecha)" />
+  <text x="441" y="74" text-anchor="middle" font-size="13" font-weight="700" fill="#334155">muestreo aleatorio</text>
+  <path d="M510,170 C470,192 420,192 372,170" fill="none" stroke="#566B7F" stroke-width="2" stroke-dasharray="6 5" marker-end="url(#pm-flecha)" />
+  <text x="441" y="208" text-anchor="middle" font-size="13" font-weight="700" fill="#334155">inferencia</text>
+  <text x="441" y="226" text-anchor="middle" font-size="12" fill="#475569">¿qué dice x̄ sobre μ?</text>
+</svg></div><figcaption>Población, muestra, parámetro y estadístico</figcaption></figure></div>
+        
+    </div>
+    <div class="pie"><span class="sello">Sesión 1 · Del dato a la pregunta</span><span>Análisis Estadístico de la Información · UCompensar</span><span class="num">22 / 53</span></div>
+</section>
+<section class="diapo ">
+    
+    <div class="marco">
+        <div class="cabecera">
+            <div class="ficha-icono"><i class="fas fa-users"></i></div>
+            <div><div class="antetitulo">Población y muestra</div><h2>El parámetro describe la población; el estadístico, la muestra</h2></div>
+        </div>
+        <div class="cuerpo"><table><thead><tr><th></th><th>Población · parámetro</th><th>Muestra · estadístico</th></tr></thead><tbody>
+<tr><td>Tamaño</td><td>\(N\)</td><td>\(n\)</td></tr>
+<tr><td>Media</td><td>\(\mu\)</td><td>\(\bar{x}\)</td></tr>
+<tr><td>Desviación estándar</td><td>\(\sigma\)</td><td>\(s\)</td></tr>
+<tr><td>Proporción</td><td>\(p\)</td><td>\(\hat{p}\)</td></tr>
+</tbody></table>
+<p>Letras <strong>griegas</strong> para los parámetros, salvo \(N\) y \(p\); <strong>latinas</strong> para los estadísticos.</p></div>
+        
+    </div>
+    <div class="pie"><span class="sello">Sesión 1 · Del dato a la pregunta</span><span>Análisis Estadístico de la Información · UCompensar</span><span class="num">23 / 53</span></div>
+</section>
+<section class="diapo ">
+    
+    <div class="marco">
+        <div class="cabecera">
+            <div class="ficha-icono"><i class="fas fa-users"></i></div>
+            <div><div class="antetitulo">Población y muestra</div><h2>La misma fórmula, sobre conjuntos distintos</h2></div>
+        </div>
+        <div class="cuerpo"><p>$$ \mu = \frac{1}{N}\sum_{i=1}^{N} x_i \qquad\qquad \bar{x} = \frac{1}{n}\sum_{i=1}^{n} x_i $$</p>
+<p><strong>μ</strong> promedia los \(N\) valores de la población; <strong>x̄</strong>, solo los \(n\) de la muestra.</p></div>
+        
+    </div>
+    <div class="pie"><span class="sello">Sesión 1 · Del dato a la pregunta</span><span>Análisis Estadístico de la Información · UCompensar</span><span class="num">24 / 53</span></div>
+</section>
+<section class="diapo ">
+    
+    <div class="marco">
+        <div class="cabecera">
+            <div class="ficha-icono"><i class="fas fa-users"></i></div>
+            <div><div class="antetitulo">Población y muestra</div><h2>Cada fila es una unidad de observación; cada columna, una variable</h2></div>
+        </div>
+        <div class="cuerpo"><table><thead><tr><th>id_pedido</th><th>ciudad</th><th>estrato</th><th>n_productos</th><th>distancia_km</th><th>tiempo_entrega_min</th></tr></thead><tbody>
+<tr><td>P00002</td><td>Bogotá</td><td>4</td><td>5</td><td>5.6</td><td>36.9</td></tr>
+<tr><td>P00003</td><td>Bucaramanga</td><td>5</td><td>2</td><td>1.9</td><td>16.0</td></tr>
+<tr><td>P00004</td><td>Barranquilla</td><td>2</td><td>1</td><td>2.6</td><td>17.0</td></tr>
+</tbody></table>
+<p>En Tingua, la <strong>unidad de observación</strong> es el <strong>pedido</strong>, no el cliente.</p></div>
+        
+    </div>
+    <div class="pie"><span class="sello">Sesión 1 · Del dato a la pregunta</span><span>Análisis Estadístico de la Información · UCompensar</span><span class="num">25 / 53</span></div>
+</section>
+<section class="diapo pregunta">
+    
+    <div class="marco">
+        <div class="cabecera">
+            <div class="ficha-icono"><i class="fas fa-users"></i></div>
+            <div><div><span class="chip-ejercicio" style="background:var(--primary)"><i class="fas fa-circle-question"></i>Pregunta para la clase</span></div><h2>¿Parámetro o estadístico?</h2></div>
+        </div>
+        <div class="cuerpo"><ol>
+<li>El 24,1 % de los 12 000 pedidos del semestre se entregó con lluvia.</li>
+<li>En 100 pedidos auditados al azar, el tiempo medio fue de 34,4 min.</li>
+<li>El tiempo medio de <strong>todos</strong> los pedidos de Cali en el semestre fue de 32,5 min.</li>
+</ol>
+<div class="paso"><div class="caja respuesta"><span class="caja-etiqueta"><i class="fas fa-check"></i>Respuesta</span><div class="caja-cuerpo"><p><strong>1, parámetro</strong>: es <em>p</em>, sobre toda la población. <strong>2, estadístico</strong>: es x̄, de una muestra. <strong>3, parámetro</strong>: es la media de una población completa, la de los pedidos de Cali.</p></div></div></div></div>
+        
+    </div>
+    <div class="pie"><span class="sello">Sesión 1 · Del dato a la pregunta</span><span>Análisis Estadístico de la Información · UCompensar</span><span class="num">26 / 53</span></div>
+</section>
+<section class="diapo idea">
+    <div class="marco">
+        <div class="etq-idea"><span class="punto"><i class="fas fa-compass"></i></span>Idea clave</div>
+        <h2>Un parámetro es fijo y casi nunca se conoce; un estadístico se conoce, pero cambia</h2>
+        <div class="cuerpo"><p>La inferencia estadística consiste en medir cuánto se puede confiar en el segundo para hablar del primero.</p></div>
+    </div>
+    <div class="pie"><span class="sello">Sesión 1 · Del dato a la pregunta</span><span>Análisis Estadístico de la Información · UCompensar</span><span class="num">27 / 53</span></div>
+</section>
+<section class="diapo dividida seccion" data-tipo="seccion">
+    <div class="marco">
+        <div class="lateral">
+            <div class="institucion">Fundación Universitaria Compensar</div>
+            <div class="asignatura">Análisis Estadístico de la Información</div>
+            <div class="capitulo">Sesión 1 · <span>Del dato a la pregunta</span></div>
+            <hr>
+            <div class="lista-secciones"><div class="item-seccion hecha"><i class="fas fa-door-open"></i><span>Bienvenida</span></div><div class="item-seccion hecha"><i class="fas fa-stethoscope"></i><span>Diagnóstico</span></div><div class="item-seccion hecha"><i class="fas fa-compass"></i><span>Estadística para decidir</span></div><div class="item-seccion hecha"><i class="fas fa-users"></i><span>Población y muestra</span></div><div class="item-seccion actual"><i class="fas fa-tags"></i><span>Tipos de variable y escalas</span></div><div class="item-seccion "><i class="fas fa-database"></i><span>Fuentes de datos</span></div><div class="item-seccion "><i class="fas fa-laptop-code"></i><span>Primer contacto en Python</span></div><div class="item-seccion "><i class="fas fa-keyboard"></i><span>Práctica y cierre</span></div></div>
+        </div>
+        <div class="principal">
+            <div class="numero-grande">05</div>
+            <h2>Tipos de variable y escalas</h2>
+            <div class="gancho"><p>Antes de calcular, clasifica: el tipo de variable decide qué operaciones tienen sentido.</p></div>
+            
+            <div class="pie" style="left:72px;right:72px"><span></span><span></span><span class="num">28 / 53</span></div>
+        </div>
+    </div>
+</section>
+<section class="diapo ">
+    
+    <div class="marco">
+        <div class="cabecera">
+            <div class="ficha-icono"><i class="fas fa-tags"></i></div>
+            <div><div class="antetitulo">Tipos de variable y escalas</div><h2>Toda variable es cualitativa o cuantitativa, y cada una tiene dos clases</h2></div>
+        </div>
+        <div class="cuerpo"><figure class="figura" style="--alto:440px"><div class="lienzo"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 330" width="100%" role="img" aria-labelledby="tv-titulo tv-desc">
+  <title id="tv-titulo">Clasificación de las variables</title>
+  <desc id="tv-desc">Una variable es cualitativa o cuantitativa. Las cualitativas nombran categorías y se dividen en
+    nominales, sin orden (grupo sanguíneo, medio de transporte, si fuma o no), y ordinales, con orden natural
+    (estrato, nivel educativo, talla). Las cuantitativas cuentan o miden y se dividen en discretas, que se
+    cuentan (número de hijos, quejas en un día), y continuas, que se miden (estatura, peso, tiempo de espera).</desc>
+  <g fill="none" stroke="#94a3b8" stroke-width="2">
+    <path d="M360,52 V72 H181.7 V92 M360,72 H538.3 V92" />
+    <path d="M181.7,150 V172 H92.5 V196 M181.7,172 H270.8 V196" />
+    <path d="M538.3,150 V172 H449.2 V196 M538.3,172 H627.5 V196" />
+  </g>
+  <rect x="290" y="8" width="140" height="44" rx="10" fill="#3A0F47" />
+  <text x="360" y="36" text-anchor="middle" fill="#fff" font-size="17" font-weight="700">Variable</text>
+
+  <rect x="66.7" y="92" width="230" height="58" rx="10" fill="#691E7A" />
+  <text x="181.7" y="117" text-anchor="middle" fill="#fff" font-size="17" font-weight="700">Cualitativa</text>
+  <text x="181.7" y="138" text-anchor="middle" fill="#fff" font-size="13.5">nombra categorías</text>
+  <rect x="423.3" y="92" width="230" height="58" rx="10" fill="#B84A00" />
+  <text x="538.3" y="117" text-anchor="middle" fill="#fff" font-size="17" font-weight="700">Cuantitativa</text>
+  <text x="538.3" y="138" text-anchor="middle" fill="#fff" font-size="13.5">cuenta o mide</text>
+
+  <g stroke-width="1.6">
+    <rect x="10" y="196" width="165" height="124" rx="10" fill="#F5EDF7" stroke="#691E7A" />
+    <rect x="188.3" y="196" width="165" height="124" rx="10" fill="#F5EDF7" stroke="#691E7A" />
+    <rect x="366.7" y="196" width="165" height="124" rx="10" fill="#FDF0E6" stroke="#B84A00" />
+    <rect x="545" y="196" width="165" height="124" rx="10" fill="#FDF0E6" stroke="#B84A00" />
+  </g>
+  <g text-anchor="middle" font-size="16" font-weight="700">
+    <text x="92.5" y="222" fill="#691E7A">Nominal</text>
+    <text x="270.8" y="222" fill="#691E7A">Ordinal</text>
+    <text x="449.2" y="222" fill="#B84A00">Discreta</text>
+    <text x="627.5" y="222" fill="#B84A00">Continua</text>
+  </g>
+  <g text-anchor="middle" font-size="13" fill="#475569">
+    <text x="92.5" y="241">sin orden</text>
+    <text x="270.8" y="241">con orden natural</text>
+    <text x="449.2" y="241">se cuenta: 0, 1, 2…</text>
+    <text x="627.5" y="241">se mide</text>
+  </g>
+  <g text-anchor="middle" font-size="13.5" fill="#1F2933">
+    <text x="92.5" y="267">grupo sanguíneo</text>
+    <text x="92.5" y="267" dy="19">medio de transporte</text>
+    <text x="92.5" y="267" dy="38">¿fuma? sí / no</text>
+    <text x="270.8" y="267">estrato</text>
+    <text x="270.8" y="267" dy="19">nivel educativo</text>
+    <text x="270.8" y="267" dy="38">talla S, M, L</text>
+    <text x="449.2" y="267">número de hijos</text>
+    <text x="449.2" y="267" dy="19">quejas en un día</text>
+    <text x="627.5" y="267">estatura</text>
+    <text x="627.5" y="267" dy="19">peso</text>
+    <text x="627.5" y="267" dy="38">tiempo de espera</text>
+  </g>
+</svg></div><figcaption>Clasificación de las variables</figcaption></figure></div>
+        
+    </div>
+    <div class="pie"><span class="sello">Sesión 1 · Del dato a la pregunta</span><span>Análisis Estadístico de la Información · UCompensar</span><span class="num">29 / 53</span></div>
+</section>
+<section class="diapo arriba">
+    
+    <div class="marco">
+        <div class="cabecera">
+            <div class="ficha-icono"><i class="fas fa-tags"></i></div>
+            <div><div class="antetitulo">Tipos de variable y escalas</div><h2>Cualitativas: las nominales solo nombran; las ordinales, además, ordenan</h2></div>
+        </div>
+        <div class="cuerpo"><div class="columnas" style="grid-template-columns:minmax(0, 1fr) minmax(0, 1fr)">
+<div class="col"><h3>Nominal</h3>
+<ul>
+<li>Grupo sanguíneo: A, B, AB, O</li>
+<li>Medio de transporte: bus, carro, bicicleta</li>
+<li>¿Fuma?: sí / no (<em>dicotómica</em>)</li>
+</ul></div>
+<div class="col"><h3>Ordinal</h3>
+<ul>
+<li>Estrato: 1 &lt; 2 &lt; … &lt; 6</li>
+<li>Nivel educativo: primaria &lt; bachillerato &lt; pregrado &lt; posgrado</li>
+<li>Satisfacción: de «muy insatisfecho» a «muy satisfecho»</li>
+</ul></div>
+</div></div>
+        
+    </div>
+    <div class="pie"><span class="sello">Sesión 1 · Del dato a la pregunta</span><span>Análisis Estadístico de la Información · UCompensar</span><span class="num">30 / 53</span></div>
+</section>
+<section class="diapo ">
+    
+    <div class="marco">
+        <div class="cabecera">
+            <div class="ficha-icono"><i class="fas fa-tags"></i></div>
+            <div><div class="antetitulo">Tipos de variable y escalas</div><h2>Cuantitativas: las discretas se cuentan; las continuas se miden</h2></div>
+        </div>
+        <div class="cuerpo"><div class="tarjetas" style="--n:2">
+<div class="tarjeta"><h3>Discreta</h3><p>Número de hijos, quejas recibidas en un día: 0, 1, 2… Entre 2 y 3 hijos no hay nada.</p></div>
+<div class="tarjeta"><h3>Continua</h3><p>Estatura, peso, tiempo de espera: entre dos valores siempre cabe otro.</p></div>
+</div>
+<p>El dinero se cuenta en pesos, pero como admite tantísimos valores se suele tratar como <strong>continuo</strong>.</p></div>
+        
+    </div>
+    <div class="pie"><span class="sello">Sesión 1 · Del dato a la pregunta</span><span>Análisis Estadístico de la Información · UCompensar</span><span class="num">31 / 53</span></div>
+</section>
+<section class="diapo ">
+    
+    <div class="marco">
+        <div class="cabecera">
+            <div class="ficha-icono"><i class="fas fa-tags"></i></div>
+            <div><div class="antetitulo">Tipos de variable y escalas</div><h2>Cuatro escalas de medición: cada una permite una operación más</h2></div>
+        </div>
+        <div class="cuerpo"><table><thead><tr><th>Escala</th><th>Qué permite</th><th>Ejemplos</th></tr></thead><tbody>
+<tr><td><strong>Nominal</strong></td><td>igual o distinto</td><td>grupo sanguíneo, medio de transporte</td></tr>
+<tr><td><strong>Ordinal</strong></td><td>+ mayor o menor</td><td>estrato, nivel educativo</td></tr>
+<tr><td><strong>Intervalo</strong></td><td>+ restar: las diferencias tienen sentido; el cero es arbitrario</td><td>temperatura en °C, año calendario</td></tr>
+<tr><td><strong>Razón</strong></td><td>+ multiplicar y dividir; el cero es «nada»</td><td>estatura, ingreso, tiempo de espera</td></tr>
+</tbody></table>
+<p>Es la clasificación de Stevens (1946).</p></div>
+        
+    </div>
+    <div class="pie"><span class="sello">Sesión 1 · Del dato a la pregunta</span><span>Análisis Estadístico de la Información · UCompensar</span><span class="num">32 / 53</span></div>
+</section>
+<section class="diapo pregunta">
+    
+    <div class="marco">
+        <div class="cabecera">
+            <div class="ficha-icono"><i class="fas fa-tags"></i></div>
+            <div><div><span class="chip-ejercicio" style="background:var(--primary)"><i class="fas fa-circle-question"></i>Pregunta para la clase</span></div><h2>¿Hace el doble de calor en Barranquilla que en Bogotá?</h2></div>
+        </div>
+        <div class="cuerpo"><p>La temperatura media de los pedidos del semestre fue de <strong>28,8 °C</strong> en Barranquilla y de <strong>13,9 °C</strong> en Bogotá, y 28,8 / 13,9 = 2,07.</p>
+<div class="paso"><div class="caja respuesta"><span class="caja-etiqueta"><i class="fas fa-check"></i>Respuesta</span><div class="caja-cuerpo"><p><strong>No.</strong> Los grados Celsius son una escala de <strong>intervalo</strong>: su cero es arbitrario (el agua se congela). En kelvin, cuyo cero es el cero absoluto (no hay temperatura más baja), la razón es 301,95 / 287,05 ≈ <strong>1,05</strong>: apenas un 5 % más.</p></div></div></div></div>
+        
+    </div>
+    <div class="pie"><span class="sello">Sesión 1 · Del dato a la pregunta</span><span>Análisis Estadístico de la Información · UCompensar</span><span class="num">33 / 53</span></div>
+</section>
+<section class="diapo idea">
+    <div class="marco">
+        <div class="etq-idea"><span class="punto"><i class="fas fa-compass"></i></span>Idea clave</div>
+        <h2>Un número no siempre es una cantidad</h2>
+        <div class="cuerpo"><p>El estrato se escribe con números del 1 al 6, pero su promedio en Tingua, 3,3, no es ningún estrato: los números son etiquetas con orden.</p></div>
+    </div>
+    <div class="pie"><span class="sello">Sesión 1 · Del dato a la pregunta</span><span>Análisis Estadístico de la Información · UCompensar</span><span class="num">34 / 53</span></div>
+</section>
+<section class="diapo pregunta">
+    
+    <div class="marco">
+        <div class="cabecera">
+            <div class="ficha-icono"><i class="fas fa-tags"></i></div>
+            <div><div><span class="chip-ejercicio" style="background:var(--primary)"><i class="fas fa-circle-question"></i>Pregunta para la clase</span></div><h2>Clasifica estas cinco variables</h2></div>
+        </div>
+        <div class="cuerpo"><ol>
+<li>Número de hijos</li>
+<li>Talla de camisa: S, M, L, XL</li>
+<li>Grupo sanguíneo</li>
+<li>Estatura en centímetros</li>
+<li>Año de nacimiento</li>
+</ol>
+<div class="paso"><div class="caja respuesta"><span class="caja-etiqueta"><i class="fas fa-check"></i>Respuesta</span><div class="caja-cuerpo"><p><strong>1</strong> cuantitativa discreta, de razón · <strong>2</strong> cualitativa ordinal · <strong>3</strong> cualitativa nominal · <strong>4</strong> cuantitativa continua, de razón · <strong>5</strong> cuantitativa, de <strong>intervalo</strong>: el origen del calendario es una convención.</p></div></div></div></div>
+        
+    </div>
+    <div class="pie"><span class="sello">Sesión 1 · Del dato a la pregunta</span><span>Análisis Estadístico de la Información · UCompensar</span><span class="num">35 / 53</span></div>
+</section>
+<section class="diapo ">
+    
+    <div class="marco">
+        <div class="cabecera">
+            <div class="ficha-icono"><i class="fas fa-tags"></i></div>
+            <div><div class="antetitulo">Tipos de variable y escalas</div><h2>El tipo de variable decide el resumen y el gráfico</h2></div>
+        </div>
+        <div class="cuerpo"><table><thead><tr><th>Tipo</th><th>Resumen</th><th>Gráfico</th></tr></thead><tbody>
+<tr><td>Nominal</td><td>frecuencias, moda</td><td>barras</td></tr>
+<tr><td>Ordinal</td><td>frecuencias acumuladas, mediana</td><td>barras en su orden</td></tr>
+<tr><td>Discreta</td><td>media, mediana, frecuencias</td><td>barras o histograma</td></tr>
+<tr><td>Continua</td><td>media, desviación estándar, cuartiles</td><td>histograma, caja</td></tr>
+</tbody></table>
+<p>Es el mapa de las próximas sesiones.</p></div>
+        
+    </div>
+    <div class="pie"><span class="sello">Sesión 1 · Del dato a la pregunta</span><span>Análisis Estadístico de la Información · UCompensar</span><span class="num">36 / 53</span></div>
+</section>
+<section class="diapo dividida seccion" data-tipo="seccion">
+    <div class="marco">
+        <div class="lateral">
+            <div class="institucion">Fundación Universitaria Compensar</div>
+            <div class="asignatura">Análisis Estadístico de la Información</div>
+            <div class="capitulo">Sesión 1 · <span>Del dato a la pregunta</span></div>
+            <hr>
+            <div class="lista-secciones"><div class="item-seccion hecha"><i class="fas fa-door-open"></i><span>Bienvenida</span></div><div class="item-seccion hecha"><i class="fas fa-stethoscope"></i><span>Diagnóstico</span></div><div class="item-seccion hecha"><i class="fas fa-compass"></i><span>Estadística para decidir</span></div><div class="item-seccion hecha"><i class="fas fa-users"></i><span>Población y muestra</span></div><div class="item-seccion hecha"><i class="fas fa-tags"></i><span>Tipos de variable y escalas</span></div><div class="item-seccion actual"><i class="fas fa-database"></i><span>Fuentes de datos</span></div><div class="item-seccion "><i class="fas fa-laptop-code"></i><span>Primer contacto en Python</span></div><div class="item-seccion "><i class="fas fa-keyboard"></i><span>Práctica y cierre</span></div></div>
+        </div>
+        <div class="principal">
+            <div class="numero-grande">06</div>
+            <h2>Fuentes de datos</h2>
+            <div class="gancho"><p>El mismo número vale distinto según de dónde viene y para qué se recogió.</p></div>
+            
+            <div class="pie" style="left:72px;right:72px"><span></span><span></span><span class="num">37 / 53</span></div>
+        </div>
+    </div>
+</section>
+<section class="diapo ">
+    
+    <div class="marco">
+        <div class="cabecera">
+            <div class="ficha-icono"><i class="fas fa-database"></i></div>
+            <div><div class="antetitulo">Fuentes de datos</div><h2>Primaria o secundaria: ¿se recogió para tu pregunta?</h2></div>
+        </div>
+        <div class="cuerpo"><div class="tarjetas" style="--n:2">
+<div class="tarjeta"><h3>Primaria</h3><p>La recoges tú, para tu pregunta: una encuesta de satisfacción que diseña Tingua, una prueba de una nueva app de rutas.</p></div>
+<div class="tarjeta"><h3>Secundaria</h3><p>Ya existía, recogida por otros o para otro fin: los registros de la app, los datos del clima del IDEAM, las encuestas del DANE.</p></div>
+</div>
+<p>En otro eje: <strong>interna</strong>, si la produce la organización, o <strong>externa</strong>, si viene de fuera.</p></div>
+        
+    </div>
+    <div class="pie"><span class="sello">Sesión 1 · Del dato a la pregunta</span><span>Análisis Estadístico de la Información · UCompensar</span><span class="num">38 / 53</span></div>
+</section>
+<section class="diapo ">
+    
+    <div class="marco">
+        <div class="cabecera">
+            <div class="ficha-icono"><i class="fas fa-database"></i></div>
+            <div><div class="antetitulo">Fuentes de datos</div><h2>Observar o experimentar: solo el experimento permite hablar de causa</h2></div>
+        </div>
+        <div class="cuerpo"><div class="tarjetas" style="--n:2">
+<div class="tarjeta"><h3>Estudio observacional</h3><p>Se registra lo que pasa, sin intervenir. Con lluvia, los pedidos de Tingua tardaron <strong>7,8 min más</strong>; pero con lluvia también cambian el tráfico y la demanda.</p></div>
+<div class="tarjeta"><h3>Experimento</h3><p>Se asigna al azar quién recibe qué. Si Tingua prueba una nueva app de rutas en la mitad de los pedidos, elegidos al azar, la diferencia sí se puede atribuir a la app.</p></div>
+</div></div>
+        
+    </div>
+    <div class="pie"><span class="sello">Sesión 1 · Del dato a la pregunta</span><span>Análisis Estadístico de la Información · UCompensar</span><span class="num">39 / 53</span></div>
+</section>
+<section class="diapo ">
+    
+    <div class="marco">
+        <div class="cabecera">
+            <div class="ficha-icono"><i class="fas fa-database"></i></div>
+            <div><div class="antetitulo">Fuentes de datos</div><h2>Cinco criterios para decidir si una fuente sirve</h2></div>
+        </div>
+        <div class="cuerpo"><table><thead><tr><th>Criterio</th><th>Pregunta</th><th>En Tingua</th></tr></thead><tbody>
+<tr><td><strong>Pertinencia</strong></td><td>¿Responde mi pregunta?</td><td>Sin identificador de cliente, no se pueden contar clientes</td></tr>
+<tr><td><strong>Exactitud</strong></td><td>¿Los valores son correctos?</td><td>Un pedido de 201 minutos: ¿demora real o error?</td></tr>
+<tr><td><strong>Completitud</strong></td><td>¿Qué falta, y por qué?</td><td>El 40,8 % de los pedidos no tiene calificación</td></tr>
+<tr><td><strong>Oportunidad</strong></td><td>¿Está al día?</td><td>Llega hasta el 30 de junio de 2026</td></tr>
+<tr><td><strong>Consistencia</strong></td><td>¿Coincide con otras fuentes?</td><td>Los totales deberían cuadrar con contabilidad</td></tr>
+</tbody></table></div>
+        
+    </div>
+    <div class="pie"><span class="sello">Sesión 1 · Del dato a la pregunta</span><span>Análisis Estadístico de la Información · UCompensar</span><span class="num">40 / 53</span></div>
+</section>
+<section class="diapo dividida seccion" data-tipo="seccion">
+    <div class="marco">
+        <div class="lateral">
+            <div class="institucion">Fundación Universitaria Compensar</div>
+            <div class="asignatura">Análisis Estadístico de la Información</div>
+            <div class="capitulo">Sesión 1 · <span>Del dato a la pregunta</span></div>
+            <hr>
+            <div class="lista-secciones"><div class="item-seccion hecha"><i class="fas fa-door-open"></i><span>Bienvenida</span></div><div class="item-seccion hecha"><i class="fas fa-stethoscope"></i><span>Diagnóstico</span></div><div class="item-seccion hecha"><i class="fas fa-compass"></i><span>Estadística para decidir</span></div><div class="item-seccion hecha"><i class="fas fa-users"></i><span>Población y muestra</span></div><div class="item-seccion hecha"><i class="fas fa-tags"></i><span>Tipos de variable y escalas</span></div><div class="item-seccion hecha"><i class="fas fa-database"></i><span>Fuentes de datos</span></div><div class="item-seccion actual"><i class="fas fa-laptop-code"></i><span>Primer contacto en Python</span></div><div class="item-seccion "><i class="fas fa-keyboard"></i><span>Práctica y cierre</span></div></div>
+        </div>
+        <div class="principal">
+            <div class="numero-grande">07</div>
+            <h2>Primer contacto en Python</h2>
+            <div class="gancho"><p>Lo que acabamos de clasificar a mano, ahora con pandas.</p></div>
+            
+            <div class="pie" style="left:72px;right:72px"><span></span><span></span><span class="num">41 / 53</span></div>
+        </div>
+    </div>
+</section>
+<section class="diapo ">
+    
+    <div class="marco">
+        <div class="cabecera">
+            <div class="ficha-icono"><i class="fas fa-laptop-code"></i></div>
+            <div><div class="antetitulo">Primer contacto en Python</div><h2>Colab: un notebook en el navegador, sin instalar nada</h2></div>
+        </div>
+        <div class="cuerpo"><div class="flujo">
+<div class="paso-flujo"><span class="num">1</span><span class="t">Abrir</span><span class="d">botón «Abrir en Colab» de la portada del curso</span></div>
+<div class="flecha-flujo">→</div>
+<div class="paso-flujo"><span class="num">2</span><span class="t">Guardar una copia</span><span class="d">Archivo → Guardar una copia en Drive</span></div>
+<div class="flecha-flujo">→</div>
+<div class="paso-flujo"><span class="num">3</span><span class="t">Crear los datos</span><span class="d">ejecutar la primera celda sin modificarla</span></div>
+<div class="flecha-flujo">→</div>
+<div class="paso-flujo"><span class="num">4</span><span class="t">Avanzar en orden</span><span class="d">Mayús + Enter, celda por celda</span></div>
+</div>
+<p><a href="https://colab.research.google.com/github/JotaMao1985/ANaLISIS-ESTADiSTICO-DE-LA-INFORMACIoN_Ucomp/blob/main/notebooks/sesion-1-del-dato-a-la-pregunta.ipynb" target="_blank" rel="noopener">Abrir el notebook de la sesión 1 en Colab</a>. Cada celda lleva entre corchetes el mismo identificador que el código de estas diapositivas.</p></div>
+        
+    </div>
+    <div class="pie"><span class="sello">Sesión 1 · Del dato a la pregunta</span><span>Análisis Estadístico de la Información · UCompensar</span><span class="num">42 / 53</span></div>
+</section>
+<section class="diapo ">
+    
+    <div class="marco">
+        <div class="cabecera">
+            <div class="ficha-icono"><i class="fas fa-laptop-code"></i></div>
+            <div><div class="antetitulo">Primer contacto en Python</div><h2>Tres líneas para cargar los 12 000 pedidos</h2></div>
+        </div>
+        <div class="cuerpo"><div class="columnas centradas" style="grid-template-columns:minmax(0, 3fr) minmax(0, 2fr)">
+<div class="col"><div class="codigo" data-lang="python" data-foco="3-4"><div class="codigo-cabecera"><span class="codigo-titulo"><i class="fab fa-python"></i>[cargar]</span><button class="btn-copiar" title="Copiar"><i class="fas fa-copy"></i> Copiar</button></div><pre><code>import pandas as pd
+
+pedidos = pd.read_csv("datos/pedidos.csv")
+pedidos.shape          # (filas, columnas)
+#&gt; (12000, 15)</code></pre></div></div>
+<div class="col"><ul>
+<li><code>read_csv</code> lee el archivo y devuelve un <strong>DataFrame</strong>: una tabla con columnas con nombre</li>
+<li><code>.shape</code>: 12 000 filas, una por <strong>pedido</strong>, y 15 columnas, una por <strong>variable</strong></li>
+</ul></div>
+</div></div>
+        
+    </div>
+    <div class="pie"><span class="sello">Sesión 1 · Del dato a la pregunta</span><span>Análisis Estadístico de la Información · UCompensar</span><span class="num">43 / 53</span></div>
+</section>
+<section class="diapo ">
+    
+    <div class="marco">
+        <div class="cabecera">
+            <div class="ficha-icono"><i class="fas fa-laptop-code"></i></div>
+            <div><div class="antetitulo">Primer contacto en Python</div><h2>pandas adivina el tipo de dato, no el tipo de variable</h2></div>
+        </div>
+        <div class="cuerpo"><div class="columnas centradas" style="grid-template-columns:minmax(0, 3fr) minmax(0, 2fr)">
+<div class="col"><div class="codigo" data-lang="python" data-foco="3,10,16"><div class="codigo-cabecera"><span class="codigo-titulo"><i class="fab fa-python"></i>[tipos]</span><button class="btn-copiar" title="Copiar"><i class="fas fa-copy"></i> Copiar</button></div><pre><code>pedidos.dtypes
+#&gt; id_pedido              object
+#&gt; fecha                  object
+#&gt; franja                 object
+#&gt; ciudad                 object
+#&gt; categoria              object
+#&gt; n_productos             int64
+#&gt; valor_pedido            int64
+#&gt; medio_pago             object
+#&gt; estrato                 int64
+#&gt; suscriptor             object
+#&gt; distancia_km          float64
+#&gt; lluvia                 object
+#&gt; temperatura_c         float64
+#&gt; tiempo_entrega_min    float64
+#&gt; calificacion          float64
+#&gt; dtype: object</code></pre></div></div>
+<div class="col"><ul>
+<li><code>object</code> es texto; <code>int64</code>, entero; <code>float64</code>, decimal</li>
+<li><code>estrato</code> es <strong>int64</strong>, pero es ordinal</li>
+<li><code>calificacion</code> es <strong>float64</strong>, pero son estrellas de 1 a 5</li>
+<li><code>fecha</code> es <strong>object</strong>: llegó como texto</li>
+</ul></div>
+</div></div>
+        
+    </div>
+    <div class="pie"><span class="sello">Sesión 1 · Del dato a la pregunta</span><span>Análisis Estadístico de la Información · UCompensar</span><span class="num">44 / 53</span></div>
+</section>
+<section class="diapo pregunta">
+    
+    <div class="marco">
+        <div class="cabecera">
+            <div class="ficha-icono"><i class="fas fa-laptop-code"></i></div>
+            <div><div><span class="chip-ejercicio" style="background:var(--primary)"><i class="fas fa-circle-question"></i>Pregunta para la clase</span></div><h2>¿Por qué la calificación es float64, si son estrellas de 1 a 5?</h2></div>
+        </div>
+        <div class="cuerpo"><p>Pista: mira la última columna de <code>pedidos.head()</code>.</p>
+<div class="paso"><div class="caja respuesta"><span class="caja-etiqueta"><i class="fas fa-check"></i>Respuesta</span><div class="caja-cuerpo"><p>Porque <strong>le faltan valores</strong>. pandas marca un faltante con <code>NaN</code>, que es un número decimal, y para que quepa vuelve decimal toda la columna.</p>
+<div class="codigo" data-lang="python" data-foco=""><div class="codigo-cabecera"><span class="codigo-titulo"><i class="fab fa-python"></i>[faltantes]</span><button class="btn-copiar" title="Copiar"><i class="fas fa-copy"></i> Copiar</button></div><pre><code>faltan = pedidos["calificacion"].isna()
+print("Pedidos sin calificación:", faltan.sum())
+print("Proporción:", round(faltan.mean(), 3))
+#&gt; Pedidos sin calificación: 4901
+#&gt; Proporción: 0.408</code></pre></div></div></div></div></div>
+        
+    </div>
+    <div class="pie"><span class="sello">Sesión 1 · Del dato a la pregunta</span><span>Análisis Estadístico de la Información · UCompensar</span><span class="num">45 / 53</span></div>
+</section>
+<section class="diapo ">
+    
+    <div class="marco">
+        <div class="cabecera">
+            <div class="ficha-icono"><i class="fas fa-laptop-code"></i></div>
+            <div><div class="antetitulo">Primer contacto en Python</div><h2>Declarar la escala evita cálculos sin sentido</h2></div>
+        </div>
+        <div class="cuerpo"><div class="columnas centradas" style="grid-template-columns:minmax(0, 2fr) minmax(0, 1fr)">
+<div class="col"><div class="codigo" data-lang="python" data-foco="2-4,7,11-12"><div class="codigo-cabecera"><span class="codigo-titulo"><i class="fab fa-python"></i>[ordinal]</span><button class="btn-copiar" title="Copiar"><i class="fas fa-copy"></i> Copiar</button></div><pre><code># El estrato es una categoría con orden, no una cantidad
+pedidos["estrato"] = pd.Categorical(
+    pedidos["estrato"], categories=[1, 2, 3, 4, 5, 6], ordered=True
+)
+print("Estrato máximo:", pedidos["estrato"].max())
+try:
+    pedidos["estrato"].mean()
+except TypeError as error:
+    print("TypeError:", error)
+#&gt; Estrato máximo: 6
+#&gt; TypeError: 'Categorical' with dtype category
+#&gt;   does not support reduction 'mean'</code></pre></div></div>
+<div class="col"><ul>
+<li><code>ordered=True</code> le dice a pandas que hay un orden</li>
+<li><code>max()</code> funciona; <code>mean()</code> se niega</li>
+<li>Un error a tiempo es mejor que un promedio sin sentido</li>
+</ul></div>
+</div></div>
+        
+    </div>
+    <div class="pie"><span class="sello">Sesión 1 · Del dato a la pregunta</span><span>Análisis Estadístico de la Información · UCompensar</span><span class="num">46 / 53</span></div>
+</section>
+<section class="diapo ">
+    
+    <div class="marco">
+        <div class="cabecera">
+            <div class="ficha-icono"><i class="fas fa-laptop-code"></i></div>
+            <div><div class="antetitulo">Primer contacto en Python</div><h2>Un parámetro y tres estadísticos</h2></div>
+        </div>
+        <div class="cuerpo"><div class="columnas centradas" style="grid-template-columns:minmax(0, 2fr) minmax(0, 1fr)">
+<div class="col"><div class="codigo" data-lang="python" data-foco="2,7,10-13"><div class="codigo-cabecera"><span class="codigo-titulo"><i class="fab fa-python"></i>[parametro]</span><button class="btn-copiar" title="Copiar"><i class="fas fa-copy"></i> Copiar</button></div><pre><code># Parámetro: se calcula con TODA la población
+mu = pedidos["tiempo_entrega_min"].mean()
+print(f"μ = {mu:.1f} min   (N = {len(pedidos)})")
+
+# Estadísticos: cada muestra aleatoria da un valor distinto
+for semilla in [1, 2, 3]:
+    muestra = pedidos.sample(n=100, random_state=semilla)
+    x_barra = muestra["tiempo_entrega_min"].mean()
+    print(f"x̄ = {x_barra:.1f} min   (n = 100, semilla {semilla})")
+#&gt; μ = 35.1 min   (N = 12000)
+#&gt; x̄ = 34.4 min   (n = 100, semilla 1)
+#&gt; x̄ = 35.2 min   (n = 100, semilla 2)
+#&gt; x̄ = 35.9 min   (n = 100, semilla 3)</code></pre></div></div>
+<div class="col"><ul>
+<li>μ no cambia: es uno solo</li>
+<li>x̄ cambia con cada muestra, pero queda <strong>cerca</strong> de μ</li>
+<li>¿Qué tan cerca? Esa es la pregunta del muestreo</li>
+</ul></div>
+</div></div>
+        
+    </div>
+    <div class="pie"><span class="sello">Sesión 1 · Del dato a la pregunta</span><span>Análisis Estadístico de la Información · UCompensar</span><span class="num">47 / 53</span></div>
+</section>
+<section class="diapo ">
+    
+    <div class="marco">
+        <div class="cabecera">
+            <div class="ficha-icono"><i class="fas fa-laptop-code"></i></div>
+            <div><div class="antetitulo">Primer contacto en Python</div><h2>Contar categorías: el primer paso de una tabla de frecuencias</h2></div>
+        </div>
+        <div class="cuerpo"><div class="columnas centradas" style="grid-template-columns:minmax(0, 3fr) minmax(0, 2fr)">
+<div class="col"><div class="codigo" data-lang="python" data-foco=""><div class="codigo-cabecera"><span class="codigo-titulo"><i class="fab fa-python"></i>[frecuencias]</span><button class="btn-copiar" title="Copiar"><i class="fas fa-copy"></i> Copiar</button></div><pre><code>ciudad = pedidos["ciudad"]
+conteo = ciudad.value_counts()
+porcentaje = (ciudad.value_counts(normalize=True) * 100).round(1)
+pd.DataFrame({"pedidos": conteo, "%": porcentaje})
+#&gt;               pedidos     %
+#&gt; ciudad
+#&gt; Bogotá           4707  39.2
+#&gt; Medellín         2663  22.2
+#&gt; Cali             1966  16.4
+#&gt; Barranquilla     1474  12.3
+#&gt; Bucaramanga      1190   9.9</code></pre></div></div>
+<div class="col"><ul>
+<li><code>value_counts()</code>: frecuencia absoluta</li>
+<li><code>normalize=True</code>: frecuencia relativa</li>
+<li>Es la respuesta de la pregunta 6 del diagnóstico</li>
+</ul></div>
+</div></div>
+        
+    </div>
+    <div class="pie"><span class="sello">Sesión 1 · Del dato a la pregunta</span><span>Análisis Estadístico de la Información · UCompensar</span><span class="num">48 / 53</span></div>
+</section>
+<section class="diapo dividida seccion" data-tipo="seccion">
+    <div class="marco">
+        <div class="lateral">
+            <div class="institucion">Fundación Universitaria Compensar</div>
+            <div class="asignatura">Análisis Estadístico de la Información</div>
+            <div class="capitulo">Sesión 1 · <span>Del dato a la pregunta</span></div>
+            <hr>
+            <div class="lista-secciones"><div class="item-seccion hecha"><i class="fas fa-door-open"></i><span>Bienvenida</span></div><div class="item-seccion hecha"><i class="fas fa-stethoscope"></i><span>Diagnóstico</span></div><div class="item-seccion hecha"><i class="fas fa-compass"></i><span>Estadística para decidir</span></div><div class="item-seccion hecha"><i class="fas fa-users"></i><span>Población y muestra</span></div><div class="item-seccion hecha"><i class="fas fa-tags"></i><span>Tipos de variable y escalas</span></div><div class="item-seccion hecha"><i class="fas fa-database"></i><span>Fuentes de datos</span></div><div class="item-seccion hecha"><i class="fas fa-laptop-code"></i><span>Primer contacto en Python</span></div><div class="item-seccion actual"><i class="fas fa-keyboard"></i><span>Práctica y cierre</span></div></div>
+        </div>
+        <div class="principal">
+            <div class="numero-grande">08</div>
+            <h2>Práctica y cierre</h2>
+            <div class="gancho"><p>Treinta minutos con el notebook: clasificar, declarar escalas y sacar tu propia muestra.</p></div>
+            
+            <div class="pie" style="left:72px;right:72px"><span></span><span></span><span class="num">49 / 53</span></div>
+        </div>
+    </div>
+</section>
+<section class="diapo ">
+    
+    <div class="marco">
+        <div class="cabecera">
+            <div class="ficha-icono"><i class="fas fa-keyboard"></i></div>
+            <div><div class="antetitulo">Práctica y cierre</div><h2>Práctica guiada: cuatro ejercicios en el notebook</h2></div>
+        </div>
+        <div class="cuerpo"><div class="flujo">
+<div class="paso-flujo"><span class="num">1</span><span class="t">Clasifica</span><span class="d">tipo y escala de 13 variables de Tingua; <code>revisar_tipos</code> da pistas · 10 min</span></div>
+<div class="flecha-flujo">→</div>
+<div class="paso-flujo"><span class="num">2</span><span class="t">Declara las escalas</span><span class="d">franja y calificación ordenadas; fecha como fecha · 8 min</span></div>
+<div class="flecha-flujo">→</div>
+<div class="paso-flujo"><span class="num">3</span><span class="t">Tu propio estadístico</span><span class="d">\(\hat{p}\) con tu semilla, y al chat · 5 min</span></div>
+<div class="flecha-flujo">→</div>
+<div class="paso-flujo"><span class="num">4</span><span class="t">De los datos a la pregunta</span><span class="d">dos preguntas para la gerencia, y la fuente de los datos · 7 min</span></div>
+</div></div>
+        
+    </div>
+    <div class="pie"><span class="sello">Sesión 1 · Del dato a la pregunta</span><span>Análisis Estadístico de la Información · UCompensar</span><span class="num">50 / 53</span></div>
+</section>
+<section class="diapo pregunta">
+    
+    <div class="marco">
+        <div class="cabecera">
+            <div class="ficha-icono"><i class="fas fa-keyboard"></i></div>
+            <div><div><span class="chip-ejercicio" style="background:var(--primary)"><i class="fas fa-circle-question"></i>Pregunta para la clase</span></div><h2>¿Por qué cada uno obtuvo un p̂ distinto?</h2></div>
+        </div>
+        <div class="cuerpo"><p>Mira los \(\hat{p}\) del chat: todos con \(n = 200\), cada uno con su propia semilla. El parámetro es p = 0,241.</p>
+<div class="paso"><div class="caja respuesta"><span class="caja-etiqueta"><i class="fas fa-check"></i>Respuesta</span><div class="caja-cuerpo"><p>Porque cada semilla elige 200 pedidos distintos de los 12 000. El estadístico <strong>varía de muestra en muestra</strong> alrededor del parámetro; esa variación tiene forma y tamaño, y medirla es el trabajo de la inferencia.</p></div></div></div></div>
+        
+    </div>
+    <div class="pie"><span class="sello">Sesión 1 · Del dato a la pregunta</span><span>Análisis Estadístico de la Información · UCompensar</span><span class="num">51 / 53</span></div>
+</section>
+<section class="diapo cierre">
+    <div class="brillo"></div>
+    <div class="marco">
+        <div class="cabecera">
+            <div class="ficha-icono"><i class="fas fa-keyboard"></i></div>
+            <div><div class="antetitulo">Práctica y cierre</div><h2>Lo que te llevas hoy</h2></div>
+        </div>
+        <div class="cuerpo"><ul>
+<li>La estadística <strong>describe</strong> lo que hay e <strong>infiere</strong> lo que no vemos</li>
+<li>Un <strong>parámetro</strong> es fijo y casi nunca se conoce; un <strong>estadístico</strong> se conoce, pero cambia con la muestra</li>
+<li>Toda variable es <strong>nominal, ordinal, discreta o continua</strong>, y su <strong>escala</strong> decide qué cálculos valen</li>
+<li>La <strong>fuente</strong> importa: primaria o secundaria, observacional o experimental</li>
+<li>pandas adivina el <strong>tipo de dato</strong>; el <strong>tipo de variable</strong> se lo dices tú</li>
+</ul></div>
+        <div class="firma-cierre">Antes de calcular, clasifica. — Javier Mauricio Sierra</div>
+    </div>
+    <div class="pie"><span class="sello">Sesión 1 · Del dato a la pregunta</span><span>Análisis Estadístico de la Información · UCompensar</span><span class="num">52 / 53</span></div>
+</section>
+<section class="diapo ">
+    
+    <div class="marco">
+        <div class="cabecera">
+            <div class="ficha-icono"><i class="fas fa-keyboard"></i></div>
+            <div><div class="antetitulo">Práctica y cierre</div><h2>Para la próxima sesión</h2></div>
+        </div>
+        <div class="cuerpo"><ul>
+<li><strong>Termina</strong> la práctica: los ejercicios 1 y 2 se revisan solos</li>
+<li><strong>Lee</strong> <em>OpenIntro Statistics</em> (4.ª edición, de acceso abierto), capítulo 1, secciones 1.2 y 1.3</li>
+<li><strong>Trae</strong> tus dos preguntas del ejercicio 4: con ellas abrimos la sesión</li>
+</ul>
+<p><strong>Próxima sesión:</strong> tablas y distribuciones de frecuencias.</p></div>
+        
+    </div>
+    <div class="pie"><span class="sello">Sesión 1 · Del dato a la pregunta</span><span>Análisis Estadístico de la Información · UCompensar</span><span class="num">53 / 53</span></div>
+</section>
+        </div>
+    </main>
+
+    <nav id="controles" aria-label="Navegación">
+        <span id="contador"></span>
+        <button class="btn-nav ant" id="btn-ant" aria-label="Anterior"><i class="fas fa-chevron-left"></i> Anterior</button>
+        <button class="btn-nav sig" id="btn-sig" aria-label="Siguiente">Siguiente <i class="fas fa-chevron-right"></i></button>
+    </nav>
+
+    <aside id="notas" aria-live="polite"></aside>
+    <div id="ir-a"></div>
+    <div id="negro"></div>
+
+    <div id="ayuda">
+        <div class="tarjeta-ayuda">
+            <h3>Atajos del teclado</h3>
+            <table>
+                <tr><td><kbd>→</kbd><kbd>Espacio</kbd><kbd>AvPág</kbd></td><td>Siguiente (y revela lo pendiente)</td></tr>
+                <tr><td><kbd>←</kbd><kbd>RePág</kbd></td><td>Anterior</td></tr>
+                <tr><td><kbd>Inicio</kbd><kbd>Fin</kbd></td><td>Primera · última</td></tr>
+                <tr><td><kbd>12</kbd><kbd>Enter</kbd></td><td>Ir a la diapositiva 12</td></tr>
+                <tr><td><kbd>M</kbd></td><td>Índice por secciones</td></tr>
+                <tr><td><kbd>N</kbd></td><td>Notas del presentador</td></tr>
+                <tr><td><kbd>P</kbd></td><td>Vista del presentador (otra ventana)</td></tr>
+                <tr><td><kbd>F</kbd></td><td>Pantalla completa</td></tr>
+                <tr><td><kbd>B</kbd><kbd>.</kbd></td><td>Pantalla en negro</td></tr>
+                <tr><td><kbd>Esc</kbd></td><td>Cerrar paneles</td></tr>
+            </table>
+        </div>
+    </div>
+
+    <div id="panel-presentador">
+        <div class="barra">
+            <div><span id="p-contador"></span> · <span id="p-titulo"></span></div>
+            <div class="reloj"><span id="p-cronometro">00:00</span><small id="p-hora"></small></div>
+        </div>
+        <div class="hueco" id="p-hueco"></div>
+        <div class="derecha">
+            <div>
+                <div class="etq">A continuación</div>
+                <div id="vista-siguiente"></div>
+            </div>
+            <div class="etq" style="margin-bottom:-8px">Notas</div>
+            <div id="notas-presentador" class="notas"></div>
+        </div>
+    </div>
+
+    <script id="datos-mazo" type="application/json">{"config": {"asignatura": "Análisis Estadístico de la Información", "numero": "1", "titulo": "Del dato a la pregunta", "ra": "", "horas": "", "stack": [], "institucion": "Fundación Universitaria Compensar", "sigla": "UCompensar", "unidad": "Sesión", "storageKey": "ucompensar_análisis_estadístico_de_la_información_1"}, "diapos": [{"titulo": "Portada", "seccion": "", "k": -1, "notas": ""}, {"titulo": "Hoja de ruta", "seccion": "", "k": -1, "notas": ""}, {"titulo": "Bienvenida", "seccion": "Bienvenida", "k": 0, "notas": "<p>Arrancar con la frase. El syllabus abre igual: la era digital produce más información, que a veces se interpreta mal y termina distrayendo de los objetivos. Este curso trata de interpretarla bien. Pedir desde ya que abran el notebook de la sesión (botón «Abrir en Colab» de la portada del curso, o el enlace de la diapositiva de Colab) y ejecuten la primera celda: lo usaremos en la segunda hora.<\/p>"}, {"titulo": "El curso recorre cuatro etapas, del diagnóstico al tablero", "seccion": "Bienvenida", "k": 0, "notas": "<p>Son las cuatro etapas de la metodología y de los contenidos del syllabus. Dos créditos son 96 horas en total. El trabajo independiente no es opcional: lecturas, talleres y la práctica de cada sesión. Todo el curso se hace en Python, en Google Colab, sin instalar nada.<\/p>"}, {"titulo": "Tres criterios valoran tu desempeño, y hoy empezamos por el primero", "seccion": "Bienvenida", "k": 0, "notas": "<p>Los criterios de realización son la base de las rúbricas. Hoy trabajamos CR1 de principio a fin: clasificar variables, escalas y fuentes. CR2 y CR3 llegan con la regresión y la visualización. La autoevaluación empieza en cinco minutos, con el diagnóstico.<\/p>"}, {"titulo": "Dos horas en seis momentos", "seccion": "Bienvenida", "k": 0, "notas": "<p>Si el diagnóstico se alarga, se saltan dos diapositivas que son adelantos de la próxima sesión: «El tipo de variable decide el resumen y el gráfico» y «Contar categorías» (que queda en el notebook). La práctica no se recorta: ahí se ve si CR1 quedó.<\/p>"}, {"titulo": "Diagnóstico", "seccion": "Diagnóstico", "k": 1, "notas": "<p>Etapa 0 del syllabus: reconocimiento. Seis preguntas, un minuto cada una. Pedir que anoten sus respuestas (en papel, o en un mensaje sin enviar) y que no las busquen: el diagnóstico solo sirve si es honesto. Las respuestas se muestran todas juntas al final.<\/p>"}, {"titulo": "¿Qué tipo de variable es el estrato socioeconómico (1 a 6)?", "seccion": "Diagnóstico", "k": 1, "notas": "<p>No dar pistas. Esta y la 6 son las que resolvemos hoy mismo.<\/p>"}, {"titulo": "20, 22, 25, 27 y 150 minutos: ¿qué describe mejor el tiempo típico?", "seccion": "Diagnóstico", "k": 1, "notas": "<p>Medidas de tendencia central y datos atípicos.<\/p>"}, {"titulo": "Misma media, distinta desviación estándar: ¿qué cambia?", "seccion": "Diagnóstico", "k": 1, "notas": "<p>Medidas de dispersión.<\/p>"}, {"titulo": "Juzgar la satisfacción solo con las reseñas: ¿cuál es el problema?", "seccion": "Diagnóstico", "k": 1, "notas": "<p>Muestreo: sesgo de selección.<\/p>"}, {"titulo": "Una regresión estima tiempo = 12 + 3 × distancia. ¿Qué dice el 3?", "seccion": "Diagnóstico", "k": 1, "notas": "<p>Regresión lineal: interpretación de la pendiente.<\/p>"}, {"titulo": "En pandas, ¿qué hace pedidos[\"ciudad\"].value_counts()?", "seccion": "Diagnóstico", "k": 1, "notas": "<p>Nivel de Python. Si muchos fallan esta, dedicar más tiempo a la demostración en Colab.<\/p>"}, {"titulo": "Respuestas del diagnóstico: cuenta tus aciertos", "seccion": "Diagnóstico", "k": 1, "notas": "<p>Pedir que escriban en el chat cuántas acertaron, solo el número: con eso se ajusta el ritmo del curso. Es su primera autoevaluación. No explicar ahora las preguntas 2 a 5: cada una tiene su sesión. La 2 sí merece una frase: la media (48,8) no se parece a ningún pedido; la mediana (25), a casi todos.<\/p>"}, {"titulo": "Estadística para decidir", "seccion": "Estadística para decidir", "k": 2, "notas": "<p>Presentar el caso como una empresa de domicilios: el tipo de servicio que todos han usado alguna vez.<\/p>"}, {"titulo": "Tingua Domicilios: el caso que nos acompaña todo el curso", "seccion": "Estadística para decidir", "k": 2, "notas": "<p>Decir explícitamente que es ficticia. Los mismos datos sirven para todo el curso: hoy los clasificamos; en las próximas sesiones los resumimos, sacamos muestras, ajustamos regresiones y armamos un tablero.<\/p>"}, {"titulo": "Cuatro preguntas de la gerencia ordenan el curso", "seccion": "Estadística para decidir", "k": 2, "notas": "<p>Volveremos a estas preguntas al final del curso. La segunda ya trae trampa: el 40,8 % de los pedidos no tiene calificación, y no faltan completamente al azar. Lo retomamos en fuentes de datos y, a fondo, en muestreo.<\/p>"}, {"titulo": "Describir lo que hay; inferir lo que no vemos", "seccion": "Estadística para decidir", "k": 2, "notas": "<p>La definición es la del glosario del syllabus (<em>statistical analysis<\/em>), traducida. La distinción entre descriptiva e inferencial ordena las dos primeras etapas del curso: análisis exploratorio, y después muestreo.<\/p>"}, {"titulo": "Un estudio estadístico empieza por la pregunta, no por los datos", "seccion": "Estadística para decidir", "k": 2, "notas": "<p>Hoy estamos al comienzo de «Datos»: antes de calcular hay que saber qué es cada columna. El título de la sesión, «del dato a la pregunta», recorre el ciclo al revés, que es lo que pasa en las empresas: llegan los datos y hay que averiguar qué preguntas pueden responder. El ciclo se debe a MacKay y Oldford; lo difundieron Wild, C. J. y Pfannkuch, M. (1999), <em>Statistical thinking in empirical enquiry<\/em>, International Statistical Review, 67(3).<\/p>"}, {"titulo": "¿Descriptiva o inferencial?", "seccion": "Estadística para decidir", "k": 2, "notas": "<p>La 3 se apoya en un dato descriptivo real (con lluvia, los pedidos del semestre tardaron 7,8 min más en promedio), pero lo proyecta a julio: eso ya es inferir.<\/p>"}, {"titulo": "Población y muestra", "seccion": "Población y muestra", "k": 3, "notas": ""}, {"titulo": "La población es el todo; la muestra, la parte que observas", "seccion": "Población y muestra", "k": 3, "notas": "<p>Detenerse en las dos flechas: muestrear es ir de la población a la muestra; inferir es volver con una conclusión. Toda la estadística inferencial vive en la flecha punteada. Aquí la población cabe en una tabla y por eso podemos calcular μ; en la vida real casi nunca se puede.<\/p>"}, {"titulo": "El parámetro describe la población; el estadístico, la muestra", "seccion": "Población y muestra", "k": 3, "notas": "<p>Es la convención de casi todos los textos; el tamaño y la proporción son las excepciones (N, y p con su p sombrero). Con los datos de Tingua: N = 12 000, μ = 35,1 min, p = 0,241 (pedidos con lluvia).<\/p>"}, {"titulo": "La misma fórmula, sobre conjuntos distintos", "seccion": "Población y muestra", "k": 3, "notas": "<p>La cuenta es idéntica; lo que cambia es sobre qué conjunto se hace, y por eso cambia lo que significa. En media hora lo veremos en Python: tres muestras de 100 pedidos, tres x̄ distintos, un solo μ.<\/p>"}, {"titulo": "Cada fila es una unidad de observación; cada columna, una variable", "seccion": "Población y muestra", "k": 3, "notas": "<p>Es la forma «ordenada» (<em>tidy<\/em>) de una tabla: una fila por unidad, una columna por variable (Wickham, 2014, <em>Tidy data<\/em>, Journal of Statistical Software). Preguntar: si la gerencia quiere saber cuántos clientes distintos tiene, ¿sirve esta tabla? No: no trae identificador de cliente. Las cifras van con punto decimal porque así las verán en pandas.<\/p>"}, {"titulo": "¿Parámetro o estadístico?", "seccion": "Población y muestra", "k": 3, "notas": "<p>La 3 es la que más se equivoca: «Cali» suena a una parte de algo más grande. Pero si la pregunta es sobre los pedidos de Cali, sus 1 966 pedidos son la población. Qué es población lo decide la pregunta, no la tabla.<\/p>"}, {"titulo": "Un parámetro es fijo y casi nunca se conoce; un estadístico se conoce, pero cambia", "seccion": "Población y muestra", "k": 3, "notas": "<p>Llevar esta frase hasta la etapa de muestreo. En la práctica la comprobarán: cada uno obtendrá un p̂ distinto.<\/p>"}, {"titulo": "Tipos de variable y escalas", "seccion": "Tipos de variable y escalas", "k": 4, "notas": "<p>Este es el núcleo de CR1. Los ejemplos de esta sección son cotidianos a propósito: las columnas de Tingua las clasifican ellos en la práctica.<\/p>"}, {"titulo": "Toda variable es cualitativa o cuantitativa, y cada una tiene dos clases", "seccion": "Tipos de variable y escalas", "k": 4, "notas": "<p>Recorrer el árbol de arriba abajo, con una pregunta en cada nivel. ¿Tiene sentido sumar o promediar? Cualitativa o cuantitativa. ¿Hay un orden natural? Nominal u ordinal. ¿Se cuenta o se mide? Discreta o continua. Las de dos categorías, como «¿fuma?», se llaman dicotómicas y son nominales.<\/p>"}, {"titulo": "Cualitativas: las nominales solo nombran; las ordinales, además, ordenan", "seccion": "Tipos de variable y escalas", "k": 4, "notas": "<p>La pregunta que las separa: ¿tiene sentido decir que una categoría es «mayor» que otra? El grupo O no es mayor que el A. El estrato 4 sí es mayor que el 2, pero en una ordinal se sabe cuál es mayor, no por cuánto: la distancia entre los estratos 1 y 2 no tiene por qué ser la misma que entre el 5 y el 6.<\/p>"}, {"titulo": "Cuantitativas: las discretas se cuentan; las continuas se miden", "seccion": "Tipos de variable y escalas", "k": 4, "notas": "<p>Una continua se registra redondeada (la estatura en centímetros), pero eso es una limitación del instrumento, no de la variable. Lo del dinero es una convención: decirlo, porque en el ejercicio 1 aparece el valor del pedido y el verificador acepta las dos respuestas.<\/p>"}, {"titulo": "Cuatro escalas de medición: cada una permite una operación más", "seccion": "Tipos de variable y escalas", "k": 4, "notas": "<p>Cada escala hereda las operaciones de la anterior. La de intervalo es la que más cuesta: de 10 a 20 °C hay lo mismo que de 20 a 30 °C, pero 0 °C no es ausencia de temperatura; y el origen del calendario es una convención. En razón, el cero sí es «nada»: 0 minutos de espera es no esperar. Referencia: Stevens, S. S. (1946), <em>On the theory of scales of measurement<\/em>, Science, 103(2684).<\/p>"}, {"titulo": "¿Hace el doble de calor en Barranquilla que en Bogotá?", "seccion": "Tipos de variable y escalas", "k": 4, "notas": "<p>Lo que sí tiene sentido es la diferencia: en Barranquilla hacía 14,9 °C más. Las temperaturas salen de la columna temperatura_c de Tingua.<\/p>"}, {"titulo": "Un número no siempre es una cantidad", "seccion": "Tipos de variable y escalas", "k": 4, "notas": "<p>Puente con Python: pandas leerá el estrato como un entero y lo promediará sin protestar. Veremos cómo decirle que es una categoría con orden.<\/p>"}, {"titulo": "Clasifica estas cinco variables", "seccion": "Tipos de variable y escalas", "k": 4, "notas": "<p>La 5 es la difícil: restar años tiene sentido (una edad), dividirlos no. Si alguien discute si el año es discreto o continuo: el tiempo es continuo, aunque lo registremos en años enteros. Lo que importa aquí es la escala.<\/p>"}, {"titulo": "El tipo de variable decide el resumen y el gráfico", "seccion": "Tipos de variable y escalas", "k": 4, "notas": "<p>No desarrollar: es un adelanto. La próxima sesión empieza por la primera columna (tablas de frecuencias). Si el tiempo aprieta, esta es la diapositiva que se salta.<\/p>"}, {"titulo": "Fuentes de datos", "seccion": "Fuentes de datos", "k": 5, "notas": "<p>La segunda mitad de CR1: clasificar la fuente. No se recorta: el ejercicio 4 de la práctica pide clasificar la fuente de pedidos.csv.<\/p>"}, {"titulo": "Primaria o secundaria: ¿se recogió para tu pregunta?", "seccion": "Fuentes de datos", "k": 5, "notas": "<p>pedidos.csv sorprende: es de Tingua (interna) pero secundaria, porque la app la registra para operar, no para responder nuestras preguntas. Por eso trae lo que la operación necesitó y no lo que el análisis querría: no tiene identificador de cliente. En la ficción, la lluvia y la temperatura vienen de un servicio de clima que se une a cada pedido: una fuente externa dentro de una tabla interna.<\/p>"}, {"titulo": "Observar o experimentar: solo el experimento permite hablar de causa", "seccion": "Fuentes de datos", "k": 5, "notas": "<p>Los datos de Tingua son observacionales: lo que concluyamos con regresión será asociación, no causa. Saber esto es la mitad de interpretar en contexto, que es lo que pide CR3.<\/p>"}, {"titulo": "Cinco criterios para decidir si una fuente sirve", "seccion": "Fuentes de datos", "k": 5, "notas": "<p>CR1 pide clasificar los datos y su fuente para decidir: esta es la lista de chequeo. La completitud trae una trampa que veremos en muestreo: los clientes cuyo pedido tardó más de 55 minutos califican mucho más (81 %) que el resto (58 %). Los faltantes no son completamente al azar. El pedido de 201 minutos es el más lento del semestre: lo retomamos en datos atípicos.<\/p>"}, {"titulo": "Primer contacto en Python", "seccion": "Primer contacto en Python", "k": 6, "notas": ""}, {"titulo": "Colab: un notebook en el navegador, sin instalar nada", "seccion": "Primer contacto en Python", "k": 6, "notas": "<p>Si alguien todavía no lo ha abierto, que lo haga ahora: la portada del curso está en https://jotamao1985.github.io/ANaLISIS-ESTADiSTICO-DE-LA-INFORMACIoN_Ucomp/ y el enlace de esta diapositiva abre el notebook directamente. Si Colab se reinicia o una celda falla al repetirla: Entorno de ejecución → Ejecutar anteriores. La primera celda está plegada: crea los datos y unas funciones para revisar la práctica.<\/p>"}, {"titulo": "Tres líneas para cargar los 12 000 pedidos", "seccion": "Primer contacto en Python", "k": 6, "notas": "<p>Ejecutar en vivo y, en la celda siguiente del notebook, mostrar pedidos.head(): ahí se ven los NaN de la calificación, que usamos en dos diapositivas.<\/p>"}, {"titulo": "pandas adivina el tipo de dato, no el tipo de variable", "seccion": "Primer contacto en Python", "k": 6, "notas": "<p>El tipo de dato dice cómo se guarda el valor en memoria; el tipo de variable, qué significa. pandas solo puede adivinar lo primero. Las tres líneas iluminadas son ejemplos de lo que hay que corregir a mano; en la práctica también corregirán la franja.<\/p>"}, {"titulo": "¿Por qué la calificación es float64, si son estrellas de 1 a 5?", "seccion": "Primer contacto en Python", "k": 6, "notas": "<p>Es la misma cifra del criterio de completitud: 4 901 pedidos, el 40,8 %.<\/p>"}, {"titulo": "Declarar la escala evita cálculos sin sentido", "seccion": "Primer contacto en Python", "k": 6, "notas": "<p>El try/except solo está para que la celda no se detenga: lo que importa es el mensaje. En el notebook la celda trae dos comentarios más («comparar sí tiene sentido… promediar, no»). La salida del error está partida en dos líneas para que quepa. En la práctica harán lo mismo con la franja y la calificación.<\/p>"}, {"titulo": "Un parámetro y tres estadísticos", "seccion": "Primer contacto en Python", "k": 6, "notas": "<p>La semilla (random_state) hace que la muestra sea reproducible: con la misma semilla sale la misma muestra en cualquier computador. Preguntar qué pasaría con muestras de 1 000 pedidos en lugar de 100 y dejar la respuesta en el aire.<\/p>"}, {"titulo": "Contar categorías: el primer paso de una tabla de frecuencias", "seccion": "Primer contacto en Python", "k": 6, "notas": "<p>Es un adelanto de la próxima sesión, donde la tabla se completa con frecuencias acumuladas y sus gráficos. Si el tiempo aprieta, se salta: la celda está en el notebook.<\/p>"}, {"titulo": "Práctica y cierre", "seccion": "Práctica y cierre", "k": 7, "notas": ""}, {"titulo": "Práctica guiada: cuatro ejercicios en el notebook", "seccion": "Práctica y cierre", "k": 7, "notas": "<p>Los ejercicios 1 y 2 se revisan solos: revisar_tipos dice qué variable está mal y da una pista, sin la respuesta. Ir anotando en el tablero los p̂ que lleguen al chat en el ejercicio 3: todos rondan p = 0,241 y nadie lo obtiene exacto. En el ejercicio 4, pedir dos o tres voluntarios que lean sus preguntas.<\/p>"}, {"titulo": "¿Por qué cada uno obtuvo un p̂ distinto?", "seccion": "Práctica y cierre", "k": 7, "notas": "<p>Es la imagen con la que abriremos la etapa de muestreo: un histograma con los p̂ del grupo tiende a la forma de campana, centrado cerca de p. Detalle para quien pregunte: con n = 200, p̂ siempre es múltiplo de 0,005, así que nadie puede obtener 0,241 exacto.<\/p>"}, {"titulo": "Lo que te llevas hoy", "seccion": "Práctica y cierre", "k": 7, "notas": "<p>Leer las cinco en voz alta y preguntar cuál les costó más: es la autoevaluación de cierre.<\/p>"}, {"titulo": "Para la próxima sesión", "seccion": "Práctica y cierre", "k": 7, "notas": "<p>OpenIntro Statistics (Diez, Çetinkaya-Rundel y Barr) se descarga gratis en openintro.org; las secciones 1.2 y 1.3 cubren tipos de variable y principios de muestreo, en inglés (el syllabus pide referencias en otros idiomas). Es una sugerencia del docente: no está en la bibliografía del syllabus.<\/p>"}], "secciones": [{"titulo": "Bienvenida", "icono": "fa-door-open", "primera": 2, "diapos": [2, 3, 4, 5]}, {"titulo": "Diagnóstico", "icono": "fa-stethoscope", "primera": 6, "diapos": [6, 7, 8, 9, 10, 11, 12, 13]}, {"titulo": "Estadística para decidir", "icono": "fa-compass", "primera": 14, "diapos": [14, 15, 16, 17, 18, 19]}, {"titulo": "Población y muestra", "icono": "fa-users", "primera": 20, "diapos": [20, 21, 22, 23, 24, 25, 26]}, {"titulo": "Tipos de variable y escalas", "icono": "fa-tags", "primera": 27, "diapos": [27, 28, 29, 30, 31, 32, 33, 34, 35]}, {"titulo": "Fuentes de datos", "icono": "fa-database", "primera": 36, "diapos": [36, 37, 38, 39]}, {"titulo": "Primer contacto en Python", "icono": "fa-laptop-code", "primera": 40, "diapos": [40, 41, 42, 43, 44, 45, 46, 47]}, {"titulo": "Práctica y cierre", "icono": "fa-keyboard", "primera": 48, "diapos": [48, 49, 50, 51, 52]}], "iconos": {}, "graficas": {}}</script>
+
+    <script>
+    (() => {
+        'use strict';
+        const DATOS = JSON.parse(document.getElementById('datos-mazo').textContent);
+        const CFG = DATOS.config;
+        const params = new URLSearchParams(location.search);
+        const MODO_PRESENTADOR = params.has('presentador');
+        const MODO_REVISION = params.has('revisar');
+        const TODO_VISIBLE = params.has('todo');   // revela todos los pasos (capturas)
+        const CLAVE = (CFG.storageKey || 'lpcore') + '_diapositivas';
+
+        const mazo = document.getElementById('mazo');
+        const diapos = Array.from(mazo.querySelectorAll(':scope > .diapo'));
+        const N = diapos.length;
+        const $ = (id) => document.getElementById(id);
+
+        const leer = (k) => { try { return localStorage.getItem(k); } catch (e) { return null; } };
+        const guardar = (k, v) => { try { localStorage.setItem(k, v); } catch (e) { } };
+
+        /* ---------- Resaltado de código, como `resaltar` de LP-CORE ------- */
+        // El pseudocódigo de Lógica de Programación Financiera: la misma gramática
+        // que registra el capítulo (Prism no la trae).
+        if (window.Prism && !Prism.languages.pseudo) {
+            Prism.languages.pseudo = {
+                'comment': { pattern: /\/\/.*/, greedy: true },
+                'string': { pattern: /"(?:[^"\\\n]|\\.)*"/, greedy: true },
+                'keyword': /\b(?:FinSi|FinMientras|FinPara|FinSegun|FinFuncion|FinProcedimiento|FinRepita|Inicio|Fin|Si|Entonces|SinoSi|Sino|Segun|Caso|DeOtroModo|Mientras|Hacer|Para|Repita|Hasta|Con|Paso|Leer|Escribir|Funcion|Procedimiento|Retornar|Llamar)\b/,
+                'builtin': /\b(?:Entero|Real|Cadena|Caracter|Logico|Arreglo|Matriz|Constante|Verdadero|Falso)\b/,
+                'function': /\b(?:Y|O|NO|MOD|DIV|abs|raiz|redondear|potencia|longitud)\b/,
+                'number': /\b\d+(?:\.\d+)?\b/,
+                'operator': /<-|←|>=|<=|<>|[+\-*\/=<>]/,
+                'punctuation': /[(),;\[\]]/,
+            };
+        }
+        const GRAMATICA = { pseudo: 'pseudo', pseudocodigo: 'pseudo', python: 'python', py: 'python', shell: 'bash', bash: 'bash', sh: 'bash', docker: 'docker', dockerfile: 'docker', yaml: 'yaml', yml: 'yaml', sql: 'sql', toml: 'toml', json: 'json', r: 'r', vba: 'visual-basic', js: 'javascript', javascript: 'javascript' };
+        const PREFIJO_SALIDA = { python: '#>', py: '#>', r: '#>', shell: '#>', bash: '#>', vba: "'>", pseudo: '//>', pseudocodigo: '//>' };
+        const escaparHtml = (s) => s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+
+        const resaltarBloques = () => {
+            document.querySelectorAll('.codigo').forEach((bloque) => {
+                const code = bloque.querySelector('pre code');
+                if (!code || code.dataset.hecho) return;
+                const fuente = code.textContent;
+                bloque._fuente = fuente;
+                const lang = bloque.dataset.lang || 'text';
+                const nombre = GRAMATICA[lang];
+                const gram = nombre && window.Prism && Prism.languages[nombre];
+                let html = gram ? Prism.highlight(fuente, gram, nombre) : escaparHtml(fuente);
+                const pref = PREFIJO_SALIDA[lang];
+                const foco = new Set((bloque.dataset.foco || '').split(',').filter(Boolean).flatMap((r) => {
+                    const [a, b] = r.split('-').map(Number);
+                    return Array.from({ length: (b || a) - a + 1 }, (_, i) => a + i);
+                }));
+                html = html.split('\n').map((linea, i) => {
+                    const plano = linea.replace(/<[^>]*>/g, '').replace(/&gt;/g, '>').replace(/&lt;/g, '<').replace(/&amp;/g, '&').trimStart();
+                    const clases = ['linea'];
+                    if (pref && plano.startsWith(pref)) clases.push('lp-salida');
+                    if (foco.has(i + 1)) clases.push('foco');
+                    return `<span class="${clases.join(' ')}">${linea || ' '}</span>`;
+                }).join('\n');
+                code.innerHTML = html;
+                code.dataset.hecho = '1';
+                if (foco.size) bloque.classList.add('con-foco');
+            });
+        };
+
+        document.addEventListener('click', (e) => {
+            const btn = e.target.closest('.btn-copiar');
+            if (!btn) return;
+            const bloque = btn.closest('.codigo');
+            const texto = bloque._fuente ?? bloque.querySelector('code').textContent;
+            navigator.clipboard.writeText(texto).then(() => {
+                btn.classList.add('copiado');
+                btn.innerHTML = '<i class="fas fa-check"></i> Copiado';
+                setTimeout(() => { btn.classList.remove('copiado'); btn.innerHTML = '<i class="fas fa-copy"></i> Copiar'; }, 2000);
+            }).catch(() => { });
+        });
+
+        /* ---------- Gráficas de Plotly (solo si el mazo trae alguna) ---------- */
+        const dibujarGraficas = () => {
+            const nodos = document.querySelectorAll('.grafica[data-fuente]');
+            if (!nodos.length || !window.Plotly) return;
+            nodos.forEach((el) => {
+                if (el.dataset.hecha) return;
+                const g = DATOS.graficas[el.dataset.fuente];
+                if (!g) return;
+                const layout = Object.assign({}, g.layout || {}, {
+                    autosize: true,
+                    font: Object.assign({ size: 14, color: '#1E293B' }, (g.layout || {}).font || {}, { family: getComputedStyle(document.documentElement).getPropertyValue('--fuente').trim() || 'Montserrat, sans-serif' }),
+                    paper_bgcolor: 'rgba(0,0,0,0)',
+                });
+                delete layout.width; delete layout.height;
+                // Con la tipografía del curso las etiquetas miden otra cosa que
+                // en el material: que cada eje reserve su propio margen.
+                Object.keys(layout).filter((k) => /^[xy]axis\d*$/.test(k)).forEach((k) => {
+                    layout[k] = Object.assign({}, layout[k], { automargin: true });
+                });
+                Plotly.newPlot(el, g.data, layout, { displayModeBar: false, responsive: true });
+                el.dataset.hecha = '1';
+            });
+        };
+
+        /* ---------- Ajuste: lo que no cabe se encoge, hasta un límite ---------- */
+        const K_MIN = 0.7;
+        const desborda = (d) => {
+            const c = d.querySelector('.cuerpo');
+            if (!c) return false;
+            if (c.scrollHeight > c.clientHeight + 2) return true;
+            if (Array.from(c.querySelectorAll('pre')).some((el) => el.scrollHeight > el.clientHeight + 2)) return true;
+            if (Array.from(c.querySelectorAll('pre, table, .tarjetas, .flujo, .columnas')).some((el) => el.scrollWidth > el.clientWidth + 2)) return true;
+            // Una fórmula, una imagen o un diagrama más anchos que su columna no
+            // agrandan la rejilla: invaden la columna de al lado. Se mide contra
+            // la caja que los contiene.
+            return Array.from(c.querySelectorAll('mjx-container, img, svg, .grafica')).some((el) => {
+                if (el.closest('.codigo')) return false;
+                if (el.tagName.toLowerCase() === 'svg' && el.parentElement && el.parentElement.closest('mjx-container, .grafica, svg')) return false;
+                const marco = el.closest('.columnas > *, .tarjeta, .caja, td, th') || c;
+                const m = marco.getBoundingClientRect();
+                // MathJax deja el contenedor del ancho de la columna y desborda por dentro.
+                const r = (el.querySelector(':scope > svg, :scope > mjx-math') || el).getBoundingClientRect();
+                return r.width > 0 && (r.right > m.right + 2 || r.left < m.left - 2);
+            });
+        };
+
+        const ajustar = () => {
+            const informe = [];
+            diapos.forEach((d, i) => {
+                d.querySelectorAll(':scope > .aviso-revision').forEach((a) => a.remove());
+                let k = parseFloat(d.dataset.k || '1');
+                d.style.setProperty('--k', k);
+                while (desborda(d) && k > K_MIN + 1e-6) {
+                    k = Math.max(K_MIN, +(k - 0.03).toFixed(3));
+                    d.style.setProperty('--k', k);
+                }
+                const sigue = desborda(d);
+                if (sigue || k < 0.88) informe.push({ n: i + 1, titulo: DATOS.diapos[i].titulo, escala: k, desborda: sigue });
+                if (MODO_REVISION && (sigue || k < 0.88)) {
+                    const a = document.createElement('div');
+                    a.className = 'aviso-revision';
+                    a.textContent = sigue ? 'NO CABE' : `encogida a ${Math.round(k * 100)} %`;
+                    d.appendChild(a);
+                }
+            });
+            return informe;
+        };
+
+        /* ---------- Escala del lienzo ---------- */
+        const escalar = () => {
+            if (MODO_PRESENTADOR) return escalarPresentador();
+            const s = Math.min(window.innerWidth / 1280, window.innerHeight / 720);
+            mazo.style.transform = `translate(-50%, -50%) scale(${s})`;
+        };
+
+        /* ---------- Estado ---------- */
+        const inicial = () => {
+            const h = parseInt(location.hash.replace('#', ''), 10);
+            if (Number.isInteger(h) && h >= 1 && h <= N) return h - 1;
+            const g = parseInt(leer(CLAVE), 10);
+            return Number.isInteger(g) && g >= 0 && g < N ? g : 0;
+        };
+
+        let actual = -1;
+        let paso = 0;
+        const pasosDe = (i) => Array.from(diapos[i].querySelectorAll('.paso'));
+
+        const canal = ('BroadcastChannel' in window) ? new BroadcastChannel('diapositivas-' + CLAVE) : null;
+        let silencio = false;
+
+        const mostrar = (i, p = 0, emitir = true) => {
+            i = Math.max(0, Math.min(N - 1, i));
+            if (i !== actual) {
+                diapos.forEach((d, j) => d.classList.toggle('activa', j === i));
+                actual = i;
+            }
+            const pasos = pasosDe(i);
+            paso = (p < 0 || TODO_VISIBLE) ? pasos.length : Math.min(p, pasos.length);
+            pasos.forEach((el, j) => el.classList.toggle('visto', j < paso));
+            const meta = DATOS.diapos[i];
+            $('progreso').firstElementChild.style.width = `${((i + 1) / N) * 100}%`;
+            $('contador').innerHTML = `${i + 1} / ${N}${meta.seccion ? ` <span>· ${meta.seccion}</span>` : ''}`;
+            $('btn-ant').disabled = i === 0 && paso === 0;
+            $('btn-sig').disabled = i === N - 1 && paso >= pasos.length;
+            $('notas').innerHTML = `<div class="etq-notas">Notas · ${i + 1}. ${meta.titulo || ''}</div>` + (meta.notas || '<p class="notas-vacias">Esta diapositiva no tiene notas.</p>');
+            if (!MODO_PRESENTADOR) {
+                if (location.hash !== '#' + (i + 1)) history.replaceState(null, '', '#' + (i + 1));
+                guardar(CLAVE, String(i));
+            }
+            pintarIndice();
+            if (MODO_PRESENTADOR) pintarPresentador();
+            if (emitir && canal && !silencio) canal.postMessage({ tipo: 'ir', i, paso });
+        };
+
+        const siguiente = () => {
+            const pasos = pasosDe(actual);
+            if (paso < pasos.length) return mostrar(actual, paso + 1);
+            if (actual < N - 1) mostrar(actual + 1, 0);
+        };
+
+        const anterior = () => {
+            if (paso > 0) return mostrar(actual, paso - 1);
+            if (actual > 0) mostrar(actual - 1, -1);
+        };
+
+        if (canal) {
+            canal.onmessage = (e) => {
+                const m = e.data || {};
+                silencio = true;
+                if (m.tipo === 'ir') mostrar(m.i, m.paso, false);
+                if (m.tipo === 'sig') siguiente();
+                if (m.tipo === 'ant') anterior();
+                silencio = false;
+                if ((m.tipo === 'sig' || m.tipo === 'ant') && canal) canal.postMessage({ tipo: 'ir', i: actual, paso });
+            };
+        }
+
+        /* ---------- Índice: la barra lateral del material ---------- */
+        const iconoSvg = (nombre) => (nombre && nombre.startsWith('fa-')) ? `<i class="fas ${nombre}"></i>`
+            : (DATOS.iconos[nombre] || DATOS.iconos.BookOpen || '<i class="fas fa-book-open"></i>');
+
+        const construirIndice = () => {
+            const ind = $('indice');
+            const secciones = DATOS.secciones;
+            let html = `<div class="cab">
+                <div class="institucion" style="font-size:10.5px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--gold)">${CFG.institucion || ''}</div>
+                <div style="font-size:18px;font-weight:700;margin-top:4px;line-height:1.25">${CFG.asignatura || ''}</div>
+                <div style="font-size:12px;color:rgba(255,255,255,.6);margin-top:5px">${CFG.unidad || 'Semana'} ${CFG.numero || ''} · <span style="color:var(--secondary);font-weight:600">${CFG.titulo || ''}</span></div>
+            </div><nav>`;
+            html += `<button class="item-seccion" data-ir="0">${iconoSvg('BookOpen')}<span>Portada</span></button>`;
+            secciones.forEach((s, k) => {
+                html += `<button class="item-seccion" data-seccion="${k}" data-ir="${s.primera}">${iconoSvg(s.icono)}<span>${s.titulo}</span></button>`;
+                html += `<div class="sub" data-sub="${k}">` + s.diapos.map((j) => `<button data-ir="${j}">${j + 1}. ${DATOS.diapos[j].titulo || '—'}</button>`).join('') + `</div>`;
+            });
+            html += `</nav><div class="pie-indice"><p style="margin:0">${CFG.ra || ''}${CFG.horas ? ' · ' + CFG.horas + ' horas' : ''}</p><p style="margin:4px 0 0">${Array.isArray(CFG.stack) ? CFG.stack.join(' · ') : (CFG.stack || '')}</p></div>`;
+            ind.innerHTML = html;
+            ind.addEventListener('click', (e) => {
+                const b = e.target.closest('[data-ir]');
+                if (!b) return;
+                mostrar(parseInt(b.dataset.ir, 10), 0);
+                document.body.classList.remove('con-indice');
+            });
+        };
+
+        const pintarIndice = () => {
+            const k = DATOS.diapos[actual].k;
+            document.querySelectorAll('#indice [data-seccion]').forEach((b) => b.classList.toggle('actual', +b.dataset.seccion === k));
+            document.querySelectorAll('#indice [data-sub]').forEach((s) => { s.style.display = +s.dataset.sub === k ? '' : 'none'; });
+            document.querySelectorAll('#indice .sub button').forEach((b) => b.classList.toggle('actual', +b.dataset.ir === actual));
+            const portada = document.querySelector('#indice [data-ir="0"].item-seccion');
+            if (portada) portada.classList.toggle('actual', k === -1);
+        };
+
+        /* ---------- Vista del presentador ---------- */
+        const t0 = Date.now();
+        const escalarPresentador = () => {
+            const hueco = $('p-hueco').getBoundingClientRect();
+            const s = Math.min(hueco.width / 1280, hueco.height / 720);
+            mazo.style.transform = `translate(-50%, -50%) scale(${s})`;
+            mazo.style.left = `${hueco.left + hueco.width / 2}px`;
+            mazo.style.top = `${hueco.top + hueco.height / 2}px`;
+            const vs = $('vista-siguiente');
+            const d = vs.firstElementChild;
+            if (d) d.style.transform = `scale(${vs.clientWidth / 1280})`;
+        };
+
+        const pintarPresentador = () => {
+            const meta = DATOS.diapos[actual];
+            $('p-contador').textContent = `${actual + 1} / ${N}`;
+            $('p-titulo').textContent = meta.titulo || '';
+            $('notas-presentador').innerHTML = meta.notas || '<p class="notas-vacias">Sin notas.</p>';
+            const vs = $('vista-siguiente');
+            vs.innerHTML = '';
+            const pasos = pasosDe(actual);
+            const fuente = paso < pasos.length ? diapos[actual] : diapos[actual + 1];
+            if (fuente) {
+                const copia = fuente.cloneNode(true);
+                copia.classList.add('activa');
+                copia.querySelectorAll('.grafica').forEach((g) => { g.innerHTML = ''; });
+                vs.appendChild(copia);
+            } else {
+                vs.innerHTML = '<div style="display:flex;height:100%;align-items:center;justify-content:center;color:#64748B;font-weight:600">Fin de la presentación</div>';
+            }
+            escalarPresentador();
+        };
+
+        if (MODO_PRESENTADOR) {
+            document.body.classList.add('presentador');
+            setInterval(() => {
+                const s = Math.floor((Date.now() - t0) / 1000);
+                $('p-cronometro').textContent = `${String(Math.floor(s / 60)).padStart(2, '0')}:${String(s % 60).padStart(2, '0')}`;
+                $('p-hora').textContent = new Date().toLocaleTimeString('es-CO', { hour: '2-digit', minute: '2-digit' });
+            }, 1000);
+            mazo.style.boxShadow = 'none';
+            mazo.style.borderRadius = '10px';
+        }
+
+        /* ---------- Teclado, ratón y tacto ---------- */
+        let numero = '';
+        let tNumero = null;
+        const irA = $('ir-a');
+
+        const alternar = (clase, forzar) => {
+            const r = document.body.classList.toggle(clase, forzar);
+            const abierto = document.body.classList.contains('con-indice');
+            $('btn-menu').innerHTML = `<i class="fas ${abierto ? 'fa-times' : 'fa-bars'}"></i>`;
+            $('btn-menu').title = abierto ? 'Ocultar el índice (M)' : 'Índice (M)';
+            return r;
+        };
+
+        document.addEventListener('keydown', (e) => {
+            if (e.metaKey || e.ctrlKey || e.altKey) return;
+            const t = e.key;
+            if (/^[0-9]$/.test(t)) {
+                numero += t;
+                irA.textContent = `Ir a ${numero}`;
+                irA.style.display = 'block';
+                clearTimeout(tNumero);
+                tNumero = setTimeout(() => { numero = ''; irA.style.display = 'none'; }, 2500);
+                return;
+            }
+            if (t === 'Enter' && numero) {
+                mostrar(parseInt(numero, 10) - 1, 0);
+                numero = ''; irA.style.display = 'none';
+                e.preventDefault();
+                return;
+            }
+            switch (t) {
+                case 'ArrowRight': case 'ArrowDown': case 'PageDown': case ' ': case 'Enter':
+                    e.preventDefault(); siguiente(); break;
+                case 'ArrowLeft': case 'ArrowUp': case 'PageUp': case 'Backspace':
+                    e.preventDefault(); anterior(); break;
+                case 'Home': e.preventDefault(); mostrar(0, 0); break;
+                case 'End': e.preventDefault(); mostrar(N - 1, 0); break;
+                case 'm': case 'M': alternar('con-indice'); break;
+                case 'n': case 'N': alternar('con-notas'); break;
+                case 'b': case 'B': case '.': alternar('en-negro'); break;
+                case '?': case 'h': case 'H': alternar('con-ayuda'); break;
+                case 'f': case 'F':
+                    if (document.fullscreenElement) document.exitFullscreen();
+                    else document.documentElement.requestFullscreen().catch(() => { });
+                    break;
+                case 'p': case 'P':
+                    if (!MODO_PRESENTADOR) {
+                        const u = new URL(location.href);
+                        u.searchParams.set('presentador', '1');
+                        u.hash = '#' + (actual + 1);
+                        window.open(u.toString(), 'presentador-' + CLAVE, 'width=1280,height=760');
+                    }
+                    break;
+                case 'Escape':
+                    ['con-notas', 'con-ayuda', 'en-negro'].forEach((c) => document.body.classList.remove(c));
+                    alternar('con-indice', false);
+                    break;
+            }
+        });
+
+        $('btn-sig').addEventListener('click', siguiente);
+        $('btn-ant').addEventListener('click', anterior);
+        $('btn-menu').addEventListener('click', () => alternar('con-indice'));
+        $('velo').addEventListener('click', () => alternar('con-indice', false));
+        $('ayuda').addEventListener('click', () => alternar('con-ayuda', false));
+        $('negro').addEventListener('click', () => alternar('en-negro', false));
+
+        document.addEventListener('click', (e) => {
+            const a = e.target.closest('.enlace-material');
+            if (!a) return;
+            // El material guarda la lección abierta en su `storageKey`: se deja
+            // apuntando a la sección y se abre. Así el enlace aterriza en ella.
+            if (a.dataset.indice && CFG.storageKey) guardar(CFG.storageKey, a.dataset.indice);
+        });
+
+        let tQuieto = null;
+        const despertar = () => {
+            document.body.classList.remove('quieto');
+            clearTimeout(tQuieto);
+            tQuieto = setTimeout(() => {
+                if (!document.body.classList.contains('con-indice')) document.body.classList.add('quieto');
+            }, 2800);
+        };
+        document.addEventListener('mousemove', despertar);
+        document.addEventListener('mousedown', despertar);
+
+        let x0 = null;
+        document.addEventListener('touchstart', (e) => { x0 = e.touches[0].clientX; }, { passive: true });
+        document.addEventListener('touchend', (e) => {
+            if (x0 === null) return;
+            const dx = e.changedTouches[0].clientX - x0;
+            if (Math.abs(dx) > 50) (dx < 0 ? siguiente : anterior)();
+            x0 = null;
+        });
+
+        window.addEventListener('resize', escalar);
+        window.addEventListener('hashchange', () => {
+            const h = parseInt(location.hash.replace('#', ''), 10);
+            if (Number.isInteger(h) && h - 1 !== actual) mostrar(h - 1, 0);
+        });
+
+        /* ---------- Arranque ---------- */
+        if (MODO_REVISION) document.body.classList.add('revision');
+        construirIndice();
+        resaltarBloques();
+        escalar();
+        mostrar(inicial(), 0, false);
+        despertar();
+
+        // Se mide cuando todo tiene ya su tamaño final. MathJax llega `async`:
+        // aquí casi nunca ha cargado, y con las fuentes en caché `fonts.ready`
+        // se resolvía antes que él, así que las fórmulas se medían como una
+        // línea de TeX sin componer y el texto de debajo se salía al
+        // componerlas. En Chrome sin ventana, con las fuentes por descargar,
+        // salía bien por casualidad: `revisar.py` no lo veía. El `load` de la
+        // ventana espera al guion de MathJax (llegue o falle) y a las imágenes;
+        // después se espera a que MathJax componga.
+        const cargada = new Promise((r) => {
+            if (document.readyState === 'complete') r();
+            else window.addEventListener('load', r, { once: true });
+        });
+        const listo = cargada.then(() => Promise.all([
+            document.fonts ? document.fonts.ready : null,
+            window.MathJax && MathJax.startup ? MathJax.startup.promise.then(() => MathJax.typesetPromise ? MathJax.typesetPromise() : null).catch(() => { }) : null,
+        ]));
+        // Si algo tarda más que el plazo, se ajusta con lo que haya y se
+        // vuelve a ajustar al terminar; mientras tanto el informe es provisional.
+        const PLAZO_CARGA = 5000;
+        let completo = false;
+        const ajustarYInformar = () => {
+            dibujarGraficas();
+            const informe = ajustar();
+            if (window.Plotly) document.querySelectorAll('.grafica[data-hecha]').forEach((g) => { try { Plotly.Plots.resize(g); } catch (e) { } });
+            if (MODO_PRESENTADOR) pintarPresentador();
+            let pre = $('informe-revision');
+            if (!pre) {
+                pre = document.createElement('pre');
+                pre.id = 'informe-revision';
+                pre.hidden = true;
+                document.body.appendChild(pre);
+            }
+            pre.textContent = JSON.stringify(Object.assign({ total: N, avisos: informe }, completo ? {} : { provisional: true }));
+            if (MODO_REVISION) console.log('[revisión]', JSON.stringify(informe));
+        };
+        const plazo = setTimeout(ajustarYInformar, PLAZO_CARGA);
+        listo.then(() => {
+            clearTimeout(plazo);
+            completo = true;
+            ajustarYInformar();
+        });
+    })();
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,53 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 330" width="100%" role="img" aria-labelledby="tv-titulo tv-desc">
+  <title id="tv-titulo">Clasificación de las variables</title>
+  <desc id="tv-desc">Una variable es cualitativa o cuantitativa. Las cualitativas nombran categorías y se dividen en
+    nominales, sin orden (grupo sanguíneo, medio de transporte, si fuma o no), y ordinales, con orden natural
+    (estrato, nivel educativo, talla). Las cuantitativas cuentan o miden y se dividen en discretas, que se
+    cuentan (número de hijos, quejas en un día), y continuas, que se miden (estatura, peso, tiempo de espera).</desc>
+  <g fill="none" stroke="#94a3b8" stroke-width="2">
+    <path d="M360,52 V72 H181.7 V92 M360,72 H538.3 V92" />
+    <path d="M181.7,150 V172 H92.5 V196 M181.7,172 H270.8 V196" />
+    <path d="M538.3,150 V172 H449.2 V196 M538.3,172 H627.5 V196" />
+  </g>
+  <rect x="290" y="8" width="140" height="44" rx="10" fill="#3A0F47" />
+  <text x="360" y="36" text-anchor="middle" fill="#fff" font-size="17" font-weight="700">Variable</text>
+
+  <rect x="66.7" y="92" width="230" height="58" rx="10" fill="#691E7A" />
+  <text x="181.7" y="117" text-anchor="middle" fill="#fff" font-size="17" font-weight="700">Cualitativa</text>
+  <text x="181.7" y="138" text-anchor="middle" fill="#fff" font-size="13.5">nombra categorías</text>
+  <rect x="423.3" y="92" width="230" height="58" rx="10" fill="#B84A00" />
+  <text x="538.3" y="117" text-anchor="middle" fill="#fff" font-size="17" font-weight="700">Cuantitativa</text>
+  <text x="538.3" y="138" text-anchor="middle" fill="#fff" font-size="13.5">cuenta o mide</text>
+
+  <g stroke-width="1.6">
+    <rect x="10" y="196" width="165" height="124" rx="10" fill="#F5EDF7" stroke="#691E7A" />
+    <rect x="188.3" y="196" width="165" height="124" rx="10" fill="#F5EDF7" stroke="#691E7A" />
+    <rect x="366.7" y="196" width="165" height="124" rx="10" fill="#FDF0E6" stroke="#B84A00" />
+    <rect x="545" y="196" width="165" height="124" rx="10" fill="#FDF0E6" stroke="#B84A00" />
+  </g>
+  <g text-anchor="middle" font-size="16" font-weight="700">
+    <text x="92.5" y="222" fill="#691E7A">Nominal</text>
+    <text x="270.8" y="222" fill="#691E7A">Ordinal</text>
+    <text x="449.2" y="222" fill="#B84A00">Discreta</text>
+    <text x="627.5" y="222" fill="#B84A00">Continua</text>
+  </g>
+  <g text-anchor="middle" font-size="13" fill="#475569">
+    <text x="92.5" y="241">sin orden</text>
+    <text x="270.8" y="241">con orden natural</text>
+    <text x="449.2" y="241">se cuenta: 0, 1, 2…</text>
+    <text x="627.5" y="241">se mide</text>
+  </g>
+  <g text-anchor="middle" font-size="13.5" fill="#1F2933">
+    <text x="92.5" y="267">grupo sanguíneo</text>
+    <text x="92.5" y="267" dy="19">medio de transporte</text>
+    <text x="92.5" y="267" dy="38">¿fuma? sí / no</text>
+    <text x="270.8" y="267">estrato</text>
+    <text x="270.8" y="267" dy="19">nivel educativo</text>
+    <text x="270.8" y="267" dy="38">talla S, M, L</text>
+    <text x="449.2" y="267">número de hijos</text>
+    <text x="449.2" y="267" dy="19">quejas en un día</text>
+    <text x="627.5" y="267">estatura</text>
+    <text x="627.5" y="267" dy="19">peso</text>
+    <text x="627.5" y="267" dy="38">tiempo de espera</text>
+  </g>
+</svg>
