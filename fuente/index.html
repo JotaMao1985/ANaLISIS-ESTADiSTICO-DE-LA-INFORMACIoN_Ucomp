@@ -95,7 +95,7 @@
     .boton.principal { color: white; background: linear-gradient(140deg, var(--uc-morado) 0%, var(--uc-naranja-texto) 100%); }
     .boton.secundario { color: var(--uc-morado); border: 2px solid var(--uc-morado); background: white; }
     .boton:hover, .boton:focus-visible { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(105, 30, 122, 0.25); }
-    .boton:focus-visible { outline: 3px solid var(--uc-ambar); outline-offset: 2px; }
+    .boton:focus-visible { outline: 3px solid var(--uc-morado); outline-offset: 2px; }
     .estado { margin-top: auto; color: #64748B; font-weight: 700; font-size: 0.92rem; }
 
     .nota {
@@ -153,24 +153,42 @@
           </div>
         </section>
 
-        <section class="sesion proxima" aria-labelledby="titulo-s2">
+        <section class="sesion" aria-labelledby="titulo-s2">
           <span class="etiqueta">Sesión 2 · 2 horas</span>
-          <h2 id="titulo-s2">Tablas y distribuciones de frecuencias</h2>
+          <h2 id="titulo-s2">De 12 000 filas a una distribución</h2>
           <ul>
             <li>Frecuencias absolutas, relativas y acumuladas</li>
-            <li>Tablas y gráficos según el tipo de variable</li>
+            <li>Intervalos e histogramas: la forma de una distribución</li>
+            <li>Tablas cruzadas: ¿sobre qué total se calcula cada porcentaje?</li>
+            <li>Tablas y gráficos con pandas en Colab</li>
+          </ul>
+          <div class="acciones">
+            <a class="boton principal" href="diapositivas/sesion-2-de-las-filas-a-la-distribucion.html"><i
+                class="fas fa-chalkboard-user" aria-hidden="true"></i>Diapositivas</a>
+            <a class="boton secundario" href="{{COLAB:2}}" target="_blank" rel="noopener"><i
+                class="fas fa-laptop-code" aria-hidden="true"></i>Abrir en Colab<span class="sr-only"> (se abre en
+                otra pestaña)</span></a>
+          </div>
+        </section>
+
+        <section class="sesion proxima" aria-labelledby="titulo-s3">
+          <span class="etiqueta">Sesión 3 · 2 horas</span>
+          <h2 id="titulo-s3">Medidas de tendencia central y dispersión</h2>
+          <ul>
+            <li>Media, mediana y moda: cuándo representa cada una a los datos</li>
+            <li>Rango, desviación estándar y cuartiles</li>
           </ul>
           <p class="estado"><i class="fas fa-hourglass-half" aria-hidden="true"></i> Próximamente</p>
         </section>
       </div>
 
       <div class="nota">
-        <p><strong>Antes de empezar.</strong> Necesitas una cuenta de Google para abrir los notebooks en Colab. Al
+        <p><strong>Antes de empezar.</strong> Necesitas una cuenta de Google para abrir los cuadernos (<em>notebooks</em>) en Colab. Al
           abrir uno, usa <em>Archivo → Guardar una copia en Drive</em> para conservar tus cambios. La primera celda
           crea los datos del caso: no hay que subir nada. En las diapositivas, las flechas avanzan y la tecla
           <kbd>F</kbd> pone la pantalla completa.</p>
         <p><strong>El caso del curso.</strong> Todas las sesiones trabajan con <em>Tingua Domicilios S.A.S.</em>, una
-          plataforma de domicilios ficticia que opera en cinco ciudades. Sus 12 000 pedidos se generaron para el curso
+          plataforma de domicilios ficticia que opera en cinco ciudades. Sus 12 000 pedidos se generaron para el curso
           con una semilla fija y no corresponden a personas ni a empresas reales.</p>
       </div>
     </div>

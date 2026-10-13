@@ -168,7 +168,8 @@ def crear_datos(carpeta="datos"):
         escritor.writeheader()
         for i, p in enumerate(pedidos, start=1):
             escritor.writerow({"id_pedido": f"P{i:05d}", **p, "fecha": p["fecha"].isoformat()})
-    print(f"Listo: {ruta} con {N_PEDIDOS:,} pedidos y {len(COLUMNAS)} columnas".replace(",", "."))
+    miles = f"{N_PEDIDOS:,}".replace(",", "\u202f")  # 12 000, con espacio fino
+    print(f"Listo: {ruta} con {miles} pedidos y {len(COLUMNAS)} columnas")
     return ruta
 
 

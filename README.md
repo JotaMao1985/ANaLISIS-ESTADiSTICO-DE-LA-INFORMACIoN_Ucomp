@@ -11,13 +11,14 @@ reales.
 | Sesión | Tema | Diapositivas | Notebook |
 |---|---|---|---|
 | 1 | Del dato a la pregunta: diagnóstico, población y muestra, tipos de variable, escalas y fuentes de datos, primer DataFrame con pandas | [Ver](https://jotamao1985.github.io/ANaLISIS-ESTADiSTICO-DE-LA-INFORMACIoN_Ucomp/diapositivas/sesion-1-del-dato-a-la-pregunta.html) | [Abrir en Colab](https://colab.research.google.com/github/JotaMao1985/ANaLISIS-ESTADiSTICO-DE-LA-INFORMACIoN_Ucomp/blob/main/notebooks/sesion-1-del-dato-a-la-pregunta.ipynb) |
+| 2 | De 12 000 filas a una distribución: frecuencias absolutas, relativas y acumuladas, intervalos e histogramas, forma de una distribución y tablas cruzadas | [Ver](https://jotamao1985.github.io/ANaLISIS-ESTADiSTICO-DE-LA-INFORMACIoN_Ucomp/diapositivas/sesion-2-de-las-filas-a-la-distribucion.html) | [Abrir en Colab](https://colab.research.google.com/github/JotaMao1985/ANaLISIS-ESTADiSTICO-DE-LA-INFORMACIoN_Ucomp/blob/main/notebooks/sesion-2-de-las-filas-a-la-distribucion.ipynb) |
 
 Cada sesión tiene:
 
 - **diapositivas de clase** en HTML: las flechas avanzan, `F` pone la pantalla completa, `M` abre el
   índice y `P`, la vista del presentador;
-- **un notebook de Google Colab** con las mismas celdas que se proyectan y una práctica guiada que se
-  revisa sola. Después de abrirlo hay que guardar una copia en Drive para conservar los cambios. La
+- **un cuaderno (*notebook*) de Google Colab** con las mismas celdas que se proyectan y una práctica
+  guiada cuyos dos primeros ejercicios se revisan solos. Después de abrirlo hay que guardar una copia en Drive para conservar los cambios. La
   primera celda crea los datos del caso, así que no hay que subir nada.
 
 ## Estructura del repositorio
@@ -27,7 +28,8 @@ Htmls/        sitio publicado en GitHub Pages: portada y diapositivas (generado,
 notebooks/    notebooks para Colab, uno por sesión
 datos/        datos del caso (los mismos que crea la primera celda de cada notebook)
 fuente/       fuente de la portada y de las diapositivas (Markdown) y sus diagramas
-precalculo/   scripts que generan los datos, arman y ejecutan los notebooks y verifican las diapositivas
+precalculo/   scripts que generan los datos, arman y ejecutan los notebooks y verifican las diapositivas;
+              ayudas_sesionN.py tiene los verificadores de la práctica de cada sesión
 ```
 
 ## Cómo se construye una sesión
@@ -38,9 +40,9 @@ mano. El notebook se ejecuta completo, con las soluciones, en un entorno que rep
 
 ```bash
 python precalculo/genera_datos.py
-python precalculo/notebook.py genera 1
-python precalculo/notebook.py ejecuta 1      # guarda precalculo/salidas_sesion1.json
-python precalculo/verifica_diapositivas.py 1 # las salidas proyectadas coinciden con la ejecución
+python precalculo/notebook.py genera N
+python precalculo/notebook.py ejecuta N      # salidas_sesionN.json y gráficas en recursos/sN/
+python precalculo/verifica_diapositivas.py N # código y salidas proyectados = notebook y ejecución
 python precalculo/portada.py                 # Htmls/index.html
 ```
 

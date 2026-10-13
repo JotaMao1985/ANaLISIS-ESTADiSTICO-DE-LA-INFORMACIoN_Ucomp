@@ -1,25 +1,28 @@
 # Fuente ÚNICA del código de la Sesión 1. De aquí salen:
-#   - el notebook para Colab               (genera_notebook.py)
-#   - las salidas que muestran las diapositivas (ejecuta_notebook.py → salidas_sesion1.json)
+#   - el notebook para Colab                    (notebook.py genera 1)
+#   - las salidas que muestran las diapositivas (notebook.py ejecuta 1 → salidas_sesion1.json)
 #
 # No es un script ejecutable: es el formato «percent» de Jupyter.
 #   # %% [markdown]            celda de texto (líneas con «# »)
 #   # %% <id> [banderas]       celda de código
 # Banderas:
-#   generador   en el notebook se antepone el código de genera_datos.py y ayudas.py (celda oculta)
+#   generador   en el notebook se antepone el código de genera_datos.py, ayudas.py y
+#               ayudas_sesion1.py (celda oculta)
 #   solucion    solución de un ejercicio: se ejecuta para verificar, NO va al notebook
 #   plantilla   ejercicio por completar: va al notebook, NO se ejecuta al verificar
+#   precalculo  cifras que las diapositivas citan en el texto: se ejecuta, NO va al notebook
 
 # %% [markdown]
 # # Sesión 1 · Del dato a la pregunta
 # **Análisis Estadístico de la Información — Especialización en Big Data (UCompensar)**
 #
-# Este notebook acompaña las [diapositivas de la sesión](https://jotamao1985.github.io/ANaLISIS-ESTADiSTICO-DE-LA-INFORMACIoN_Ucomp/diapositivas/sesion-1-del-dato-a-la-pregunta.html).
+# Este cuaderno (*notebook*) acompaña las [diapositivas de la sesión](https://jotamao1985.github.io/ANaLISIS-ESTADiSTICO-DE-LA-INFORMACIoN_Ucomp/diapositivas/sesion-1-del-dato-a-la-pregunta.html).
 # Cada celda lleva entre corchetes el mismo identificador que el código proyectado, así que puedes seguir
 # la clase celda a celda. La portada del curso está en https://jotamao1985.github.io/ANaLISIS-ESTADiSTICO-DE-LA-INFORMACIoN_Ucomp/
 #
 # 1. **Archivo → Guardar una copia en Drive** para que tus cambios no se pierdan.
 # 2. Ejecuta las celdas **en orden** con **Mayús + Enter**. Varias usan resultados de las anteriores.
+#    Si Colab avisa que el cuaderno no es de Google, elige **Ejecutar de todos modos**.
 # 3. Si Colab se reinicia o una celda falla al repetirla, usa **Entorno de ejecución → Ejecutar anteriores**.
 # 4. La primera celda crea los datos del caso *Tingua Domicilios S.A.S.*, una empresa **ficticia**:
 #    sus datos se inventan con una semilla fija y no corresponden a personas ni a empresas reales.
@@ -40,6 +43,27 @@ pedidos.shape          # (filas, columnas)
 # %% vistazo
 # Las primeras cinco filas: cada fila es un pedido, cada columna una variable
 pedidos.head()
+
+# %% [markdown]
+# ### Diccionario de datos
+#
+# | Columna | Qué registra | Valores o unidad | Origen |
+# |---|---|---|---|
+# | `id_pedido` | Código del pedido | P00001, P00002… | App |
+# | `fecha` | Día del pedido | AAAA-MM-DD, del 1 de enero al 30 de junio de 2026 | App |
+# | `franja` | Momento del día en que se pidió | Mañana, Almuerzo, Tarde, Noche | App |
+# | `ciudad` | Ciudad de entrega | Bogotá, Medellín, Cali, Barranquilla, Bucaramanga | App |
+# | `categoria` | Tipo de comercio que despacha | Restaurante, Mercado, Farmacia, Mascotas, Floristería | App |
+# | `n_productos` | Unidades pedidas | conteo | App |
+# | `valor_pedido` | Valor de los productos, sin domicilio ni propina | pesos (COP) | App |
+# | `medio_pago` | Cómo se pagó | Efectivo, Tarjeta, Billetera digital | App |
+# | `estrato` | Estrato de la **dirección de entrega**: lo asigna el municipio a la vivienda; no es el ingreso de quien pide | 1 a 6 | Estratificación del municipio, unida por dirección |
+# | `suscriptor` | Si quien pide paga la suscripción de Tingua | Sí / No | App |
+# | `distancia_km` | Distancia por vía del comercio a la dirección | kilómetros; la app registra hasta 14: una ruta más larga queda como 14 | App |
+# | `lluvia` | Si llovía en la zona durante la entrega | Sí / No | Servicio externo de clima |
+# | `temperatura_c` | Temperatura en la zona al momento de la entrega | grados Celsius | Servicio externo de clima |
+# | `tiempo_entrega_min` | Minutos desde que se confirma el pedido hasta que llega (incluye la preparación) | minutos | App |
+# | `calificacion` | Estrellas que dio quien pidió; vacía si no calificó | 1 a 5 | App (calificar es opcional) |
 
 # %% tipos
 # El tipo de dato que pandas adivinó para cada columna
@@ -73,8 +97,8 @@ except TypeError as error:
 # %% [markdown]
 # ## 3 · Un parámetro y tres estadísticos
 #
-# La tabla tiene **todos** los pedidos del semestre: es la población. Su media es un **parámetro** (μ).
-# Una muestra aleatoria de 100 pedidos da un **estadístico** (x̄), que cambia de muestra en muestra.
+# La tabla tiene **todos** los pedidos del semestre: es la población. Su media es un **parámetro** ($\mu$).
+# Una muestra aleatoria de 100 pedidos da un **estadístico** ($\bar{x}$), que cambia de muestra en muestra.
 
 # %% parametro
 # Parámetro: se calcula con TODA la población
@@ -109,7 +133,7 @@ pd.DataFrame({"pedidos": conteo, "%": porcentaje})
 # ## Ejercicio 1 · Clasifica las variables
 #
 # Para cada variable escribe su **tipo** (`nominal`, `ordinal`, `discreta` o `continua`) y su
-# **escala de medición** (`nominal`, `ordinal`, `intervalo` o `razon`). `id_pedido` y `fecha` no
+# **escala de medición** (`nominal`, `ordinal`, `intervalo` o `razón`; con o sin tilde). `id_pedido` y `fecha` no
 # están: el primero es un identificador y la segunda la trabajamos en el ejercicio 2.
 #
 # `revisar_tipos` te dice cuáles están bien y, en las demás, te da una pista sin darte la respuesta.
@@ -158,6 +182,7 @@ revisar_tipos(mis_tipos)
 # del archivo original, puedes repetir la celda las veces que quieras sin perder datos.
 
 # %% ej2 plantilla
+# Si ves «Ellipsis» en un error, te quedó un ... sin reemplazar
 original = pd.read_csv("datos/pedidos.csv")
 
 pedidos["franja"] = pd.Categorical(
@@ -166,7 +191,7 @@ pedidos["franja"] = pd.Categorical(
 pedidos["calificacion"] = pd.Categorical(
     original["calificacion"], categories=..., ordered=True
 )
-pedidos["fecha"] = pd.to_datetime(...)
+pedidos["fecha"] = pd.to_datetime(...)   # ← la columna "fecha" de original
 
 # %% ej2_solucion solucion
 original = pd.read_csv("datos/pedidos.csv")
@@ -186,16 +211,16 @@ revisar_escalas(pedidos)
 # ## Ejercicio 3 · Tu propio estadístico
 #
 # La proporción de pedidos que se entregaron con lluvia, calculada con **toda** la población, es el
-# parámetro *p*. Toma tu propia muestra de 200 pedidos y calcula su proporción, *p̂*.
+# parámetro $p$. Toma tu propia muestra de 200 pedidos y calcula su proporción, $\hat{p}$.
 #
-# Usa como semilla los **tres últimos dígitos de tu documento** (si empiezan por 0, quita los ceros:
-# 045 se escribe 45) y comparte tu *p̂* en el chat. ¿Por qué cada uno obtiene un valor distinto?
+# Usa como semilla **un número de tres cifras que elijas tú** (del 100 al 999) y comparte tu $\hat{p}$
+# en el chat. ¿Por qué cada uno obtiene un valor distinto?
 
 # %% ej3
 p = (pedidos["lluvia"] == "Sí").mean()
 print(f"p = {p:.3f}   (los {len(pedidos)} pedidos)")
 
-mi_semilla = 123   # ← tus tres últimos dígitos, sin ceros a la izquierda
+mi_semilla = 123   # ← un número de tres cifras que elijas tú
 muestra = pedidos.sample(n=200, random_state=mi_semilla)
 p_gorro = (muestra["lluvia"] == "Sí").mean()
 print(f"p̂ = {p_gorro:.3f}   (n = 200, semilla {mi_semilla})")
@@ -209,6 +234,33 @@ print(f"p̂ = {p_gorro:.3f}   (n = 200, semilla {mi_semilla})")
 # 2. ¿Basta con describir los 12 000 pedidos, o tendrías que inferir algo que no está en la tabla?
 #
 # Y una pregunta sobre la fuente: ¿`pedidos.csv` es una fuente primaria o secundaria, interna o externa?
-# ¿Sus datos son observacionales o experimentales? ¿Qué limita eso en lo que puedes concluir?
+# ¿Y las columnas `lluvia` y `temperatura_c`, de dónde vienen? ¿Sus datos son observacionales o
+# experimentales? ¿Qué limita eso en lo que puedes concluir?
+
+# %% [markdown]
+# ### Tus respuestas
 #
-# *Escribe tus respuestas aquí (doble clic para editar).*
+# *Doble clic para escribir aquí.*
+
+# %% cifras precalculo
+# Cifras que las diapositivas citan en el texto (esta celda no va al notebook)
+datos = pd.read_csv("datos/pedidos.csv")
+t, llueve = datos["tiempo_entrega_min"], datos["lluvia"] == "Sí"
+temp = datos.groupby("ciudad")["temperatura_c"].mean()
+baq, bog = temp["Barranquilla"], temp["Bogotá"]
+print(f"temperatura: Barranquilla {baq:.1f}, Bogotá {bog:.1f}, razón {baq / bog:.2f}, "
+      f"diferencia {baq - bog:.1f}, razón en kelvin {(baq + 273.15) / (bog + 273.15):.4f}")
+print(f"estrato: media {datos['estrato'].mean():.1f}")
+print(f"lluvia: p {llueve.mean():.3f}, diferencia {t[llueve].mean() - t[~llueve].mean():.2f}")
+ciudades = datos.groupby("ciudad").agg(p_lluvia=("lluvia", lambda s: (s == "Sí").mean()),
+                                       media=("tiempo_entrega_min", "mean"),
+                                       n=("id_pedido", "size"))
+print(ciudades.round(3).to_string())
+medias = datos.groupby(["ciudad", "lluvia"])["tiempo_entrega_min"].mean().unstack()
+dentro = ((medias["Sí"] - medias["No"]) * ciudades["n"]).sum() / ciudades["n"].sum()
+print(f"lluvia dentro de cada ciudad (promedio ponderado por pedidos): {dentro:.2f}")
+falta = datos["calificacion"].isna()
+largo = t > 55
+print(f"calificación: faltan {falta.sum()} ({falta.mean():.3f}); califica {1 - falta[largo].mean():.3f} "
+      f"si tarda más de 55 min (n = {largo.sum()}) y {1 - falta[~largo].mean():.3f} si no")
+print(f"tiempo máximo {t.max()}")

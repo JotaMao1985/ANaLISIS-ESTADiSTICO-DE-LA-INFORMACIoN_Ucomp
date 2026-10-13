@@ -3,7 +3,7 @@
   <desc id="tv-desc">Una variable es cualitativa o cuantitativa. Las cualitativas nombran categorías y se dividen en
     nominales, sin orden (grupo sanguíneo, medio de transporte, si fuma o no), y ordinales, con orden natural
     (estrato, nivel educativo, talla). Las cuantitativas cuentan o miden y se dividen en discretas, que se
-    cuentan (número de hijos, quejas en un día), y continuas, que se miden (estatura, peso, tiempo de espera).</desc>
+    cuentan (número de hijos, quejas en un día), y continuas, que se miden (estatura, peso corporal, tiempo de espera).</desc>
   <g fill="none" stroke="#94a3b8" stroke-width="2">
     <path d="M360,52 V72 H181.7 V92 M360,72 H538.3 V92" />
     <path d="M181.7,150 V172 H92.5 V196 M181.7,172 H270.8 V196" />
@@ -47,7 +47,7 @@
     <text x="449.2" y="267">número de hijos</text>
     <text x="449.2" y="267" dy="19">quejas en un día</text>
     <text x="627.5" y="267">estatura</text>
-    <text x="627.5" y="267" dy="19">peso</text>
+    <text x="627.5" y="267" dy="19">peso corporal</text>
     <text x="627.5" y="267" dy="38">tiempo de espera</text>
   </g>
 </svg>

@@ -32,16 +32,20 @@ def main():
     for i in range(120):
         fila, col = divmod(i, 15)
         x, y = 34 + col * 20.5, 62 + fila * 21
-        color = NARANJA if i in elegidos else "#C9B3CF"
-        puntos.append(f'<circle cx="{x:.1f}" cy="{y:.1f}" r="6.2" fill="{color}" />')
+        if i in elegidos:  # más grandes y con borde: no se distinguen solo por el color
+            puntos.append(f'<circle cx="{x:.1f}" cy="{y:.1f}" r="7" fill="{NARANJA}" '
+                          f'stroke="{NARANJA_TEXTO}" stroke-width="1.5" />')
+        else:
+            puntos.append(f'<circle cx="{x:.1f}" cy="{y:.1f}" r="5" fill="#C9B3CF" />')
     muestra = []
     for k, _ in enumerate(sorted(elegidos)):
         fila, col = divmod(k, 4)
-        muestra.append(f'<circle cx="{560 + col * 22}" cy="{96 + fila * 22}" r="6.2" fill="{NARANJA}" />')
+        muestra.append(f'<circle cx="{560 + col * 22}" cy="{96 + fila * 22}" r="7" fill="{NARANJA}" '
+                       f'stroke="{NARANJA_TEXTO}" stroke-width="1.5" />')
 
     svg = f"""<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 300" width="100%" role="img" aria-labelledby="pm-titulo pm-desc">
   <title id="pm-titulo">Población, muestra, parámetro y estadístico</title>
-  <desc id="pm-desc">A la izquierda, la población: los 12 000 pedidos del semestre, cuya media de tiempo de
+  <desc id="pm-desc">A la izquierda, la población: los 12 000 pedidos del semestre, cuya media de tiempo de
     entrega es el parámetro mu, {coma(mu)} minutos. Una flecha de muestreo aleatorio lleva a la derecha, a una
     muestra de 100 pedidos, cuya media es el estadístico x barra, {coma(x_barra)} minutos. Una flecha punteada
     de regreso indica la inferencia: usar el estadístico para estimar el parámetro.</desc>
@@ -51,7 +55,7 @@ def main():
     </marker>
   </defs>
   <rect x="12" y="14" width="350" height="272" rx="14" fill="#FAF6FB" stroke="{MORADO}" stroke-width="1.8" />
-  <text x="187" y="40" text-anchor="middle" font-size="16" font-weight="700" fill="{MORADO}">Población · N = 12 000 pedidos</text>
+  <text x="187" y="40" text-anchor="middle" font-size="16" font-weight="700" fill="{MORADO}">Población · N = 12 000 pedidos</text>
   {"".join(puntos)}
   <text x="187" y="248" text-anchor="middle" font-size="14" fill="#334155">parámetro</text>
   <text x="187" y="272" text-anchor="middle" font-size="18" font-weight="700" fill="{MORADO}">μ = {coma(mu)} min</text>
