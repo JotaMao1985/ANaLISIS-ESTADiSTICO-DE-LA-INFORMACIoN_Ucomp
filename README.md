@@ -12,13 +12,14 @@ reales.
 |---|---|---|---|
 | 1 | Del dato a la pregunta: diagnóstico, población y muestra, tipos de variable, escalas y fuentes de datos, primer DataFrame con pandas | [Ver](https://jotamao1985.github.io/ANaLISIS-ESTADiSTICO-DE-LA-INFORMACIoN_Ucomp/diapositivas/sesion-1-del-dato-a-la-pregunta.html) | [Abrir en Colab](https://colab.research.google.com/github/JotaMao1985/ANaLISIS-ESTADiSTICO-DE-LA-INFORMACIoN_Ucomp/blob/main/notebooks/sesion-1-del-dato-a-la-pregunta.ipynb) |
 | 2 | De 12 000 filas a una distribución: frecuencias absolutas, relativas y acumuladas, intervalos e histogramas, forma de una distribución y tablas cruzadas | [Ver](https://jotamao1985.github.io/ANaLISIS-ESTADiSTICO-DE-LA-INFORMACIoN_Ucomp/diapositivas/sesion-2-de-las-filas-a-la-distribucion.html) | [Abrir en Colab](https://colab.research.google.com/github/JotaMao1985/ANaLISIS-ESTADiSTICO-DE-LA-INFORMACIoN_Ucomp/blob/main/notebooks/sesion-2-de-las-filas-a-la-distribucion.ipynb) |
+| 3 | Lo típico y lo variable: media, mediana y moda, rango, varianza y desviación estándar, cuartiles y diagramas de caja, medidas robustas y coeficiente de variación | [Ver](https://jotamao1985.github.io/ANaLISIS-ESTADiSTICO-DE-LA-INFORMACIoN_Ucomp/diapositivas/sesion-3-lo-tipico-y-lo-variable.html) | [Abrir en Colab](https://colab.research.google.com/github/JotaMao1985/ANaLISIS-ESTADiSTICO-DE-LA-INFORMACIoN_Ucomp/blob/main/notebooks/sesion-3-lo-tipico-y-lo-variable.ipynb) |
 
 Cada sesión tiene:
 
 - **diapositivas de clase** en HTML: las flechas avanzan, `F` pone la pantalla completa, `M` abre el
   índice y `P`, la vista del presentador;
 - **un cuaderno (*notebook*) de Google Colab** con las mismas celdas que se proyectan y una práctica
-  guiada cuyos dos primeros ejercicios se revisan solos. Después de abrirlo hay que guardar una copia en Drive para conservar los cambios. La
+  guiada cuyos ejercicios se revisan solos (en la sesión 1, los dos primeros). Después de abrirlo hay que guardar una copia en Drive para conservar los cambios. La
   primera celda crea los datos del caso, así que no hay que subir nada.
 
 ## Estructura del repositorio

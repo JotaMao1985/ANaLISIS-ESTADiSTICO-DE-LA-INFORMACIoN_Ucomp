@@ -29,6 +29,7 @@ RAIZ = AQUI.parent
 SESIONES = {
     1: "sesion-1-del-dato-a-la-pregunta.ipynb",
     2: "sesion-2-de-las-filas-a-la-distribucion.ipynb",
+    3: "sesion-3-lo-tipico-y-lo-variable.ipynb",
 }
 
 # Al ejecutar (no en el notebook del estudiante): las gráficas salen en SVG con texto real,
