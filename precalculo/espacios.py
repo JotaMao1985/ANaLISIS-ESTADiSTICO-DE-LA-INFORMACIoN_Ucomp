@@ -3,8 +3,8 @@
     python3 precalculo/espacios.py fuente/diapositivas/sesionN.md              # muestra los cambios
     python3 precalculo/espacios.py fuente/diapositivas/sesionN.md --escribir   # y los guarda
 
-- miles: 12 000 → 12 000 con U+202F (espacio fino de no separación)
-- número + unidad o %: 40,8 % · 5 min · 28,8 °C · 400 mil → U+00A0
+- miles: 12 000 → 12 000 con U+202F (espacio fino de no separación), también en cifras de 7 dígitos
+- número + unidad o %: 40,8 % · 5 min · 28,8 °C · 400 mil · 58 000 pesos → U+00A0 (también tras **negrita**)
 - operadores entre números (28,8 / 13,9 ≈ 2,07) y «<» de una secuencia → U+00A0 delante
 
 No toca el encabezado, los bloques de código, el código en línea, las fórmulas \\( \\) y $$ $$,
@@ -20,8 +20,8 @@ PROTEGIDO = re.compile(r"(`[^`\n]*`|\\\(.*?\\\)|\$\$.*?\$\$|\]\([^)]*\)|https?:/
 
 
 def prosa(t):
-    t = re.sub(r"(?<![\d.,])(\d{1,3}) (\d{3})(?![\d])", rf"\1{FINO}\2", t)
-    t = re.sub(r"(\d) (%|min\b|km\b|°C|h\b|horas\b|mil\b|millones\b)", rf"\1{NB}\2", t)
+    t = re.sub(r"(?<![\d.,])\d{1,3}(?:[ \u202f]\d{3})+(?![\d])", lambda m: m.group(0).replace(" ", FINO), t)
+    t = re.sub(r"(\d\**) (%|min\b|km\b|°C|h\b|horas\b|mil\b|millones\b|pesos\b)", rf"\1{NB}\2", t)
     t = re.sub(r"(\d\**) (/|≈|=) (\**\d)", rf"\1{NB}\2{NB}\3", t)
     t = re.sub(r" < ", f"{NB}< ", t)
     return t

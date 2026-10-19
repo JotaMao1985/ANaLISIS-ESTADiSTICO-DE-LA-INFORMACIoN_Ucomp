@@ -1,0 +1,604 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description"
+    content="Enunciado y rúbrica del proyecto final de Análisis Estadístico de la Información: un tablero semanal para la gerencia de Tingua Domicilios.">
+  <title>Proyecto final: el tablero · Análisis Estadístico de la Información</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700;900&display=swap" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" rel="stylesheet">
+  <style>
+    /* Paleta UCompensar (portada del syllabus). El naranja de marca y el ámbar solo van en
+       bordes, íconos y franjas; el texto naranja usa --uc-naranja-texto (5,2:1 sobre blanco). */
+    :root {
+      --uc-morado: #691E7A;
+      --uc-morado-claro: #8A2E9E;
+      --uc-morado-profundo: #3A0F47;
+      --uc-naranja: #F46201;
+      --uc-naranja-texto: #B84A00;
+      --uc-ambar: #FAA012;
+      --uc-pizarra: #566B7F;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      font-family: 'Roboto', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+      line-height: 1.6;
+      color: #1E293B;
+      background: #F8FAFC;
+    }
+
+    .contenedor { max-width: 72rem; margin: 0 auto; padding: 0 1rem; width: 100%; }
+    @media (min-width: 640px) { .contenedor { padding: 0 1.5rem; } }
+
+    .skip-link {
+      position: absolute; top: -100px; left: 1rem; z-index: 100;
+      background: white; color: var(--uc-morado); border: 2px solid var(--uc-morado);
+      padding: 0.75rem 1rem; border-radius: 0.5rem; font-weight: 500; text-decoration: none;
+      transition: top 0.2s;
+    }
+    .skip-link:focus { top: 1rem; }
+    .sr-only {
+      position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
+      overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0;
+    }
+
+    .heroe { background: linear-gradient(135deg, #5C1A6C 0%, var(--uc-morado-profundo) 100%); color: white; }
+    .heroe .contenedor { padding-top: 2.5rem; padding-bottom: 2.5rem; }
+    .uc-logo {
+      display: inline-flex; align-items: center; background: white; border-radius: 999px;
+      padding: 0.35rem 0.9rem; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.18); margin-bottom: 1.5rem;
+    }
+    .uc-logo img { height: 30px; width: auto; display: block; }
+    .antetitulo {
+      margin: 0; color: var(--uc-ambar); font-size: 0.85rem; font-weight: 700;
+      letter-spacing: 0.12em; text-transform: uppercase;
+    }
+    h1 { margin: 0.5rem 0 1rem; font-size: clamp(2rem, 5vw, 3rem); font-weight: 900; line-height: 1.15; }
+    .heroe p.lead { margin: 0; max-width: 48rem; font-size: 1.125rem; color: rgba(255, 255, 255, 0.92); }
+    .heroe a.volver { color: white; font-weight: 500; }
+    .heroe p.migas { margin: 1.25rem 0 0; font-size: 0.95rem; }
+    .uc-franja {
+      height: 5px;
+      background: linear-gradient(90deg, var(--uc-naranja) 0%, var(--uc-ambar) 55%, var(--uc-pizarra) 100%);
+    }
+
+    main { flex-grow: 1; padding: 2.5rem 0; }
+
+    .indice {
+      background: white; border: 1px solid #E5E7EB; border-radius: 1rem; padding: 1.25rem 1.5rem;
+      margin-bottom: 2rem;
+    }
+    .indice h2 { margin: 0 0 0.5rem; font-size: 1rem; color: var(--uc-morado); }
+    .indice ol { margin: 0; padding-left: 1.4rem; columns: 2; column-gap: 2rem; }
+    @media (max-width: 640px) { .indice ol { columns: 1; } }
+    .indice a { color: var(--uc-morado); }
+
+    .bloque {
+      background: white; border: 1px solid #E5E7EB; border-radius: 1rem; padding: 1.5rem;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06); margin-bottom: 1.5rem;
+    }
+    .bloque h2 { margin: 0 0 0.75rem; font-size: 1.5rem; line-height: 1.25; color: var(--uc-morado); }
+    .bloque h3 { margin: 1.25rem 0 0.5rem; font-size: 1.1rem; color: var(--uc-morado-profundo); }
+    .bloque p { margin: 0 0 0.75rem; }
+    .bloque ul, .bloque ol { margin: 0.25rem 0 0.75rem; padding-left: 1.3rem; }
+    .bloque li { margin-bottom: 0.3rem; }
+    .bloque a { color: var(--uc-morado); }
+    .etiqueta {
+      font-size: 0.7rem; font-weight: 700; letter-spacing: 0.05em; text-transform: uppercase;
+      color: var(--uc-naranja-texto);
+    }
+    .pregunta-grande {
+      margin: 0.25rem 0 0.75rem; font-size: clamp(1.4rem, 4vw, 2rem); font-weight: 900;
+      line-height: 1.2; color: var(--uc-morado-profundo);
+    }
+    code {
+      font-family: ui-monospace, 'SFMono-Regular', Menlo, monospace; font-size: 0.88em;
+      background: #F1F5F9; border: 1px solid #E2E8F0; border-radius: 0.3rem; padding: 0.05em 0.35em;
+      overflow-wrap: anywhere;
+    }
+
+    table { width: 100%; border-collapse: collapse; margin: 0.5rem 0 1rem; font-size: 0.95rem; }
+    th, td { text-align: left; vertical-align: top; padding: 0.55rem 0.7rem; border: 1px solid #E5E7EB; }
+    thead th { background: #F5EEF7; color: var(--uc-morado-profundo); }
+    tbody th { background: #FAFAFB; color: var(--uc-morado-profundo); font-weight: 700; }
+
+    .rubrica td { font-size: 0.9rem; }
+    .rubrica tbody th { width: 17%; }
+    .rubrica tbody th small { display: block; font-weight: 400; color: #475569; }
+    @media (max-width: 760px) {
+      .rubrica thead { display: none; }
+      .rubrica, .rubrica tbody, .rubrica tr, .rubrica th, .rubrica td { display: block; width: 100%; }
+      .rubrica tr { border: 1px solid #E5E7EB; border-radius: 0.75rem; margin-bottom: 1rem; overflow: hidden; }
+      .rubrica tbody th { width: 100%; border: 0; border-bottom: 1px solid #E5E7EB; }
+      .rubrica td { border: 0; border-bottom: 1px solid #F1F5F9; }
+      .rubrica td::before {
+        content: attr(data-nivel); display: block; font-size: 0.72rem; font-weight: 700;
+        letter-spacing: 0.05em; text-transform: uppercase; color: var(--uc-naranja-texto);
+      }
+    }
+
+    .aviso {
+      background: #FFF7ED; border-left: 4px solid var(--uc-naranja); padding: 1rem 1.25rem;
+      border-radius: 0 0.75rem 0.75rem 0; margin: 0.75rem 0 1rem;
+    }
+    .aviso p:last-child { margin: 0; }
+    .aviso strong { color: var(--uc-naranja-texto); }
+
+    .hitos { list-style: none; padding: 0 !important; display: grid; gap: 0.75rem; }
+    @media (min-width: 768px) { .hitos { grid-template-columns: repeat(4, 1fr); } }
+    .hitos li {
+      border: 1px solid #E5E7EB; border-top: 4px solid var(--uc-morado); border-radius: 0.75rem;
+      padding: 0.75rem 1rem; margin: 0;
+    }
+    .hitos strong { display: block; color: var(--uc-morado-profundo); }
+
+    .boton {
+      display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.7rem 1.4rem;
+      border-radius: 999px; font-weight: 700; font-size: 0.92rem; text-decoration: none;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+    .boton.principal { color: white !important; background: linear-gradient(140deg, var(--uc-morado) 0%, var(--uc-naranja-texto) 100%); }
+    .boton:hover, .boton:focus-visible { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(105, 30, 122, 0.25); }
+    .boton:focus-visible { outline: 3px solid var(--uc-morado); outline-offset: 2px; }
+
+    footer { background: linear-gradient(180deg, #5C1A6C 0%, var(--uc-morado-profundo) 100%); }
+    footer p { margin: 0; padding: 1.5rem 0; text-align: center; color: white; font-size: 0.875rem; }
+    footer span { color: var(--uc-ambar); }
+
+    @media (prefers-reduced-motion: reduce) { .boton { transition: none; } }
+
+    @media print {
+      @page { margin: 1.6cm 1.4cm; }
+      body { background: white; font-size: 10.5pt; display: block; }
+      .skip-link, .indice, .boton i, .uc-franja { display: none; }
+      .heroe { background: none; color: #1E293B; border-bottom: 2px solid var(--uc-morado); }
+      .heroe .contenedor { padding: 0 0 0.75rem; }
+      .heroe p.lead { color: #1E293B; }
+      .heroe a.volver { color: var(--uc-morado); }
+      .antetitulo { color: var(--uc-naranja-texto); }
+      .uc-logo { box-shadow: none; padding: 0; margin-bottom: 0.75rem; }
+      main { padding: 1rem 0 0; }
+      .bloque { box-shadow: none; border: 0; padding: 0; margin-bottom: 1rem; }
+      .bloque h2 { break-after: avoid; }
+      .boton, .boton.principal { padding: 0; color: var(--uc-morado) !important; background: none; }
+      .hitos { grid-template-columns: repeat(4, 1fr); }
+      tr, .hitos li, .aviso { break-inside: avoid; }
+      .rubrica thead { display: none; }
+      .rubrica, .rubrica tbody, .rubrica tr, .rubrica th, .rubrica td { display: block; width: 100%; }
+      .rubrica tr { border: 1px solid #CBD5E1; border-radius: 0.5rem; margin-bottom: 0.75rem; overflow: hidden; }
+      .rubrica tbody th, .rubrica td { border: 0; border-bottom: 1px solid #E5E7EB; }
+      .rubrica td::before {
+        content: attr(data-nivel); display: block; font-size: 0.72rem; font-weight: 700;
+        letter-spacing: 0.05em; text-transform: uppercase; color: var(--uc-naranja-texto);
+      }
+      footer { background: none; }
+      footer p { color: #475569; padding: 0.5rem 0; }
+      footer span { color: #475569; }
+      a[href^="http"]::after { content: " (" attr(href) ")"; font-size: 0.8em; color: #475569; overflow-wrap: anywhere; }
+    }
+  </style>
+</head>
+
+<body>
+  <a href="#contenido" class="skip-link">Saltar al contenido</a>
+
+  <header class="heroe">
+    <div class="contenedor">
+      <span class="uc-logo"><img src="{{LOGO}}" alt="Fundación Universitaria Compensar"></span>
+      <p class="antetitulo">Análisis Estadístico de la Información · Proyecto final</p>
+      <h1>El tablero de Tingua</h1>
+      <p class="lead">Un tablero semanal para la gerencia de <em>Tingua Domicilios S.A.S.</em>, con los mismos
+        pedidos de todo el curso. Aquí están el enunciado, lo que se entrega y cómo se evalúa.</p>
+      <p class="migas"><a class="volver" href="index.html"><i class="fas fa-arrow-left" aria-hidden="true"></i>
+          Volver a la portada del curso</a></p>
+    </div>
+    <div class="uc-franja" aria-hidden="true"></div>
+  </header>
+
+  <main id="contenido">
+    <div class="contenedor">
+      <nav class="indice" aria-labelledby="titulo-indice">
+        <h2 id="titulo-indice">En esta página</h2>
+        <ol>
+          <li><a href="#pregunta">La pregunta</a></li>
+          <li><a href="#organizacion">Cómo se organiza</a></li>
+          <li><a href="#datos">Los datos y cómo cargarlos</a></li>
+          <li><a href="#lista-minima">La lista mínima</a></li>
+          <li><a href="#semanas">Las semanas ISO</a></li>
+          <li><a href="#visualizacion">Las gráficas</a></li>
+          <li><a href="#opcional">Para ir más lejos</a></li>
+          <li><a href="#hitos">Hitos</a></li>
+          <li><a href="#entrega">La entrega</a></li>
+          <li><a href="#evaluacion">La evaluación</a></li>
+          <li><a href="#rubrica">La rúbrica</a></li>
+          <li><a href="#ia">El uso de IA</a></li>
+        </ol>
+      </nav>
+
+      <section class="bloque" id="pregunta" aria-labelledby="titulo-pregunta">
+        <span class="etiqueta">La pregunta de la gerencia</span>
+        <h2 id="titulo-pregunta" class="sr-only">La pregunta</h2>
+        <p class="pregunta-grande">¿Cómo va la operación cada semana?</p>
+        <p>La gerencia de Tingua quiere abrir un tablero cada lunes y saber, para la semana que pasó y para cada
+          ciudad, cuántos pedidos hubo, cuánto tardaron, cuántos llegaron tarde y qué tan satisfecha quedó la
+          clientela. Tu tablero responde esa pregunta con los datos del curso y con las herramientas de las sesiones
+          1 a 4: tipos de variable, distribuciones, medidas de centro y de dispersión, atípicos y tablas dinámicas.</p>
+        <p>Recuerda que Tingua es una empresa <strong>ficticia</strong>: sus datos se generaron para el curso y no
+          corresponden a personas ni a empresas reales.</p>
+      </section>
+
+      <section class="bloque" id="organizacion" aria-labelledby="titulo-organizacion">
+        <h2 id="titulo-organizacion">Cómo se organiza</h2>
+        <ul>
+          <li><strong>En parejas.</strong> Solo si el grupo tiene un número impar de estudiantes, un equipo puede ser
+            un trío.</li>
+          <li><strong>Con una herramienta</strong>, la que elija la pareja: Streamlit, Shiny (en Python o en R),
+            Power BI o Looker Studio.</li>
+          <li><strong>Trabajo independiente</strong>, desde la sesión 4 hasta la sesión 8, con avances que se revisan en
+            clase (ver <a href="#hitos">Hitos</a>).</li>
+          <li><strong>Se presenta en la sesión 8.</strong> El formato de las presentaciones se anuncia en la
+            sesión 7.</li>
+        </ul>
+      </section>
+
+      <section class="bloque" id="datos" aria-labelledby="titulo-datos">
+        <h2 id="titulo-datos">Los datos y cómo cargarlos</h2>
+        <p>El tablero usa <strong>solo</strong> <code>pedidos.csv</code>: los 12 000 pedidos de Tingua, del 1 de
+          enero al 30 de junio de 2026, en cinco ciudades, con las 15 columnas del diccionario de datos de la sesión
+          1. Es el mismo archivo que crea la primera celda de cada notebook.</p>
+        <p><a class="boton principal" href="{{DATOS_URL}}"><i class="fas fa-file-csv" aria-hidden="true"></i>
+            Descargar pedidos.csv</a></p>
+        <p>Si el navegador muestra el archivo como texto, haz clic derecho en el botón y elige <em>Guardar enlace
+            como…</em></p>
+        <p>El archivo está en UTF-8, separado por comas y con punto decimal. Notas para cada herramienta:</p>
+        <table>
+          <thead>
+            <tr>
+              <th scope="col">Herramienta</th>
+              <th scope="col">Cómo cargar el archivo</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <th scope="row">Looker Studio</th>
+              <td>No lee el archivo desde la URL: descárgalo y súbelo con el conector de carga de archivos CSV.</td>
+            </tr>
+            <tr>
+              <th scope="row">Power BI Desktop</th>
+              <td>Solo funciona en Windows (en Mac, elige otra herramienta). <strong>Antes de importar</strong>, en
+                <em>Archivo → Opciones y configuración → Opciones → Archivo actual → Configuración regional</em>, elige
+                <em>Inglés (Estados Unidos)</em> (en-US) como configuración regional de la importación, para que los
+                decimales con punto no se lean como miles. Luego, en <em>Obtener datos → Texto o CSV</em>, elige el
+                origen <em>65001: Unicode (UTF-8)</em> para que las tildes se lean bien. Comprueba que la mediana de
+                <code>distancia_km</code> dé 3,1 km.</td>
+            </tr>
+            <tr>
+              <th scope="row">Streamlit</th>
+              <td>Se construye en tu computador (no desde Colab) y, para entregarlo, se publica en Streamlit
+                Community Cloud, que es gratuito con una cuenta de GitHub. Con pandas,
+                <code>pd.read_csv</code> lee el archivo o su URL.</td>
+            </tr>
+            <tr>
+              <th scope="row">Shiny</th>
+              <td>En Python o en R, como prefiera la pareja. En los dos se lee el archivo o su URL
+                (<code>pd.read_csv</code> en Python, <code>read.csv</code> en R).</td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+
+      <section class="bloque" id="lista-minima" aria-labelledby="titulo-lista">
+        <h2 id="titulo-lista">La lista mínima</h2>
+        <div class="aviso">
+          <p><strong>Es requisito para que el tablero se evalúe:</strong> cada elemento tiene que estar. Qué tan
+            bien está hecho se valora con la <a href="#rubrica">rúbrica</a>.</p>
+        </div>
+        <ol>
+          <li><strong>Abre y usa solo <code>pedidos.csv</code>.</strong></li>
+          <li><strong>Cuatro indicadores semanales</strong>, cada uno con su definición escrita en el tablero:
+            <ul>
+              <li>el número de pedidos de la semana;</li>
+              <li>el tiempo de entrega típico con su dispersión: la mediana y el RIC;</li>
+              <li>el % de pedidos que tardan más que un umbral de promesa que la pareja justifica (por ejemplo,
+                45 min), mostrando sobre cuántos pedidos se calcula (n);</li>
+              <li>la satisfacción como % de pedidos con 4 o 5 estrellas <strong>entre los calificados</strong>,
+                mostrando cuántos se calificaron. La calificación es ordinal: no se promedia.</li>
+            </ul>
+          </li>
+          <li><strong>Un filtro por ciudad y un selector de semana</strong> que cambian todos los indicadores.</li>
+          <li><strong>Una comparación</strong>: entre ciudades, entre semanas, con y sin lluvia o la que la pareja
+            justifique.</li>
+          <li><strong>Un texto para la gerencia</strong>: tres hallazgos con cifras y una recomendación.</li>
+          <li><strong>Una nota sobre los datos</strong>, con: la fuente; su calidad (por ejemplo, el 40,8 % de los
+            pedidos no tiene calificación); la regla de atípicos que se usó; el tope de 14 km de la distancia; las
+            semanas incompletas; los grupos pequeños por ciudad, y el uso de IA (ver <a href="#ia">El uso de
+              IA</a>).</li>
+        </ol>
+        <p>Sobre los grupos pequeños: en las semanas completas hay ciudades con solo 34 pedidos en una semana, y
+          con apenas 18 calificados en otra. Un porcentaje sobre tan pocos pedidos cambia mucho de una semana a otra; por eso cada
+          indicador muestra su n.</p>
+      </section>
+
+      <section class="bloque" id="semanas" aria-labelledby="titulo-semanas">
+        <h2 id="titulo-semanas">Las semanas ISO</h2>
+        <p>Una semana ISO va de lunes a domingo, y la semana 1 es la que contiene el primer jueves del año. Así se
+          calcula en cada herramienta:</p>
+        <table>
+          <thead>
+            <tr>
+              <th scope="col">Herramienta</th>
+              <th scope="col">Semana ISO de la columna <code>fecha</code></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <th scope="row">pandas (Streamlit, Shiny en Python)</th>
+              <td><code>pd.to_datetime(pedidos["fecha"]).dt.isocalendar().week</code></td>
+            </tr>
+            <tr>
+              <th scope="row">R (Shiny en R)</th>
+              <td><code>lubridate::isoweek(as.Date(pedidos$fecha))</code> (una vez antes:
+                <code>install.packages("lubridate")</code>)</td>
+            </tr>
+            <tr>
+              <th scope="row">Power BI</th>
+              <td><code>WEEKNUM(pedidos[fecha], 21)</code> (el 21 pide la semana ISO)</td>
+            </tr>
+            <tr>
+              <th scope="row">Looker Studio</th>
+              <td><code>ISOWEEK(fecha)</code></td>
+            </tr>
+            <tr>
+              <th scope="row">Google Sheets</th>
+              <td><code>ISOWEEKNUM(B2)</code>, si la fecha está en la columna B</td>
+            </tr>
+          </tbody>
+        </table>
+        <p>Los datos cubren 27 semanas, y dos están <strong>incompletas</strong>: la semana 1 tiene 4 días (304
+          pedidos) y la 27, 2 días (111 pedidos). Márcalas en el tablero: compararlas con una semana completa haría
+          creer que los pedidos cayeron. La celda [semanas] del <a href="{{COLAB:4}}" target="_blank"
+            rel="noopener">notebook de la sesión 4<span class="sr-only"> (se abre en otra pestaña)</span></a>
+          muestra cómo encontrarlas.</p>
+      </section>
+
+      <section class="bloque" id="visualizacion" aria-labelledby="titulo-visualizacion">
+        <h2 id="titulo-visualizacion">Las gráficas</h2>
+        <h3>Qué gráfica para qué pregunta</h3>
+        <table>
+          <thead>
+            <tr>
+              <th scope="col">Si la pregunta es de…</th>
+              <th scope="col">Usa</th>
+              <th scope="col">Ejemplo en Tingua</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <th scope="row">Tendencia</th>
+              <td>Una línea</td>
+              <td>Los pedidos de cada semana</td>
+            </tr>
+            <tr>
+              <th scope="row">Comparación</th>
+              <td>Barras</td>
+              <td>El tiempo típico de cada ciudad</td>
+            </tr>
+            <tr>
+              <th scope="row">Distribución</th>
+              <td>Un histograma o una caja</td>
+              <td>Cómo se reparten los tiempos de entrega</td>
+            </tr>
+            <tr>
+              <th scope="row">Composición</th>
+              <td>Barras apiladas al 100 %</td>
+              <td>Los medios de pago de cada ciudad</td>
+            </tr>
+            <tr>
+              <th scope="row">Relación</th>
+              <td>Un diagrama de dispersión</td>
+              <td>La distancia y el tiempo de entrega</td>
+            </tr>
+          </tbody>
+        </table>
+        <h3>Cuatro reglas</h3>
+        <ul>
+          <li><strong>Las barras empiezan en cero</strong>: si no, una diferencia pequeña parece enorme.</li>
+          <li><strong>Los títulos afirman</strong>: «Bogotá tarda más que las demás ciudades», no «Tiempo por
+            ciudad».</li>
+          <li><strong>Cada eje dice su unidad</strong> y cada color tiene su leyenda.</li>
+          <li><strong>No conviertas ruido en noticia</strong>: un cambio pequeño entre dos semanas, o un % calculado
+            sobre pocos pedidos, no es una tendencia.</li>
+        </ul>
+      </section>
+
+      <section class="bloque" id="opcional" aria-labelledby="titulo-opcional">
+        <h2 id="titulo-opcional">Para ir más lejos (opcional)</h2>
+        <p>Lo que veremos en las sesiones 5 a 7 puede enriquecer el tablero, sin ser requisito: el sesgo de los
+          pedidos sin calificación (sesión 5), intervalos de confianza para los porcentajes semanales (sesión 6) o
+          una regresión del tiempo de entrega sobre la distancia y la lluvia (sesión 7).</p>
+      </section>
+
+      <section class="bloque" id="hitos" aria-labelledby="titulo-hitos">
+        <h2 id="titulo-hitos">Hitos</h2>
+        <ol class="hitos">
+          <li><strong>Después de la sesión 4</strong>La pareja, la herramienta y tres preguntas de la gerencia, cada
+            una con su indicador. Se coevalúan al abrir la sesión 5.</li>
+          <li><strong>Sesiones 5 y 6</strong>Un prototipo que abre, carga los datos y muestra los cuatro
+            indicadores.</li>
+          <li><strong>Sesión 7</strong>Las comparaciones y el texto para la gerencia.</li>
+          <li><strong>Sesión 8</strong>La presentación del tablero.</li>
+        </ol>
+      </section>
+
+      <section class="bloque" id="entrega" aria-labelledby="titulo-entrega">
+        <h2 id="titulo-entrega">La entrega</h2>
+        <p>Por la plataforma del curso, <strong>antes de la sesión 8</strong>. Qué se entrega depende de la
+          herramienta:</p>
+        <table>
+          <thead>
+            <tr>
+              <th scope="col">Herramienta</th>
+              <th scope="col">Qué se entrega</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <th scope="row">Looker Studio</th>
+              <td>El enlace al informe, con permiso de lectura para el docente</td>
+            </tr>
+            <tr>
+              <th scope="row">Power BI</th>
+              <td>El archivo <code>.pbix</code> y un PDF del tablero</td>
+            </tr>
+            <tr>
+              <th scope="row">Streamlit</th>
+              <td>La URL de la aplicación y su código</td>
+            </tr>
+            <tr>
+              <th scope="row">Shiny</th>
+              <td>La URL de la aplicación o la aplicación (su código)</td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+
+      <section class="bloque" id="evaluacion" aria-labelledby="titulo-evaluacion">
+        <h2 id="titulo-evaluacion">La evaluación</h2>
+        <p>Como dice el syllabus del curso, el tablero se evalúa desde tres miradas:</p>
+        <table>
+          <thead>
+            <tr>
+              <th scope="col">Quién evalúa</th>
+              <th scope="col">Qué se valora</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <th scope="row">Tú: autoevaluación individual</th>
+              <td>Tu desempeño con los criterios de la rúbrica y tu aporte a la pareja: qué hizo cada
+                integrante.</td>
+            </tr>
+            <tr>
+              <th scope="row">Otra pareja: coevaluación</th>
+              <td>Un formulario de tres criterios que se comparte antes de la sesión 8.</td>
+            </tr>
+            <tr>
+              <th scope="row">El docente: heteroevaluación</th>
+              <td>La rúbrica completa, de cinco criterios.</td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+
+      <section class="bloque" id="rubrica" aria-labelledby="titulo-rubrica">
+        <h2 id="titulo-rubrica">La rúbrica</h2>
+        <p>Cinco criterios, cada uno en cuatro niveles. Los descriptores dicen qué se tiene que poder ver en el
+          tablero o en su nota sobre los datos. La rúbrica se aplica a los tableros que cumplen la <a
+            href="#lista-minima">lista mínima</a>: los niveles describen qué tan bien está hecho cada elemento, no si
+          está. Destacado incluye lo de Logrado.</p>
+        <table class="rubrica">
+          <thead>
+            <tr>
+              <th scope="col">Criterio</th>
+              <th scope="col">Inicial</th>
+              <th scope="col">En desarrollo</th>
+              <th scope="col">Logrado</th>
+              <th scope="col">Destacado</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <th scope="row">1. Datos y medidas <small>CR1 del syllabus</small></th>
+              <td data-nivel="Inicial">Algún indicador está mal calculado o usa una medida que no corresponde a la
+                variable (por ejemplo, la media de la calificación, que es ordinal, o el % de 4 y 5 estrellas con los
+                pedidos sin calificar en el denominador), o su definición no dice qué calcula.</td>
+              <td data-nivel="En desarrollo">Las medidas corresponden a cada variable, pero alguna definición es
+                ambigua (no dice sobre qué pedidos se calcula), el tiempo típico no muestra su n o las semanas
+                incompletas aparecen sin marcar junto a las completas.</td>
+              <td data-nivel="Logrado">Los cuatro indicadores tienen definición escrita, usan la medida que
+                corresponde (mediana y RIC para el tiempo; % de 4 y 5 estrellas entre los calificados) y muestran su
+                n; las semanas incompletas están marcadas.</td>
+              <td data-nivel="Destacado">Además, la nota sobre los datos explica cómo afecta a cada indicador la
+                calidad del archivo: los pedidos sin calificación, el tope de 14 km y los grupos pequeños.</td>
+            </tr>
+            <tr>
+              <th scope="row">2. Técnicas y herramienta <small>CR2 del syllabus</small></th>
+              <td data-nivel="Inicial">La nota nombra la regla de atípicos, pero no dice con qué referencia (todos
+                los pedidos o los de cada ciudad) ni por qué, y no explica por qué se eligió la herramienta.</td>
+              <td data-nivel="En desarrollo">Justifica la regla de atípicos o la elección de la herramienta, pero no
+                las dos.</td>
+              <td data-nivel="Logrado">La nota dice qué regla de atípicos se usó (1,5 RIC, puntaje z u otra), con qué
+                referencia (todos los pedidos o los de cada ciudad) y por qué; y por qué la pareja eligió su
+                herramienta frente a las otras tres.</td>
+              <td data-nivel="Destacado">Además, compara con los datos dos reglas o dos referencias y muestra qué
+                cambia en el tablero con cada una.</td>
+            </tr>
+            <tr>
+              <th scope="row">3. Visualización <small>Categorías de visualización del syllabus</small></th>
+              <td data-nivel="Inicial">El tablero no tiene gráficas, o las que tiene no corresponden a su pregunta o
+                engañan (por ejemplo, barras que no empiezan en cero).</td>
+              <td data-nivel="En desarrollo">La mayoría de las gráficas corresponde a su pregunta, pero hay títulos
+                que solo nombran el tema, ejes sin unidad o colores sin leyenda.</td>
+              <td data-nivel="Logrado">Cada gráfica usa la categoría que corresponde a su pregunta (tendencia,
+                comparación, distribución, composición o relación); las barras empiezan en cero, los ejes llevan su
+                unidad y los títulos afirman.</td>
+              <td data-nivel="Destacado">Además, el tablero se lee en orden, de lo general al detalle, y destaca lo
+                importante sin adornos que distraigan.</td>
+            </tr>
+            <tr>
+              <th scope="row">4. Interpretación para la gerencia <small>CR3 del syllabus</small></th>
+              <td data-nivel="Inicial">Los hallazgos repiten lo que muestran las gráficas o sus cifras no dicen de
+                qué semana, ciudad o grupo hablan, y la recomendación no se apoya en ellos.</td>
+              <td data-nivel="En desarrollo">Hay hallazgos con cifras, pero alguno toma un cambio pequeño o un grupo
+                pequeño por una tendencia, o la recomendación no se sigue de los hallazgos.</td>
+              <td data-nivel="Logrado">Tres hallazgos con cifras, unidades y su referencia (qué semana, qué ciudad,
+                sobre cuántos pedidos), y una recomendación que se sigue de ellos.</td>
+              <td data-nivel="Destacado">Además, separa lo que los datos muestran de lo que no pueden probar, como
+                las causas de una demora.</td>
+            </tr>
+            <tr>
+              <th scope="row">5. Funcionamiento</th>
+              <td data-nivel="Inicial">El filtro o el selector fallan en algunas combinaciones de ciudad y semana (por
+                ejemplo, la pantalla queda en blanco o muestra un error con una ciudad en la semana 27).</td>
+              <td data-nivel="En desarrollo">Funciona con todas las combinaciones de ciudad y semana, pero no explica
+                cómo se actualizaría con los pedidos de una semana nueva, o la explicación no sirve para su
+                herramienta.</td>
+              <td data-nivel="Logrado">El filtro por ciudad y el selector de semana cambian todos los indicadores, y
+                dos frases explican cómo se actualizaría el tablero con los pedidos de una semana nueva.</td>
+              <td data-nivel="Destacado">Además, la actualización está probada (por ejemplo, con un archivo de
+                prueba) y la pareja que lo coevalúa lo usa sin ayuda en la sesión 8.</td>
+            </tr>
+          </tbody>
+        </table>
+        <p>Cada herramienta calcula los cuartiles a su manera, así que la mediana y el RIC pueden diferir un poco
+          entre ellas. <strong>Esas pequeñas diferencias no se penalizan.</strong></p>
+      </section>
+
+      <section class="bloque" id="ia" aria-labelledby="titulo-ia">
+        <h2 id="titulo-ia">El uso de IA</h2>
+        <p>Puedes usar herramientas de inteligencia artificial para programar, diseñar o redactar, <strong>si lo
+            declaras</strong> en la nota sobre los datos: qué herramienta usaste y para qué. Cada integrante de la
+          pareja debe poder explicar cada cifra del tablero y cómo se calculó.</p>
+      </section>
+    </div>
+  </main>
+
+  <footer>
+    <div class="contenedor">
+      <p>Análisis Estadístico de la Información · Especialización en Big Data · Fundación Universitaria Compensar ·
+        Material diseñado por <span>Javier Mauricio Sierra</span></p>
+    </div>
+  </footer>
+</body>
+
+</html>
