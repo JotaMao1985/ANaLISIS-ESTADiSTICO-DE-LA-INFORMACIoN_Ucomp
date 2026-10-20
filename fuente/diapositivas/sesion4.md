@@ -8,15 +8,15 @@ subtitulo: Datos atípicos con la regla de 1,5 RIC y el puntaje z, datos censura
 lema: Un atípico es una pregunta, no un error.
 docente: Javier Mauricio Sierra
 etiqueta: Sesión 4 · 2 horas
-temas: Vallas de 1,5 RIC, Diagramas de caja, Puntaje z, Datos censurados, Tablas dinámicas, Proyecto final
-objetivo: Detectar datos atípicos con la regla de 1,5 RIC, leerlos en un diagrama de caja y compararlos con el puntaje z, decidir qué hacer con cada uno según su causa y su referencia, explorar una medida por varias dimensiones con una tabla dinámica y conocer el enunciado del tablero final.
+temas: Vallas de Tukey, Diagramas de caja, Puntaje z, Datos censurados, Tablas dinámicas, Proyecto final
+objetivo: Detectar datos atípicos con la regla de 1,5 RIC y con el puntaje z, leerlos en un diagrama de caja, decidir qué son según su causa y su referencia, explorar una medida por varias dimensiones con una tabla dinámica y conocer el enunciado del tablero final.
 salida: ../../Htmls/diapositivas/sesion-4-lo-que-se-sale-de-lo-normal.html
 agenda: si
 ---
 
 <!--
   Sesión 4 (2 h): apertura 12 min · atípicos 36 · exploración multidimensional 14 ·
-  enunciado del tablero 13 · práctica 30 · cierre 7 · holgura 8. Las diapositivas
+  enunciado del tablero 13 · práctica 30 · cierre 8 · holgura 7. Las diapositivas
   de código corresponden a las celdas del notebook (mismo identificador entre
   corchetes); las salidas y las gráficas salen de ejecutarlo
   (precalculo/salidas_sesion4.json y recursos/s4/<id>.svg), con Python 3.13 y
@@ -39,13 +39,13 @@ Es la segunda pregunta de la gerencia. Pedir desde ya que abran el cuaderno de l
 3. **Exploración multidimensional** — 14 min: tablas dinámicas
 4. **El proyecto final** — 13 min: el enunciado del tablero
 5. **Práctica guiada** — 30 min en Colab
-6. **Cierre** — 7 min
+6. **Cierre** — 8 min
 :::
 
 Hoy buscamos los pedidos que se salen de lo normal y presentamos el **proyecto final**: un tablero para la gerencia.
 
 ???
-Hitos de reloj: la diapositiva 8 en el minuto 12; la 15, en el 27; la 20, en el 37; la 25, en el 48; la 31, en el 62; la 36, en el 75; la 38, en el 105, y la 40, en el 110. Quedan 8 minutos de holgura. Hito fijo: el enunciado del tablero (diapositiva 31) empieza a más tardar en el minuto 62 y nunca se recorta: el trabajo independiente del proyecto empieza hoy. Si a los 60 min no se ha terminado la exploración, pasar directo a la 31: lo que falte queda en el notebook. Durante la exposición solo miran; ejecutan todo en la práctica. Si a los 27 min no se ha llegado a la 15, a los 37 no se ha llegado a la 20 o a los 48 no se ha llegado a la 25, recortar en este orden lo que todavía no se haya pasado: (1) el desglose, diapositiva 29: decir solo que lejos y con lluvia el 59,3 % de los pedidos es lento y dejar la celda [desglose] para el notebook (−3 min); (2) el borrado en cadena, en la nota de la 23 (−1 min); (3) la gráfica de n_productos, diapositiva 17: se deja la pregunta de la 16 con su respuesta (−2 min); (4) Barranquilla frente a Bucaramanga: la última viñeta de la diapositiva 21 (−1 min); (5) el 3·RIC: saltar la última viñeta de la 10 y definir los extremos al llegar a la 18 (−0,5 min). No se recortan las dos reglas, la caja del tiempo, las cajas por ciudad, el tope de 14 km, la tabla dinámica, el enunciado ni la práctica.
+Hitos de reloj: la diapositiva 8 en el minuto 12; la 15, en el 27; la 20, en el 37; la 25, en el 48; la 31, en el 62; la 36, en el 75; la 38, en el 105, y la 40, en el 111. Quedan 7 minutos de holgura (la autoevaluación de la 38 toma 2 minutos). Hito fijo: el enunciado del tablero (diapositiva 31) empieza a más tardar en el minuto 62 y nunca se recorta: el trabajo independiente del proyecto empieza hoy. Si a los 60 min no se ha terminado la exploración, pasar directo a la 31: lo que falte queda en el notebook. Durante la exposición solo miran; ejecutan todo en la práctica. Si a los 27 min no se ha llegado a la 15, a los 37 no se ha llegado a la 20 o a los 48 no se ha llegado a la 25, recortar en este orden lo que todavía no se haya pasado: (1) el desglose, diapositiva 29: decir solo que lejos y con lluvia el 59,3 % de los pedidos es lento y dejar la celda [desglose] para el notebook (−3 min); (2) el borrado en cadena, en la nota de la 23 (−1 min); (3) la gráfica de n_productos, diapositiva 17: se deja la pregunta de la 16 con su respuesta (−2 min); (4) Barranquilla frente a Bucaramanga: la última viñeta de la diapositiva 21 (−1 min); (5) el 3·RIC: saltar la última viñeta de la 10 y definir los extremos al llegar a la 18 (−0,5 min). No se recortan las dos reglas, la caja del tiempo, las cajas por ciudad, el tope de 14 km, la tabla dinámica, el enunciado ni la práctica.
 
 ## Otra persona del curso revisa tus tres frases sobre una ciudad
 
@@ -57,12 +57,12 @@ Hitos de reloj: la diapositiva 8 en el minuto 12; la 15, en el 27; la 20, en el 
 
 | Criterio | Pregunta |
 |---|---|
-| **Pareja** | ¿El centro va con su dispersión: la media con la desviación, la mediana con el RIC? |
+| **Centro y dispersión** | ¿El centro va con su dispersión: la media con la desviación, la mediana con el RIC? |
 | **Precisión** | ¿Cada frase da una cifra con su unidad y dice de qué ciudad habla? |
 | **El pedido raro** | ¿Dice por qué parece raro y comparado con qué? |
 
 ???
-Es la coevaluación prometida al cierre de la sesión 3. En salas de grupos, de a dos; siete minutos en total. Al volver, pedir en el chat el pedido raro de cada uno: la ciudad y los minutos. Guardarlos: en unos minutos veremos si las reglas los marcan. El tercer criterio prepara la idea de hoy: un pedido no es raro en abstracto, sino comparado con algo.
+Es la coevaluación prometida al cierre de la sesión 3. En salas de grupos, de a dos; siete minutos en total. Para ganar tiempo, que peguen su pedido raro en el chat (la ciudad y los minutos) antes de volver de las salas. Guardarlos: en unos minutos veremos si las reglas los marcan. El tercer criterio no se califica: prepara la idea de hoy, que un pedido no es raro en abstracto, sino comparado con algo.
 
 ## Un pedido tardó 200,9 minutos: ¿demora real o error? {.pregunta etiqueta="Sesión 1"}
 
@@ -130,7 +130,7 @@ print("Por encima:", (tiempo > valla_sup).sum(), "pedidos")
 ???
 Ningún tiempo cae justo en una valla, pero en el valor del pedido sí hay uno, y por eso importa el «estrictamente» (ejercicio 1). Los 6 de abajo tardan de 6,0 a 8,7 min. La última viñeta es la celda [extremos]: q3 + 3 * ric. La usamos para partir a los lentos en dos grupos.
 
-## La caja dibuja las vallas: sus puntos sueltos son los 246 candidatos {columnas=3:2}
+## Los puntos sueltos de la caja son los 246 candidatos de las vallas {columnas=3:2}
 
 ![La caja del tiempo y sus vallas (celda caja_tiempo)](recursos/s4/caja_tiempo.svg){alto=420}
 
@@ -138,11 +138,11 @@ Ningún tiempo cae justo en una valla, pero en el valor del pedido sí hay uno, 
 
 - La **caja** va de \(Q_1\) a \(Q_3\); la línea es la mediana
 - Los **bigotes** llegan a 9,6 y 59,1 min: al último pedido que no pasa cada valla
-- Los **puntos sueltos** son los 246 candidatos, dibujados en 164 puntos; la caja no dice qué son
+- Los 246 candidatos se dibujan como 164 **puntos sueltos**, porque varios tienen el mismo tiempo; la caja no dice qué son
 - La caja no muestra la forma: para eso, el histograma
 
 ???
-Es la caja de todos los pedidos juntos, ahora con las vallas dibujadas (celda [caja_tiempo]); en la sesión 3 la vimos por ciudad. A esta escala, el bigote superior y su valla se confunden: por eso las cifras van en la viñeta. Tres errores frecuentes al leer una caja: creer que los bigotes llegan hasta la valla (terminan en el último pedido que queda dentro: 9,6 y 59,1 min, no 9,15 y 59,15); creer que llegan al mínimo y al máximo (eso solo pasa del lado en que no hay puntos sueltos; y el bigote coincide con la valla solo si un pedido cae justo en ella, como en los productos, en 6), y creer que cada punto es un pedido: los 246 candidatos se dibujan como 164 puntos, porque varios tienen el mismo tiempo. La caja tampoco muestra la forma: la cola a la derecha se ve en el histograma (diapositiva 15), y los dos grupos de lentos, en la 18. Volver a los pedidos raros del chat: ¿cuáles son puntos sueltos?
+Es la caja de todos los pedidos juntos (celda [caja_tiempo]); en la sesión 3 la vimos por ciudad. Las vallas no las dibuja la caja: son las dos líneas naranjas que añade el código. A esta escala, el bigote superior y su valla se confunden: por eso las cifras van en la viñeta. Tres errores frecuentes al leer una caja: creer que los bigotes llegan hasta la valla (terminan en el último pedido que queda dentro: 9,6 y 59,1 min, no 9,15 y 59,15); creer que llegan al mínimo y al máximo (eso solo pasa del lado en que no hay puntos sueltos; y el bigote coincide con la valla solo si un pedido cae justo en ella, como en los productos, en 6), y creer que cada punto es un pedido: los 246 candidatos se dibujan como 164 puntos, porque varios tienen el mismo tiempo. La caja tampoco muestra la forma: la cola a la derecha se ve en el histograma (diapositiva 15), y los dos grupos de lentos, en la 18. Volver a los pedidos raros del chat: ¿cuáles son puntos sueltos?
 
 ## El puntaje z dice a cuántas desviaciones de la media está un pedido
 
@@ -151,9 +151,9 @@ $$ z = \frac{x - \bar{x}}{s} $$
 Por convención, un pedido es candidato si \(|z| > 3\): si está a más de tres desviaciones de la media, por encima o por debajo.
 
 ???
-Cómo se lee en voz alta: «z es x menos x barra, dividido entre s»; y la regla: «el valor absoluto de z es mayor que tres». El pedido de 200,9 min tiene z = 13,1: está a trece desviaciones de la media. La lectura de la sesión 3 presentaba z junto con la distribución normal; aquí z solo mide distancias en desviaciones. La normal, y los porcentajes que da, llegan en la sesión 6: no prometer ningún porcentaje por ahora.
+Cómo se lee en voz alta: «z es x menos x barra, dividido entre s»; y la regla: «el valor absoluto de z es mayor que tres». El pedido de 200,9 min tiene z = 13,1: está a trece desviaciones de la media. La lectura de la sesión 3 presentaba z junto con la distribución normal; aquí z solo mide distancias en desviaciones. La normal, y los porcentajes que da, llegan en la sesión 6: no prometer ningún porcentaje por ahora. En la sesión 3, la desviación de la población dividía entre N; aquí z usa s, que divide entre n − 1. Con 12 000 pedidos da igual: el conteo de |z| > 3 es 75 con las dos.
 
-## El puntaje z marca 75 pedidos, todos dentro de los 240 de la valla
+## El puntaje z marca 75 pedidos, y los 75 están entre los 240 de la valla
 
 ```python [puntaje_z]
 media, s = tiempo.mean(), tiempo.std()
@@ -174,22 +174,22 @@ print(f"Media - 3s = {media - 3 * s:.1f} min")
 ???
 Cómo se lee la segunda viñeta: «x barra menos tres s». Un tiempo no puede ser negativo, así que el límite de abajo no sirve: los 6 pedidos rápidos que marca la valla, z no los ve. abs() es el valor absoluto. Preguntar: ¿por qué z marca 75 y la valla 240, si las dos miran los mismos pedidos? La siguiente diapositiva lo responde.
 
-## Los atípicos inflan la desviación y así se esconden: es el enmascaramiento
+## Los candidatos inflan la desviación y así se esconden: es el enmascaramiento
 
 ```python [enmascaramiento]
 fuera = (tiempo < valla_inf) | (tiempo > valla_sup)
 print(f"s con todos los pedidos: {s:.2f} min")
-print(f"s sin los {fuera.sum()} atípicos: {tiempo[~fuera].std():.2f} min")
+print(f"s sin los {fuera.sum()} candidatos: {tiempo[~fuera].std():.2f} min")
 #> s con todos los pedidos: 12.66 min
-#> s sin los 246 atípicos: 8.96 min
+#> s sin los 246 candidatos: 8.96 min
 ```
 
 - Los 246 candidatos suben la desviación de 8,96 a 12,66 min
-- Con una \(s\) más grande, la línea de \(z = 3\) se aleja, y menos pedidos la cruzan
+- Con una \(s\) más grande, el corte de \(z = 3\), \(\bar{x} + 3s\), sube, y menos pedidos lo pasan
 - Las vallas usan cuartiles, que casi no se mueven
 
 ???
-El símbolo | es «o»: fuera de una valla o de la otra; ~ es «no». Es la robustez de la sesión 3: la desviación siente los extremos y el RIC, casi no. Dato para quien pregunte: con la media y la desviación calculadas sin los atípicos, z > 3 marcaría 196 pedidos. Por eso z, en datos con cola, encuentra menos de lo que hay.
+El símbolo | es «o»: fuera de una valla o de la otra; ~ es «no». Es la robustez de la sesión 3: la desviación siente los extremos y el RIC, casi no. Dato para quien pregunte: con la media y la desviación calculadas sin los candidatos, z > 3 marcaría 196 pedidos. Por eso z, en datos con cola, marca menos candidatos que la valla.
 
 ## La valla corta en 59,15 min y z = 3 en 73,1: la valla ve más candidatos {columnas=3:2}
 
@@ -197,31 +197,31 @@ El símbolo | es «o»: fuera de una valla o de la otra; ~ es «no». Es la robu
 
 |||
 
-- Entre las dos líneas están los pedidos que la valla marca y \(z\) no
-- La cola sigue hasta 200,9 min: sus barras son tan bajas que no se ven
-- Con cola a la derecha, la valla, que usa cuartiles, es la regla que conviene
+- Entre las dos líneas, 165 pedidos que la valla marca y \(z\) no
+- Más allá de \(z = 3\), 75 pedidos, hasta 200,9 min: sus barras son tan bajas que no se ven
+- Con cola a la derecha, la valla resiste mejor que \(z\); aun así, solo marca candidatos
 
 ???
-El eje se corta en 140 minutos para ver la forma. Las cifras de la leyenda van con punto porque las escribe Python. La línea de z = 3 es la media más tres desviaciones: 73,1 min. Las vallas usan cuartiles; z, la media y la desviación, que los atípicos inflan: pedir que lo digan con sus palabras. El puntaje z sirve mejor cuando la forma es simétrica y sin cola; aun así, las dos reglas marcan solo candidatos. Transición: ¿y si la regla marca demasiados?
+El eje se corta en 140 minutos para ver la forma. Las cifras de la gráfica van con punto porque las escribe Python. La línea punteada de z = 3 es la media más tres desviaciones: 73,1 min; la franja sombreada va de la valla a esa línea. Las vallas usan cuartiles; z, la media y la desviación, que los candidatos inflan: pedir que lo digan con sus palabras. El puntaje z sirve mejor cuando la forma es simétrica y sin cola. Transición: ¿y si la regla marca demasiados?
 
-## La regla marca 1082 pedidos por tener muchos productos: ¿son 1082 pedidos raros? {.pregunta}
+## La regla marca 1082 pedidos por tener muchos productos: ¿cuáles son raros de verdad? {.pregunta}
 
 - En `n_productos`, \(Q_1 = 1\) y \(Q_3 = 3\): la valla superior queda en 6
-- **Fuera** quedan los pedidos de más de 6 productos
+- **Fuera** quedan los pedidos de más de 6 productos: son el 9,0 % de los pedidos
 
 ::: respuesta
-**No.** Es un conteo con cola a la derecha: 370 pedidos tienen exactamente 6 productos, el valor de la valla, y los 1059 de 7 a 17 siguen la misma cola. Lo raro son **23 pedidos de 20 a 44 productos**, después de un hueco: ninguno tiene 18 ni 19.
+**Solo 23, los de 20 a 44 productos.** Es un conteo con cola a la derecha, y la valla cae en medio de ella: 370 pedidos tienen exactamente 6 productos y quedan dentro; los 1059 de 7 a 17 quedan fuera, aunque siguen la misma cola. Esos 23 van sueltos, después de un hueco: ninguno tiene 18 ni 19.
 :::
 
 ???
-Un minuto; en el chat, «sí» o «no». La regla marca el 9,0 % de los pedidos: demasiados para llamarlos raros. Antes de creerle a una regla, se mira la gráfica. Los 23 son los pedidos corporativos del caso: una empresa que pide para su oficina. Son reales y raros: se conservan.
+Un minuto; en el chat, cuáles les parecen raros. El 9,0 % de los pedidos es demasiado para llamarlo raro. Antes de creerle a una regla, se mira la gráfica. Por el caso sabemos que los 23 son pedidos de empresas para su oficina; en los datos ninguna columna lo dice, y en la vida real habría que confirmarlo. Nada los hace imposibles ni choca con otras columnas: se tratan como reales y raros, y se conservan.
 
-## En la caja, 1082 pedidos son 26 puntos; las barras muestran el hueco de 17 a 20
+## En la caja, 1082 pedidos son 26 puntos; las barras muestran un grupo aparte, de 20 a 44
 
 ![La caja y los pedidos por número de productos, con la ampliación de los de más de 14 (celda productos_barras)](recursos/s4/productos_barras.svg){alto=430}
 
 ???
-A la izquierda, la caja: el bigote termina en 6 y por encima hay 26 puntos, uno por cada valor distinto de 7 a 44; detrás de ellos hay 1082 pedidos. En un conteo con cola, la caja siempre dibuja muchos puntos, y no son muchos errores. En el centro, todos los valores: la cola baja poco a poco y la valla la corta en 6. A la derecha, ampliados los de más de 14: después del 17 hay un hueco, y de 20 a 44 aparece otro grupo. Ese hueco es lo que la regla no ve: la valla solo mira la distancia a la caja, no la forma. El hueco de 18 y 19 no es el único: en la ampliación hay otros. Lo que distingue al grupo es que de 7 a 17 la cola baja sin saltos, y de 20 a 44 los pedidos aparecen sueltos. Es la diapositiva recortable 3: si se salta, basta con la respuesta de la anterior.
+A la izquierda, la caja: el bigote termina en 6 y por encima hay 26 puntos, uno por cada valor distinto de 7 a 44; detrás de ellos hay 1082 pedidos. En un conteo con cola, la caja siempre dibuja muchos puntos, y no son muchos errores. En el centro, de 1 a 17 productos: la valla, la línea naranja, cae en la barra de 6, la de los 370 pedidos que quedan dentro; las barras claras, de 7 en adelante, son las de fuera, y la cola baja poco a poco. A la derecha, ampliados los de más de 14: de 15 a 17 la cola sigue bajando (5, 4 y 1 pedidos), y de 20 a 44, en morado oscuro, aparecen 23 pedidos sueltos. Eso es lo que la regla no ve: la valla solo mira la distancia a la caja, no la forma. El hueco de 18 y 19 no es el único: en la ampliación hay otros, y no hay que buscar «el» hueco. Lo que distingue al grupo es el cambio de patrón: hasta el 17 la cola baja sin saltos, y de 20 a 44 los pedidos aparecen sueltos. Es la diapositiva recortable 3: si se salta, basta con la respuesta de la anterior.
 
 ## Los 240 pedidos lentos son dos grupos: 174 moderados y 66 extremos {columnas=2:1}
 
@@ -253,7 +253,7 @@ resumen.round(2)
 ???
 pd.cut parte a los lentos con las dos vallas: moderados hasta 77,9 y extremos más allá. La media de una columna de 100 y 0 es el porcentaje. Los moderados se explican por la distancia larga y la lluvia: el 77,0 % va a más de 7,7 km y el 52,3 % tuvo lluvia, frente al 3,9 % y el 24,1 % de todos los pedidos; además, el 77,0 % es de Bogotá (las dos cifras de 77,0 % coinciden por azar). Los extremos se parecen a un pedido cualquiera: decir «demoras que ni la distancia ni la lluvia explican», nunca «incidentes»: no sabemos qué pasó. La celda usa observed=True porque el grupo es una categoría.
 
-## 47 de 48 extremos calificados tienen 1 estrella: el de 200,9 min fue una demora real {columnas=3:2}
+## 47 de 48 extremos calificados tienen 1 estrella: el de 200,9 min parece una demora real {columnas=3:2}
 
 ```python [extremos_calificacion]
 extremos = pedidos[tiempo > valla_ext]
@@ -276,11 +276,11 @@ pedidos.loc[tiempo.idxmax(), columnas]
 |||
 
 - Contamos estrellas: la calificación nunca se promedia
-- Nada lo hace imposible: es un pedido **real y raro**
-- Su calificación fue de 1 estrella: se conserva y se investiga
+- Su 1 estrella, como la de 47 de los 48 extremos calificados, es coherente con una demora: un error de registro no la explicaría
+- Se trata como **real y raro**: se conserva y se investiga
 
 ???
-Es la respuesta a la pregunta de la diapositiva 6 y de la sesión 1. De los 66 extremos, 18 no se calificaron. Entre todos los pedidos calificados, solo el 1,0 % tiene 1 estrella: en los extremos es casi la regla. idxmax da la fila del tiempo más alto, y .loc la muestra con las columnas elegidas.
+Es la respuesta a la pregunta de la diapositiva 6 y de la sesión 1. Que nada lo haga imposible no basta: un 20,9 tecleado como 200,9 también es posible. La evidencia es la coherencia con otra columna: si el tiempo estuviera mal registrado, la calificación reflejaría la entrega real y difícilmente sería de 1 estrella. Por eso «parece»: no hay certeza. De los 66 extremos se calificaron 48, el 72,7 %, más que el 59,2 % de todos los pedidos: guardar el dato, porque la sesión 5 pregunta quién califica. Entre todos los pedidos calificados, solo el 1,0 % tiene 1 estrella: en los extremos es casi la regla. idxmax da la fila del tiempo más alto, y .loc la muestra con las columnas elegidas. Transición: hasta aquí medimos qué tan lejos está un pedido de todos los demás. La segunda pregunta: ¿lejos respecto a qué?
 
 ## Con la valla global, Bogotá aporta 161 de los 240 pedidos lentos {columnas=2:1}
 
@@ -308,13 +308,13 @@ pd.DataFrame({
 |||
 
 - La valla **global** compara con todos; la **propia**, con los de su ciudad
-- En Barranquilla, 55 min es atípico: su valla es de 49,45
-- En el total, 55 min es normal: **24** pedidos de Barranquilla son atípicos solo en su ciudad
+- Bogotá tiene el 39,2 % de los pedidos y el 67,1 % de los lentos globales; con su valla, el 1,8 %
+- En Barranquilla, 55 min pasa su valla (49,45), no la global: **24** pedidos son atípicos solo en su ciudad
 
 ???
-map le pone a cada pedido la valla de su ciudad. Bogotá es más lenta en general, así que con la valla global parece la ciudad de los atípicos; con su propia valla tiene 86. La celda [solo_ciudad] cuenta los 24 pedidos de Barranquilla que solo son atípicos en su ciudad. ¿Cuál usar? Depende de la pregunta: para comparar ciudades, la global; para el jefe de operación de Barranquilla, la propia. En el tablero, un filtro por ciudad cambia la referencia.
+map le pone a cada pedido la valla de su ciudad. Bogotá es más lenta en general, así que con la valla global parece la ciudad de los atípicos; con su propia valla tiene 86. Con su propia valla, todas las ciudades quedan entre el 1,8 y el 2,3 % de sus pedidos. La celda [solo_ciudad] cuenta los 24 pedidos de Barranquilla que solo son atípicos en su ciudad. ¿Cuál usar? Depende de la pregunta: para comparar ciudades, la global; para el jefe de operación de Barranquilla, la propia. En el tablero, filtrar por ciudad cambia la referencia solo si la valla se recalcula con los pedidos filtrados: hay que decidirlo y decirlo en la nota sobre los datos. Volver al chat: sus pedidos raros eran de una ciudad; ¿pasan la valla global o solo la de su ciudad?
 
-## Cada caja usa la valla de su ciudad; la línea naranja es la valla global {columnas=3:2}
+## La valla global y las de cada ciudad no marcan los mismos pedidos {columnas=3:2}
 
 ![Tiempo de entrega por ciudad y la valla global (celda cajas_ciudad)](recursos/s4/cajas_ciudad.svg){alto=420}
 
@@ -325,7 +325,7 @@ map le pone a cada pedido la valla de su ciudad. Bogotá es más lenta en genera
 - Barranquilla y Bucaramanga: el mismo 2,3 % de pedidos sobre su valla; los de Bucaramanga llegan más lejos
 
 ???
-Son las cajas de la sesión 3 con la valla global encima (celda [cajas_ciudad]), ordenadas de la valla más baja a la más alta. En Barranquilla, los puntos entre el bigote superior y la línea naranja son los 24 pedidos atípicos solo en su ciudad. En Bogotá pasa al revés: su bigote llega a 63,3 min, por encima de la línea, y 75 pedidos son atípicos con la valla global y normales en su ciudad. La última viñeta es la recortable 4, y la celda [alejan] la mide: pasan su valla 34 de 1474 pedidos en Barranquilla y 27 de 1190 en Bucaramanga (2,3 % en las dos), pero se alejan de ella 5,0 y 11,7 min en mediana, y el más lejano, 103,5 y 151,4 min. Contar puntos no basta: hay que ver cuánto se alejan. Es la idea de la sesión 3: el cuerpo es igual; Bucaramanga tiene demoras más extremas.
+Son las cajas de la sesión 3 con la valla global encima (celda [cajas_ciudad]), ordenadas de la valla más baja a la más alta. En Barranquilla, los puntos entre el bigote superior y la línea naranja son los 24 pedidos atípicos solo en su ciudad. En Bogotá pasa al revés: su bigote llega a 63,3 min, por encima de la línea, y 75 pedidos son atípicos con la valla global y normales en su ciudad. La última viñeta es la recortable 4, y la celda [alejan] la mide: pasan su valla 34 de 1474 pedidos en Barranquilla y 27 de 1190 en Bucaramanga (2,3 % en las dos), pero se alejan de ella 5,0 y 11,7 min en mediana, y el más lejano, 103,5 y 151,4 min. Contar puntos no basta: hay que ver cuánto se alejan. Es la idea de la sesión 3: el cuerpo es igual; Bucaramanga tiene demoras más extremas, y su punto más alto es el pedido de 200,9 min. La gráfica no lleva leyenda para no tapar esos puntos: la clave de la línea naranja va en su título. Transición: volvemos a la causa, con una que no es error ni demora: el tope del registro.
 
 ## 20 pedidos tienen exactamente 14,0 km: «14» significa «14 o más» {columnas=3:2}
 
@@ -334,32 +334,32 @@ Son las cajas de la sesión 3 con la valla global encima (celda [cajas_ciudad]),
 |||
 
 - La app registra hasta 14 km: es un **dato censurado**
-- La mediana y los cuartiles siguen siendo exactos
+- La mediana y los cuartiles siguen siendo exactos: los 20 quedan muy por encima de \(Q_3\)
 - La media pasa a ser un **piso**: la verdadera es igual o mayor
 - En la caja, los 20 pedidos de 14 km son un solo punto: la caja no muestra la censura
 
 ???
-A la izquierda, la caja de la distancia: 466 pedidos fuera de los bigotes, que se dibujan como solo 58 puntos, y los 20 pedidos de 14 km se dibujan como un único punto, igual que si fuera uno solo. Por eso la censura se busca contando valores repetidos, no mirando la caja. La celda [tope] lo muestra en texto: distancia.value_counts().sort_index().tail() deja ver 13,9 km con 1 pedido y 14,0 con 20. Lo dice el diccionario de datos: una ruta más larga queda como 14. Censurado quiere decir que solo sabemos que el valor es 14 o más. No afirmar que los tiempos de esos pedidos prueban que eran más lejanos: en estos datos el tiempo se calculó con la distancia ya topada, y un tiempo largo tiene muchas causas. El ejercicio 3 mide cuánto se movería la media. El tiempo también tiene un piso: 6,0 min, en 2 pedidos.
+A la izquierda, la caja de la distancia: 466 pedidos fuera de los bigotes, que se dibujan como solo 58 puntos, y los 20 pedidos de 14 km se dibujan como un único punto, igual que si fuera uno solo. Por eso la censura se busca contando valores repetidos, no mirando la caja. La celda [tope] lo muestra en texto: distancia.value_counts().sort_index().tail() deja ver 13,9 km con 1 pedido y 14,0 con 20. Lo dice el diccionario de datos: una ruta más larga queda como 14. Censurado quiere decir que solo sabemos que el valor es 14 o más. No afirmar que los tiempos de esos pedidos prueban que eran más lejanos: en estos datos el tiempo se calculó con la distancia ya topada, y un tiempo largo tiene muchas causas. El ejercicio 3 mide cuánto se movería la media. El tiempo tiene un tope por abajo: 6,0 min, en 2 pedidos («6,0» quiere decir «6 o menos»).
 
 ## Qué hacer con cada candidato depende de su causa
 
 | Pregunta | Si la respuesta es sí | Qué se hace |
 |---|---|---|
-| ¿Es imposible? | Un **error** | Se corrige en la fuente o se marca como faltante |
+| ¿Es imposible o choca con otras columnas? | Un **error** (seguro o probable) | Se corrige en la fuente o se marca como faltante |
 | ¿Está en el tope del registro? | Un dato **censurado** | Se marca: no se borra ni se trata como exacto |
-| ¿Es real y raro? | Un atípico **real** | Se conserva, se investiga y se informa con medidas robustas |
+| ¿Es posible, coherente y no está en un tope? | Un atípico **real** | Se conserva, se investiga y se informa con medidas robustas |
 
-En Tingua no hay valores imposibles: 0 filas repetidas, 0 códigos repetidos y 0 valores ≤ 0 (celda [errores]).
+En Tingua no aparecen errores evidentes: 0 filas repetidas, 0 códigos repetidos y 0 cantidades \(\le 0\) (celda [errores]).
 
 ???
-Las preguntas van en ese orden. Un tiempo negativo o una distancia de 0 km serían imposibles: errores. Los 14 km son censurados. El pedido de 200,9 min y los 23 corporativos son reales y raros. Recortable 2, el borrado en cadena (celda [cadena]): si se borran los 246 candidatos y se recalculan las vallas con lo que queda (9,65 y 58,05 min), aparecen 34 candidatos nuevos. Por eso nunca se «limpia» un conjunto de datos aplicando una regla de atípicos.
+Las preguntas van en ese orden. Un tiempo negativo o una distancia de 0 km serían imposibles: errores. Un valor posible también puede ser un error (un 20,9 escrito 200,9): por eso se mira si es coherente con las demás columnas; 200,9 min en 2 km con 5 estrellas chocaría. Los 14 km son censurados. El pedido de 200,9 min, con su 1 estrella, y los 23 corporativos se tratan como reales y raros. Recortable 2, el borrado en cadena (celda [cadena]): si se borran los 246 candidatos y se recalculan las vallas con lo que queda (9,65 y 58,05 min), aparecen 34 candidatos nuevos. Si alguien pregunta «¿y si se repite?»: en Tingua se detiene en la tercera ronda, con 280 pedidos borrados, el 2,3 %, y esos 34 no eran atípicos con los datos completos. Por eso nunca se «limpia» un conjunto de datos aplicando una regla de atípicos.
 
 ## Un atípico es una pregunta, no un error {.idea}
 
-La regla señala candidatos; la causa y la referencia deciden qué son. El pedido de 200,9 min no era un error: era la demora que la gerencia necesita ver.
+La regla señala candidatos; la causa y la referencia deciden qué son. Para la gerencia: 174 demoras moderadas van con la distancia larga y la lluvia; 66 son extremas y ni la distancia ni la lluvia las explican, con 1 estrella en 47 de los 48 calificados. Esas son las que hay que investigar: el pedido de 200,9 min no parece un error, sino una de ellas.
 
 ???
-Es el lema de la sesión. Pedir que lo repitan. Transición: hasta ahora miramos una variable a la vez, a veces separada por ciudad; ahora cruzamos varias dimensiones al tiempo.
+Es el lema de la sesión, y la respuesta a la pregunta de la gerencia. Pedir que alguien lo diga con sus palabras y con un pedido de hoy. Transición: hasta ahora miramos una variable a la vez, a veces separada por ciudad; ahora cruzamos varias dimensiones al tiempo.
 
 # Exploración multidimensional {icono=fa-cubes}
 
@@ -382,9 +382,9 @@ Lo que se resume: el **tiempo**, el **valor**, cuántos pedidos.
 Es lo que hacen las tablas dinámicas de Excel, Power BI y Looker Studio.
 
 ???
-Imagen: un cubo con la ciudad en un eje, la franja en otro y la lluvia en el tercero; en cada celda, la mediana del tiempo. Filtrar es quedarse con una rebanada (solo Bogotá); desglosar, bajar a más detalle (de ciudad a ciudad y lluvia); pivotar, cambiar qué va en filas y qué en columnas. El tablero final hace exactamente esto.
+Pedir que imaginen un cubo: con la ciudad en un eje, la franja en otro y la lluvia en el tercero; en cada celda, la mediana del tiempo. Filtrar es quedarse con una rebanada (solo Bogotá); desglosar, bajar a más detalle (de ciudad a ciudad y lluvia); pivotar, cambiar qué va en filas y qué en columnas. El tablero final hace exactamente esto.
 
-## La tabla dinámica: en cada ciudad, la lluvia suma de 6,2 a 7,9 min a la mediana {columnas=3:2}
+## La tabla dinámica: en cada ciudad, con lluvia la mediana sube entre 6 y 8 min {columnas=3:2}
 
 ```python [dinamica]
 tabla = pd.pivot_table(pedidos, values="tiempo_entrega_min",
@@ -405,15 +405,15 @@ tabla.round(1)
 |||
 
 - `values`: la medida · `index` y `columns`: las dimensiones
-- `aggfunc="median"`: la mediana, como texto
+- `aggfunc="median"`: la función que resume, escrita entre comillas
 - `margins=True`: la fila y la columna «Total»
 
 ???
-La celda [efecto_lluvia] resta las columnas: la lluvia suma 7,9 min en Barranquilla, 7,4 en Bogotá, 6,2 en Bucaramanga y en Cali y 6,5 en Medellín; en la fila Total, 8,1 (no confundirlo con los 8,1 min que Bogotá le saca a Barranquilla sin lluvia, en la diapositiva siguiente). Las restas con la tabla redondeada pueden diferir en una décima. observed=True evita un aviso de pandas cuando una dimensión es categórica. Con medias, como en la sesión 1, la lluvia suma 7,8 min en el total y 6,9 dentro de cada ciudad: la ciudad confunde el efecto de la lluvia.
+La celda [efecto_lluvia] resta las columnas: la lluvia suma 7,9 min en Barranquilla, 7,4 en Bogotá, 6,2 en Bucaramanga y en Cali y 6,5 en Medellín; en la fila Total, 8,1 (no confundirlo con los 8,1 min de más que tarda Bogotá sin lluvia, en la diapositiva siguiente). Las restas con la tabla redondeada pueden diferir en una décima. observed=True evita un aviso de pandas cuando una dimensión es categórica. Con medias, como en la sesión 1, la lluvia suma 7,8 min en el total y 6,9 dentro de cada ciudad: la ciudad confunde el efecto de la lluvia.
 
-## Bogotá le saca 9,4 min a Barranquilla en el total y 8,1 sin lluvia: ¿por qué? {.pregunta}
+## Bogotá tarda 9,4 min más que Barranquilla en total y 8,1 sin lluvia: ¿por qué? {.pregunta}
 
-Las dos diferencias salen de la misma tabla dinámica, con la mediana: columna «Total» y columna «No».
+Las dos salen de la tabla dinámica: columnas «Total» y «No». Pista: ¿en cuál de las dos llueve en más pedidos? (sesión 2)
 
 ::: respuesta
 **Por la composición.** En Bogotá llueve en el 28,5 % de los pedidos y en Barranquilla en el 10,6 %: la columna «Total» de Bogotá lleva más pedidos con lluvia, que son más lentos.
@@ -454,7 +454,7 @@ pd.pivot_table(pedidos.assign(tramo=tramo, lento=lento),
 
 - Los cortes van explícitos: 4,4 km es \(Q_3\) y 7,7, la valla de la distancia
 - Con `right=True`, los 26 pedidos de 7,7 km exactos no cuentan como lejanos
-- Cerca, la lluvia casi no cambia nada; lejos, los lentos pasan del 20,7 al 59,3 %
+- Cerca, la lluvia casi no cambia el % de lentos (0,6 % en los dos casos); lejos, lo sube del 20,7 al 59,3 %
 
 ???
 Es la diapositiva recortable 1. Un pedido es «lento» si pasa la valla de 59,15 min; la media de una columna de 100 y 0 es el porcentaje. Desglosar es bajar de «la lluvia suma minutos» a «dónde los suma». Con cortes automáticos, pandas pondría los bordes donde quisiera; aquí cada borde significa algo. Los lejanos con lluvia son 108 pedidos: pocos, pero casi seis de cada diez son lentos.
@@ -491,14 +491,14 @@ La página trae las notas para cargar el archivo en cada herramienta (Looker Stu
 
 1. Los pedidos de la semana
 2. El tiempo típico y su dispersión: mediana y RIC
-3. El % de pedidos por encima de una promesa justificada (por ejemplo, 45 min), con n
-4. La satisfacción: % de 4 y 5 estrellas entre los calificados, con cuántos se calificaron
+3. El % de pedidos sobre un umbral de promesa que justifiques (como 45 min), con su n
+4. La satisfacción: % de 4 y 5 estrellas entre los calificados, con su n
 
 |||
 
-### Y además
+### Además
 
-- Un filtro por ciudad, un selector de semana y una comparación
+- Un filtro por ciudad, un selector de semana y una comparación (ciudades, semanas o lluvia)
 - Un texto para la gerencia: tres hallazgos con cifras y una recomendación
 - Una nota sobre los datos: fuente, calidad, atípicos, tope de 14 km, semanas incompletas, grupos pequeños e IA
 
@@ -507,18 +507,21 @@ Sin la lista mínima, el tablero no se evalúa. La celda [semanas] del notebook 
 
 ## ¿Qué gráfica responde cada pregunta de la gerencia? {.pregunta}
 
-1. ¿Cómo cambia el número de pedidos semana a semana?
-2. ¿En qué ciudad se tarda más?
-3. ¿Cómo se reparten los tiempos de entrega?
-4. ¿Cómo se reparten por medio de pago los pedidos de cada ciudad?
-5. ¿Los pedidos más lejanos tardan más?
+Una categoría puede repetirse.
+
+1. ¿Qué parte de cada franja paga en efectivo, tarjeta o billetera?
+2. ¿Cómo cambia cada semana el % de pedidos que pasan de 45 min?
+3. ¿El tiempo de entrega cambia con la temperatura?
+4. ¿Cómo se reparten los valores de los pedidos?
+5. ¿En qué franja se tarda más?
+6. ¿Sube o baja cada semana el % de 4 y 5 estrellas?
 
 ::: respuesta
-**1** tendencia: una línea · **2** comparación: barras · **3** distribución: histograma o caja · **4** composición: barras apiladas al 100 % · **5** relación: un diagrama de dispersión
+**1** composición: barras apiladas al 100 % · **2** y **6** tendencia: una línea · **3** relación: dispersión · **4** distribución: histograma o caja · **5** comparación: barras de la mediana (o cajas)
 :::
 
 ???
-Son las categorías de visualización del syllabus. Dos minutos: que respondan en el chat con el número y el tipo de gráfica. Si usan una caja en el tablero, que digan qué regla usa: Power BI, Excel o Looker Studio pueden llevar los bigotes al mínimo y al máximo o calcular los cuartiles de otra forma. Reglas que se evalúan: las barras empiezan en cero, los títulos afirman (como los de estas diapositivas) y no se convierte el ruido en noticia: una semana con 2 puntos más no es una tendencia.
+Son las categorías de visualización del syllabus: tendencia, comparación, distribución, composición y relación. Las preguntas no son las de la tabla de la página del proyecto, y la tendencia sale dos veces. Dos minutos: que respondan en el chat con el número y el tipo de gráfica. Matices de la clave: la tendencia también vale en columnas, una por semana; la comparación, en barras de la mediana que empiezan en cero, o en una caja por franja si también importa la dispersión. La línea y la dispersión no las hemos dibujado: mostrarlas en el tablero es parte del proyecto. Si usan una caja en el tablero, que digan qué regla usa: Power BI, Excel o Looker Studio pueden llevar los bigotes al mínimo y al máximo o calcular los cuartiles de otra forma. Reglas que se evalúan: las barras empiezan en cero, los títulos afirman (como los de estas diapositivas) y no se convierte el ruido en noticia: una semana con 2 puntos más no es una tendencia.
 
 ## El tablero avanza en cuatro hitos y se evalúa desde tres miradas
 
@@ -545,29 +548,32 @@ Son las tres formas de evaluación del syllabus. La rúbrica tiene cinco criteri
 ## Práctica guiada: tres ejercicios en el notebook
 
 ::: flujo
-1. **El valor del pedido** — vallas, \(|z| > 3\) y su caja · 12 min
+1. **El valor del pedido** — vallas, \(|z| > 3\) y su caja · 15 min
 2. **Una tabla dinámica** — ciudad por franja · 12 min
-3. **Opcional: el tope** — ¿y si fueran 30 km? · 6 min o en casa
+3. **Opcional: el tope** — ¿y si fueran 30 km? · en casa
 :::
 
-[Abrir el notebook de la sesión 4 en Colab](https://colab.research.google.com/github/JotaMao1985/ANaLISIS-ESTADiSTICO-DE-LA-INFORMACIoN_Ucomp/blob/main/notebooks/sesion-4-lo-que-se-sale-de-lo-normal.ipynb). Antes del ejercicio 1: **Entorno de ejecución → Ejecutar anteriores**. Las respuestas escritas van en «Tus respuestas», que no se verifica.
+[Abrir el notebook de la sesión 4 en Colab](https://colab.research.google.com/github/JotaMao1985/ANaLISIS-ESTADiSTICO-DE-LA-INFORMACIoN_Ucomp/blob/main/notebooks/sesion-4-lo-que-se-sale-de-lo-normal.ipynb). Antes del ejercicio 1: clic en la celda [ej1] → **Entorno de ejecución → Ejecutar anteriores**. Las respuestas escritas van en «Tus respuestas», que no se verifica.
 
 ???
-Cada ejercicio termina con un verificador que da pistas sin la respuesta. Clave del 1: vallas de −35 600 y 155 600 pesos; 340 pedidos fuera y 72 con |z| > 3 (con cualquiera de las dos fórmulas de la desviación). Un pedido vale exactamente 155 600 pesos: quien use ≥ cuenta 341, y el verificador se lo señala. La valla inferior es negativa y no se cambia por cero. z marca menos por lo mismo que en el tiempo: los pedidos grandes inflan la desviación. La caja del ejercicio 1 no tiene verificador: el bigote superior termina justo en 155 600 pesos, porque un pedido vale exactamente la valla y «fuera» es estrictamente fuera: queda dentro, y el bigote llega hasta él. El inferior termina en 4 400 pesos, el pedido más barato, porque la valla inferior es negativa. Por encima quedan 340 pedidos, que se dibujan como 273 puntos. Clave del 2: el almuerzo es la franja más lenta en las cinco ciudades. Clave del 3: la mediana sigue en 3,1 km y la media sube de 3,543 a 3,570 km: un dato censurado mueve la media, no la mediana. Si alguien pregunta por la celda [semanas], es para el tablero y no tiene verificador.
+Reparto de los 30 minutos: 15 para el ejercicio 1, con su caja, y 12 para el 2; los 3 que quedan cubren «Ejecutar anteriores». El 3 queda para la casa. Cada ejercicio termina con un verificador que da pistas sin la respuesta, salvo la caja del 1. Clave del 1: vallas de −35 600 y 155 600 pesos; 340 pedidos fuera y 72 con |z| > 3 (con cualquiera de las dos fórmulas de la desviación). Un pedido vale exactamente 155 600 pesos: quien use ≥ cuenta 341, y el verificador se lo señala. La valla inferior es negativa y no se cambia por cero; al dar el ✓, la tabla del verificador separa los pedidos de abajo y los de arriba, y se ve que el lado de abajo queda vacío. z marca menos por lo mismo que en el tiempo: los pedidos grandes inflan la desviación. La caja del ejercicio 1 no tiene verificador: el bigote superior termina justo en 155 600 pesos, porque un pedido vale exactamente la valla y «fuera» es estrictamente fuera: queda dentro, y el bigote llega hasta él. El inferior termina en 4 400 pesos, el pedido más barato, porque la valla inferior es negativa. Por encima quedan 340 pedidos, que se dibujan como 273 puntos. Clave del 2: el almuerzo es la franja más lenta en las cinco ciudades. Clave del 3: la mediana sigue en 3,1 km y la media sube de 3,543 a 3,570 km: unos pocos datos censurados en la cola mueven la media, no la mediana. Si alguien pregunta por la celda [semanas], es para el tablero y no tiene verificador.
 
-## ¿Error, real y raro, censurado o atípico solo en su grupo? {.pregunta}
+## Para cada pedido, las dos preguntas: ¿por qué está lejos y respecto a qué? {.pregunta}
 
-1. Un tiempo de entrega de −5 min
-2. Un pedido de una empresa con 44 productos
-3. Una ruta registrada con 14,0 km
-4. Un pedido de 55 min en Barranquilla
+¿Error, real o censurado? ¿Atípico en el total, en su grupo o en ninguno?
+
+1. Un pedido de 62 min en Bogotá (su valla: 63,40 min)
+2. Una ruta registrada con 14,0 km
+3. Un pedido de farmacia de 120 000 pesos (vallas: farmacias, 103 000; todos, 155 600)
+4. Un tiempo de entrega de −5 min
+5. Una empresa pide 44 productos
 
 ::: respuesta
-**1** error: es imposible · **2** real y raro: se conserva y se investiga · **3** censurado: «14 o más» · **4** atípico en su ciudad (valla de 49,45 min) y normal en el total (59,15)
+**1** real; atípico en el total, no en Bogotá · **2** censurado; atípico en el total · **3** real; atípico solo entre farmacias · **4** error: imposible · **5** real; atípico en el total
 :::
 
 ???
-Es la autoevaluación de cierre: un minuto, y en el chat las cuatro respuestas en una línea. La 4 es la que más se equivoca: un pedido puede ser atípico respecto a su ciudad y no respecto a todos.
+Es la autoevaluación de cierre: dos minutos, y en el chat las cinco respuestas en una línea. Cada caso tiene dos respuestas: la causa y la referencia. Al revelar, completar: el de 62 min pasa la valla global (59,15); el de 14,0 km es «14 o más», se marca y pasa la valla de la distancia (7,7 km); en el de −5 min la valla ya no importa: se corrige o se marca como faltante; el de 44 productos pasa la valla de 6, y se conserva y se investiga. Donde más se equivocan es en la 1 y la 3: un pedido puede ser atípico respecto a todos y normal en su grupo (la 1), o al revés (la 3). Los casos existen en Tingua: 75 pedidos de Bogotá tardan entre 59,15 y 63,40 min, 17 de ellos cerca de 62; y 23 pedidos de farmacia valen entre 103 000 y 155 600 pesos, uno de ellos 120 300. Los mismos casos están en «Tus respuestas» del notebook.
 
 ## Lo que te llevas hoy {.cierre}
 
@@ -582,12 +588,13 @@ Leer las cinco en voz alta y preguntar cuál les costó más. Cerrar con el lema
 
 ## La sesión 5 abre con las preguntas de tu tablero
 
-- **Termina** la práctica: los verificadores revisan los tres ejercicios
-- **Elige** pareja y herramienta: Streamlit, Shiny, Power BI o Looker Studio
-- **Escribe** tres preguntas de la gerencia, cada una con el indicador que la responde. Otra pareja las revisará al abrir la sesión 5
+- **Termina** la práctica: los verificadores revisan los tres ejercicios, salvo la caja del 1
 - **Lee** el enunciado completo y la rúbrica en la página del proyecto
+- **Elige** pareja y herramienta: Streamlit, Shiny, Power BI o Looker Studio
+- **Escribe** tres preguntas de la gerencia, cada una con su indicador: qué cuenta, sobre qué total y calculable cada semana. Otra pareja las revisará al abrir la sesión 5
+- **Repasa** la sección 1.3 de *OpenIntro*, sobre muestreo (sesión 1)
 
 **Próxima sesión:** ¿qué tan satisfecha está la clientela? Métodos de muestreo y el sesgo de no respuesta.
 
 ???
-No hay lectura nueva: la sección 1.3 de OpenIntro (principios de muestreo) ya se asignó en la sesión 1 y conviene repasarla. Las tres preguntas con sus indicadores se coevalúan al abrir la sesión 5, como las frases de hoy. Recordar que la celda [semanas] es el primer paso del tablero.
+No hay lectura nueva: la sección 1.3 de OpenIntro ya se asignó en la sesión 1; por eso solo se pide repasarla. Las tres preguntas con sus indicadores se coevalúan al abrir la sesión 5, como las frases de hoy. Recordar que la celda [semanas] es el primer paso del tablero.

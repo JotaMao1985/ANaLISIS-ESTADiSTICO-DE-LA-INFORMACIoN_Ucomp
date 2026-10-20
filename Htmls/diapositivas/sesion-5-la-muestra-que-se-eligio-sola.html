@@ -1,0 +1,3016 @@
+<!DOCTYPE html>
+<html lang="es" data-tema="ucompensar">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Presentación de clase: Sesión 5 (La muestra que se eligió sola), Análisis Estadístico de la Información.">
+    <meta name="generator" content="diapositivas-clase · construir.py">
+    <title>Diapositivas · Sesión 5 — La muestra que se eligió sola · Análisis Estadístico de la Información</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400&family=Roboto:ital,wght@0,300;0,400;0,500;0,700;0,900;1,400&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" rel="stylesheet">
+
+    <!-- Prism, las mismas gramáticas que carga LP-CORE. `manual` antes del
+         núcleo: el resaltado lo dispara el visor cuando el mazo ya existe. -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css" rel="stylesheet">
+    <script>window.Prism = window.Prism || {}; window.Prism.manual = true;</script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-python.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-bash.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-docker.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-yaml.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-sql.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-toml.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-json.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-r.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-basic.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-visual-basic.min.js"></script>
+    <script>
+        window.MathJax = { tex: { inlineMath: [['\\(', '\\)']], displayMath: [['$$', '$$'], ['\\[', '\\]']] }, svg: { fontCache: 'global', mtextInheritFont: true } };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-svg.js"></script>
+    <style>
+        /* ============================================================
+           PALETA LP-CORE — la misma del material del curso
+        ============================================================ */
+        :root {
+            --primary: #3D008D;
+            --primary-rgb: 61, 0, 141;
+            --secondary: #ED1E79;
+            --secondary-rgb: 237, 30, 121;
+            --secondary-texto: #ED1E79;   /* el secundario como texto sobre blanco */
+            --navy: #001A4D;
+            --navy-2: #002868;
+            --gold: #FDB913;
+            --teal: #0E7490;
+            --bg: #F8FAFC;
+            --texto: #1E293B;
+            --tinta: #0F172A;
+            --gris: #64748B;
+            --gris-claro: #94A3B8;
+            --borde: #E2E8F0;
+            --lila: #F5F0FA;
+            --grad: linear-gradient(140deg, #3D008D 0%, #ED1E79 100%);
+            --grad-navy: linear-gradient(180deg, #001A4D 0%, #002868 100%);
+            --sombra: 0 4px 20px rgba(0, 0, 0, 0.08);
+            --fuente: 'Montserrat', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+            --W: 1280px;
+            --H: 720px;
+        }
+
+        /* ============================================================
+           TEMA EL BOSQUE — verde #012820 y naranja #FF6600, como el
+           material de Series de tiempo, Muestreo y Estadística espacial.
+           Mismas tipografías y mismos degradados; solo cambian los colores.
+        ============================================================ */
+        :root[data-tema="elbosque"] {
+            --primary: #012820;
+            --primary-rgb: 1, 40, 32;
+            --secondary: #FF6600;
+            --secondary-rgb: 255, 102, 0;
+            --secondary-texto: #C2410C;   /* #FF6600 sobre blanco no llega a 4.5:1 */
+            --navy: #012820;
+            --navy-2: #001F18;
+            --gold: #FFC24B;
+            --lila: #F0FDF4;
+            --grad: linear-gradient(140deg, #012820 0%, #FF6600 100%);
+            --grad-navy: linear-gradient(180deg, #012820 0%, #001F18 100%);
+        }
+        /* El degradado se reparte en la caja del número: a lo ancho de la
+           diapositiva, a los dígitos solo les tocaría el verde casi negro. */
+        :root[data-tema="elbosque"] .numero-grande { width: fit-content; padding-right: 0.04em; }
+
+        /* ============================================================
+           TEMA UCOMPENSAR — morado #691E7A y naranja #F46201, como el
+           material de Procesamiento de Datos (Esp. Big Data). El ámbar
+           #FAA012 solo sobre morado; el naranja como texto, #B84A00.
+           Su material usa Roboto: la presentación también.
+        ============================================================ */
+        :root[data-tema="ucompensar"] {
+            --primary: #691E7A;
+            --primary-rgb: 105, 30, 122;
+            --secondary: #F46201;
+            --secondary-rgb: 244, 98, 1;
+            --secondary-texto: #B84A00;   /* #F46201 sobre blanco da 3,2:1 */
+            --navy: #3A0F47;
+            --navy-2: #4B1558;
+            --gold: #FAA012;
+            --lila: #F7F0FA;
+            --grad: linear-gradient(140deg, #691E7A 0%, #F46201 100%);
+            --grad-navy: linear-gradient(180deg, #3A0F47 0%, #4B1558 100%);
+            --fuente: 'Roboto', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+        }
+        /* Contraste (WCAG 2.1) e identidad del material de UCompensar: pie en
+           pizarra, etiquetas más opacas, degradado de texto naranja (#B84A00)
+           donde va texto blanco encima, ítem activo morado con filete naranja
+           y títulos en 700 (Roboto no carga el 800). */
+        :root[data-tema="ucompensar"] .numero-grande { width: fit-content; padding-right: 0.04em; }
+        :root[data-tema="ucompensar"] .idea .etq-idea,
+        :root[data-tema="ucompensar"] .ra-caja .etq { color: rgba(var(--primary-rgb), 0.85); }
+        :root[data-tema="ucompensar"] .pie { color: #566B7F; }
+        :root[data-tema="ucompensar"] .cierre .pie { color: rgba(255, 255, 255, 0.62); }
+        :root[data-tema="ucompensar"] .item-seccion.hecha { color: rgba(255, 255, 255, 0.6); }
+        :root[data-tema="ucompensar"] .item-seccion.actual,
+        :root[data-tema="ucompensar"] #indice .item-seccion.actual,
+        :root[data-tema="ucompensar"] #indice .item-seccion.actual:hover {
+            background: linear-gradient(135deg, #691E7A, #8A2E9E);
+            box-shadow: inset 4px 0 0 #F46201, 0 8px 18px rgba(105, 30, 122, 0.3);
+        }
+        :root[data-tema="ucompensar"] .portada .chip-semana,
+        :root[data-tema="ucompensar"] .btn-nav.sig { background: linear-gradient(140deg, #691E7A 0%, #B84A00 100%); }
+        :root[data-tema="ucompensar"] .codigo.con-foco .linea.foco { background: rgba(var(--secondary-rgb), 0.10); }
+        :root[data-tema="ucompensar"] .diapo.idea { background: linear-gradient(135deg, rgba(105, 30, 122, 0.06), rgba(244, 98, 1, 0.08)), #fff; }
+        :root[data-tema="ucompensar"] .portada h1,
+        :root[data-tema="ucompensar"] .principal h2 { font-weight: 700; }
+        :root[data-tema="ucompensar"] .cierre .cuerpo h3 { color: var(--gold); }
+        :root[data-tema="ucompensar"] .caja.warn { border-color: #B84A00; background: #FFF7ED; }
+        :root[data-tema="ucompensar"] .caja.warn .caja-etiqueta { background: #B84A00; }
+        /* Contrastes AA medidos en la auditoría de octubre de 2026: líneas de código no
+           resaltadas (la opacidad 0,42 las dejaba en 2,0–3,6:1), número de página sobre
+           .idea y capítulo de la barra lateral. Símbolos sueltos de MathJax en tablas,
+           al tamaño del texto. */
+        :root[data-tema="ucompensar"] .codigo.con-foco .linea { opacity: 0.85; }
+        :root[data-tema="ucompensar"] .codigo.con-foco .linea.foco { opacity: 1; }
+        :root[data-tema="ucompensar"] .pie .num { color: #566B7F; }
+        :root[data-tema="ucompensar"] .cierre .pie .num { color: rgba(255, 255, 255, 0.7); }
+        :root[data-tema="ucompensar"] .lateral .capitulo span { color: var(--gold); }
+        :root[data-tema="ucompensar"] td mjx-container:not([display="true"]) { font-size: 125%; }
+
+        * { box-sizing: border-box; }
+
+        html, body {
+            margin: 0;
+            height: 100%;
+            overflow: hidden;
+            font-family: var(--fuente);
+            color: var(--texto);
+            background: #E9EDF3;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* Sin ligaduras: Fira Code dibuja `<=` como «≤» y `!=` como «≠», y un
+           estudiante que copia a mano lo proyectado escribe un carácter que
+           Python no acepta. */
+        code, pre, kbd { font-family: 'Fira Code', monospace; font-variant-ligatures: none; font-feature-settings: "liga" 0, "calt" 0; }
+
+        button { font-family: inherit; }
+
+        button:focus-visible, a:focus-visible {
+            outline: 2px solid var(--secondary);
+            outline-offset: 2px;
+        }
+
+        ::-webkit-scrollbar { width: 8px; height: 8px; }
+        ::-webkit-scrollbar-track { background: #f1f5f9; }
+        ::-webkit-scrollbar-thumb { background: linear-gradient(180deg, var(--primary), var(--secondary)); border-radius: 4px; }
+
+        .lp-gradient { background: var(--grad); }
+        .lp-header { background: var(--grad-navy); }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* ============================================================
+           ESCENARIO — un lienzo fijo de 1280 × 720 que se escala
+        ============================================================ */
+        #escenario { position: fixed; inset: 0; }
+
+        #mazo {
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            width: var(--W);
+            height: var(--H);
+            transform-origin: center center;
+            box-shadow: 0 20px 60px rgba(0, 26, 77, 0.18);
+            background: #fff;
+            overflow: hidden;
+        }
+
+        .diapo {
+            position: absolute;
+            inset: 0;
+            background: #fff;
+            visibility: hidden;
+            opacity: 0;
+            --k: 1;
+        }
+
+        .diapo.activa {
+            visibility: visible;
+            opacity: 1;
+            z-index: 2;
+        }
+
+        .diapo.activa > .marco { animation: fadeIn 0.4s ease-out both; }
+
+        .marco {
+            position: absolute;
+            inset: 0;
+            padding: 42px 72px 58px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* --- Cabecera: la de `SectionHeader` del material ------------- */
+        .cabecera {
+            display: flex;
+            align-items: center;
+            gap: 18px;
+            padding-bottom: 16px;
+            margin-bottom: 24px;
+            border-bottom: 1px solid var(--borde);
+            flex-shrink: 0;
+        }
+
+        .ficha-icono {
+            width: 50px;
+            height: 50px;
+            border-radius: 13px;
+            background: var(--grad);
+            color: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 12px rgba(var(--primary-rgb), 0.25);
+            flex-shrink: 0;
+        }
+
+        .ficha-icono svg { width: 26px; height: 26px; }
+
+        .antetitulo {
+            font-size: 12.5px;
+            font-weight: 700;
+            letter-spacing: 0.14em;
+            text-transform: uppercase;
+            color: var(--secondary-texto);
+            margin-bottom: 4px;
+        }
+
+        .cabecera h2 {
+            margin: 0;
+            font-size: 33px;
+            line-height: 1.18;
+            font-weight: 700;
+            color: var(--tinta);
+            letter-spacing: -0.01em;
+        }
+
+        /* --- Cuerpo ---------------------------------------------------- */
+        /* El cuerpo centra en vertical lo que lleva: una diapositiva corta no
+           se queda colgada del título. El margen negativo con su relleno deja
+           sitio a las sombras de tarjetas y bloques, que `overflow: hidden`
+           cortaría en el borde. */
+        .cuerpo {
+            flex: 1;
+            min-height: 0;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            justify-content: safe center;
+            padding: 10px 14px 14px;
+            margin: -10px -14px -14px;
+            font-size: calc(23px * var(--k));
+            line-height: 1.5;
+            color: var(--texto);
+        }
+
+        .diapo.arriba .cuerpo { justify-content: flex-start; }
+
+        /* Ningún bloque cede altura: si no cabe, que desborde y lo vea el
+           ajuste. Con el encogimiento por defecto de flex, un bloque de código
+           se recortaba por abajo en silencio y el cuerpo «cabía». */
+        .cuerpo > * { flex-shrink: 0; }
+
+        .cuerpo > :first-child, .col > :first-child, .caja-cuerpo > :first-child { margin-top: 0; }
+        .cuerpo > :last-child, .col > :last-child, .caja-cuerpo > :last-child { margin-bottom: 0; }
+
+        .cuerpo p { margin: 0 0 0.65em; }
+        .cuerpo strong { color: var(--tinta); font-weight: 700; }
+        .cuerpo em { font-style: italic; }
+        .cuerpo a { color: var(--primary); text-decoration: underline; text-decoration-color: rgba(var(--secondary-rgb), 0.5); text-underline-offset: 3px; }
+
+        .cuerpo h3 {
+            color: var(--secondary-texto);
+            font-weight: 600;
+            font-size: 1.1em;
+            margin: 0.9em 0 0.35em;
+            line-height: 1.25;
+        }
+
+        .cuerpo h4 {
+            color: var(--navy);
+            font-weight: 700;
+            font-size: 0.98em;
+            margin: 0.8em 0 0.3em;
+        }
+
+        .cuerpo ul, .cuerpo ol { margin: 0 0 0.7em; padding-left: 1.25em; }
+        .cuerpo li { margin: 0 0 0.38em; padding-left: 0.2em; }
+        .cuerpo li::marker { color: var(--secondary); font-weight: 700; }
+        .cuerpo li > ul, .cuerpo li > ol { margin: 0.3em 0 0.2em; font-size: 0.9em; }
+
+        .cuerpo code:not(pre code) {
+            background: #F1F5F9;
+            color: var(--tinta);
+            padding: 0.08em 0.36em;
+            border-radius: 5px;
+            font-size: 0.86em;
+        }
+
+        .cuerpo kbd {
+            display: inline-block;
+            padding: 0.05em 0.45em;
+            border: 1px solid #CBD5E1;
+            border-bottom-width: 3px;
+            border-radius: 6px;
+            background: #fff;
+            font-size: 0.8em;
+            color: var(--tinta);
+        }
+
+        .cuerpo mark { background: rgba(253, 185, 19, 0.35); color: inherit; padding: 0 0.15em; border-radius: 3px; }
+
+        .cita {
+            margin: 0.4em 0 0.8em;
+            padding: 0.1em 0 0.1em 0.9em;
+            border-left: 4px solid var(--secondary);
+            color: var(--primary);
+            font-weight: 600;
+            font-size: 1.08em;
+            line-height: 1.4;
+        }
+
+        .cita p { margin: 0 0 0.3em; }
+
+        /* --- Tablas: las de `prose-lp` -------------------------------- */
+        .cuerpo table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.82em;
+            margin: 0.2em 0 0.8em;
+            background: #fff;
+        }
+
+        .cuerpo th {
+            background: var(--lila);
+            color: var(--navy);
+            text-align: left;
+            padding: 0.5em 0.75em;
+            border: 1px solid var(--borde);
+            font-weight: 700;
+        }
+
+        .cuerpo td {
+            padding: 0.5em 0.75em;
+            border: 1px solid var(--borde);
+            vertical-align: top;
+        }
+
+        /* --- Columnas -------------------------------------------------- */
+        .columnas {
+            display: grid;
+            gap: 40px;
+            align-items: start;
+        }
+
+        .columnas.centradas { align-items: center; }
+        .col { min-width: 0; }
+
+        /* --- Cajas: `Box` de LP-CORE ----------------------------------- */
+        .caja {
+            border-left: 5px solid var(--primary);
+            background: var(--lila);
+            border-radius: 14px;
+            padding: 0.7em 1em 0.75em;
+            margin: 0.3em 0 0.8em;
+            font-size: 0.9em;
+        }
+
+        .caja-etiqueta {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5em;
+            font-size: 0.6em;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            font-weight: 700;
+            color: #fff;
+            background: var(--primary);
+            border-radius: 5px;
+            padding: 0.25em 0.7em;
+            margin-bottom: 0.55em;
+        }
+
+        .caja.tip { border-color: #15803D; background: #F0FDF4; }
+        .caja.tip .caja-etiqueta { background: #15803D; }
+        .caja.warn { border-color: #B45309; background: #FFFBEB; }
+        .caja.warn .caja-etiqueta { background: #B45309; }
+        .caja.danger { border-color: #B91C1C; background: #FEF2F2; }
+        .caja.danger .caja-etiqueta { background: #B91C1C; }
+        /* Una fórmula en bloque suele ser la idea de la diapositiva: más grande
+           que el texto, para que se lea desde el fondo del aula. */
+        .cuerpo mjx-container[display="true"] { font-size: 138%; margin: 0.5em 0 !important; }
+        .caja mjx-container[display="true"], .tarjeta mjx-container[display="true"], td mjx-container[display="true"] { font-size: 112%; }
+        .caja.definicion { border-color: var(--primary); background: var(--lila); }
+        .caja.definicion .caja-etiqueta { background: var(--primary); }
+        .caja.ejemplo { border-color: var(--teal); background: #F0F9FF; }
+        .caja.ejemplo .caja-etiqueta { background: var(--teal); }
+        .caja p { margin-bottom: 0.4em; }
+
+        /* --- La motivación del material, en pequeño --------------------- */
+        .idea-caja {
+            border-radius: 18px;
+            border: 1px solid rgba(var(--primary-rgb), 0.15);
+            background: linear-gradient(135deg, rgba(var(--primary-rgb), 0.055) 0%, rgba(14, 116, 144, 0.05) 45%, rgba(var(--secondary-rgb), 0.10) 100%);
+            padding: 0.8em 1.1em;
+            margin: 0.3em 0 0.8em;
+            display: flex;
+            gap: 0.8em;
+        }
+
+        .idea-caja .punto {
+            width: 1.7em;
+            height: 1.7em;
+            border-radius: 999px;
+            background: var(--grad);
+            color: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8em;
+            flex-shrink: 0;
+            margin-top: 0.1em;
+        }
+
+        .idea-caja .texto { color: var(--primary); font-weight: 600; line-height: 1.4; }
+        .idea-caja .texto p { margin: 0 0 0.3em; }
+
+        /* --- Tarjetas (`lp-card`) y flujo (`Pipeline`) ------------------ */
+        .tarjetas {
+            display: grid;
+            grid-template-columns: repeat(var(--n, 2), minmax(0, 1fr));
+            gap: 22px;
+            margin: 0.2em 0 0.8em;
+        }
+
+        .tarjeta {
+            background: #fff;
+            border-radius: 16px;
+            box-shadow: var(--sombra);
+            border: 1px solid #EEF2F7;
+            border-top: 4px solid var(--primary);
+            padding: 0.8em 1em 0.7em;
+            font-size: 0.86em;
+            transition: all 0.3s ease;
+        }
+
+        .tarjeta:nth-child(even) { border-top-color: var(--secondary); }
+        .tarjeta:hover { box-shadow: 0 12px 35px rgba(0, 0, 0, 0.12); transform: translateY(-4px); }
+
+        .tarjeta h3 {
+            color: var(--navy);
+            font-size: 1.1em;
+            font-weight: 700;
+            margin: 0 0 0.45em;
+        }
+
+        .tarjeta ul { padding-left: 1.1em; }
+
+        .flujo {
+            display: flex;
+            align-items: stretch;
+            gap: 10px;
+            margin: 0.3em 0 0.9em;
+        }
+
+        .paso-flujo {
+            flex: 1;
+            min-width: 0;
+            background: #fff;
+            border: 1px solid var(--borde);
+            border-top: 4px solid var(--primary);
+            border-radius: 14px;
+            padding: 0.75em 0.7em 0.7em;
+            text-align: center;
+            font-size: 0.74em;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+        }
+
+        .paso-flujo .num {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 1.7em;
+            height: 1.7em;
+            border-radius: 999px;
+            background: var(--primary);
+            color: #fff;
+            font-weight: 700;
+            font-size: 0.85em;
+            margin-bottom: 0.35em;
+        }
+
+        .paso-flujo .t { display: block; font-weight: 700; color: var(--navy); margin-bottom: 0.25em; font-size: 1.08em; line-height: 1.25; }
+        .paso-flujo .d { color: #475569; line-height: 1.35; display: block; }
+        .flecha-flujo { align-self: center; color: var(--secondary); font-weight: 800; font-size: 1.1em; }
+
+        /* --- Bloques de código: `lp-code-wrapper` ----------------------- */
+        .codigo {
+            position: relative;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 6px 16px -4px rgba(15, 23, 42, 0.25);
+            margin: 0.2em 0 0.8em;
+            background: #1E293B;
+            font-size: calc(18px * var(--k) * var(--kc, 1));
+        }
+
+        .codigo-cabecera {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 12px;
+            padding: 9px 16px;
+            background: linear-gradient(135deg, #0F172A 0%, #1E293B 100%);
+            border-bottom: 1px solid #334155;
+        }
+
+        .codigo-cabecera.flotante {
+            position: absolute;
+            top: 8px;
+            right: 10px;
+            padding: 0;
+            background: none;
+            border: 0;
+            opacity: 0;
+            transition: opacity 0.2s;
+        }
+
+        .codigo:hover .codigo-cabecera.flotante { opacity: 1; }
+
+        .codigo-titulo {
+            font-family: var(--fuente);
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--gris-claro);
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .codigo-titulo i { margin-right: 8px; }
+        .codigo-titulo .fa-python { color: #FACC15; }
+        .codigo-titulo .fa-terminal { color: #4ADE80; }
+        .codigo-titulo .fa-docker { color: #60A5FA; }
+
+        .btn-copiar {
+            background: rgba(255, 255, 255, 0.1);
+            border: none;
+            color: #CBD5E1;
+            padding: 5px 11px;
+            border-radius: 6px;
+            font-size: 11.5px;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            transition: all 0.2s;
+            flex-shrink: 0;
+        }
+
+        .btn-copiar:hover { background: rgba(255, 255, 255, 0.2); color: #fff; }
+        .btn-copiar.copiado { background: rgba(34, 197, 94, 0.3); color: #4ADE80; }
+
+        .codigo pre {
+            margin: 0;
+            padding: 16px 20px;
+            background: #1E293B !important;
+            color: #F3F4F6;
+            font-size: 1em;
+            line-height: 1.55;
+            overflow: hidden;
+            white-space: pre;
+            tab-size: 4;
+        }
+
+        .codigo pre code { font-size: inherit; background: none; padding: 0; color: inherit; text-shadow: none; }
+        .codigo .token { display: inline; }
+        .codigo .linea { display: inline-block; min-width: 100%; }
+        .codigo.con-foco .linea { opacity: 0.42; transition: opacity 0.3s; }
+
+        .codigo.con-foco .linea.foco {
+            opacity: 1;
+            background: rgba(var(--secondary-rgb), 0.16);
+            box-shadow: inset 3px 0 0 var(--secondary);
+            margin: 0 -20px;
+            padding: 0 20px;
+            min-width: calc(100% + 40px);
+        }
+
+        /* Salida dentro del código (`#>`), como en LP-CORE */
+        .lp-salida, .lp-salida .token { color: #7DD3FC !important; font-style: normal !important; }
+        .lp-salida { background: rgba(125, 211, 252, 0.07); }
+
+        /* --- Figuras: diagramas, imágenes y gráficas -------------------- */
+        .figura { margin: 0.1em 0 0.6em; text-align: center; }
+
+        .figura .lienzo {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #fff;
+            border-radius: 14px;
+        }
+
+        /* El alto de una figura también se encoge con el ajuste (`--k`): si no,
+           una diapositiva con figura no cabría nunca y el ajuste no podría hacer
+           nada por ella. */
+        .figura svg, .figura img { max-width: 100%; height: auto; max-height: calc(var(--alto, 470px) * var(--k)); }
+        .figura .grafica { width: 100%; height: calc(var(--alto, 440px) * var(--k)); }
+
+        .figura figcaption {
+            margin-top: 0.5em;
+            font-size: 0.66em;
+            color: var(--gris);
+            font-style: italic;
+        }
+
+        /* --- Revelado paso a paso --------------------------------------- */
+        .paso { opacity: 0; transform: translateY(10px); transition: opacity 0.4s ease-out, transform 0.4s ease-out; }
+        .paso.visto { opacity: 1; transform: none; }
+
+        .respuesta { border-left-color: #15803D; background: #F0FDF4; }
+        .respuesta .caja-etiqueta { background: #15803D; }
+
+        /* --- Pie de cada diapositiva ------------------------------------- */
+        .pie {
+            position: absolute;
+            left: 72px;
+            right: 72px;
+            bottom: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 11.5px;
+            color: var(--gris-claro);
+            letter-spacing: 0.02em;
+        }
+
+        .pie .num { font-weight: 700; color: var(--gris); font-variant-numeric: tabular-nums; }
+        .pie .sello { display: inline-flex; align-items: center; gap: 10px; }
+        .pie .sello::before { content: ''; width: 22px; height: 3px; border-radius: 3px; background: var(--grad); }
+
+        /* ============================================================
+           PORTADA
+        ============================================================ */
+        .diapo.portada { background: var(--grad-navy); color: #fff; }
+
+        .portada .brillo {
+            position: absolute;
+            inset: 0;
+            background:
+                radial-gradient(640px 420px at 100% 0%, rgba(var(--secondary-rgb), 0.30), transparent 70%),
+                radial-gradient(560px 480px at 0% 100%, rgba(var(--primary-rgb), 0.55), transparent 70%);
+            pointer-events: none;
+        }
+
+        .portada .marco { padding: 58px 84px 64px; justify-content: space-between; }
+        .portada .institucion { font-size: 13px; font-weight: 700; letter-spacing: 0.22em; text-transform: uppercase; color: var(--gold); }
+        .portada .asignatura { font-size: 17px; color: rgba(255, 255, 255, 0.72); margin-top: 6px; font-weight: 500; }
+
+        .portada .chip-semana {
+            display: inline-block;
+            background: var(--grad);
+            color: #fff;
+            font-weight: 700;
+            font-size: 13.5px;
+            letter-spacing: 0.16em;
+            text-transform: uppercase;
+            padding: 7px 16px;
+            border-radius: 999px;
+            box-shadow: 0 6px 18px rgba(var(--secondary-rgb), 0.35);
+        }
+
+        .portada h1 {
+            margin: 22px 0 14px;
+            font-size: 62px;
+            line-height: 1.06;
+            font-weight: 800;
+            letter-spacing: -0.02em;
+            max-width: 980px;
+        }
+
+        .portada .subtitulo { font-size: 25px; font-weight: 300; color: rgba(255, 255, 255, 0.82); max-width: 900px; }
+        .portada .temas { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 26px; }
+
+        .portada .temas span {
+            font-size: 14.5px;
+            padding: 6px 15px;
+            border-radius: 999px;
+            background: rgba(255, 255, 255, 0.09);
+            border: 1px solid rgba(255, 255, 255, 0.16);
+            color: rgba(255, 255, 255, 0.92);
+        }
+
+        .portada .base { display: flex; justify-content: space-between; align-items: flex-end; gap: 40px; }
+
+        .portada .lema {
+            max-width: 640px;
+            font-size: 17px;
+            font-style: italic;
+            color: rgba(255, 255, 255, 0.78);
+            border-left: 3px solid var(--secondary);
+            padding-left: 16px;
+            line-height: 1.45;
+        }
+
+        .portada .firma { text-align: right; font-size: 14px; color: rgba(255, 255, 255, 0.62); line-height: 1.5; }
+        .portada .firma strong { color: #fff; font-weight: 600; display: block; font-size: 15.5px; }
+
+        .barra-grad { position: absolute; left: 0; right: 0; bottom: 0; height: 6px; background: var(--grad); }
+
+        /* ============================================================
+           HOJA DE RUTA y DIVISOR DE SECCIÓN — la barra lateral del material
+        ============================================================ */
+        .dividida .marco { padding: 0; flex-direction: row; }
+
+        .dividida .lateral {
+            width: 410px;
+            flex-shrink: 0;
+            background: var(--grad-navy);
+            color: #fff;
+            padding: 44px 26px 30px 30px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .lateral .institucion { font-size: 10.5px; font-weight: 700; letter-spacing: 0.2em; text-transform: uppercase; color: var(--gold); }
+        .lateral .asignatura { font-size: 16px; font-weight: 700; margin-top: 4px; line-height: 1.25; }
+        .lateral .capitulo { font-size: 12px; color: rgba(255, 255, 255, 0.6); margin-top: 4px; }
+        .lateral .capitulo span { color: var(--secondary); font-weight: 600; }
+        .lateral hr { border: 0; border-top: 1px solid rgba(255, 255, 255, 0.1); margin: 20px -26px 14px -30px; }
+
+        .lista-secciones { display: flex; flex-direction: column; gap: 5px; flex: 1; min-height: 0; }
+        /* Más de 14 secciones (p. ej., una sesión de 17 módulos): filas más bajas para que quepan todas */
+        .lista-secciones.compacta { gap: 2px; }
+        .lista-secciones.compacta .item-seccion { padding: 4px 11px; font-size: 12.5px; }
+
+        .item-seccion {
+            display: flex;
+            align-items: flex-start;
+            gap: 11px;
+            padding: 8px 11px;
+            border-radius: 9px;
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 13.5px;
+            font-weight: 500;
+            line-height: 1.25;
+        }
+
+        .item-seccion svg { width: 16px; height: 16px; flex-shrink: 0; margin-top: 1px; }
+        .item-seccion.hecha { color: rgba(255, 255, 255, 0.38); }
+        .item-seccion.actual { background: var(--grad); color: #fff; box-shadow: 0 8px 18px rgba(var(--secondary-rgb), 0.28); }
+
+        .dividida .principal { flex: 1; position: relative; padding: 64px 72px 60px; display: flex; flex-direction: column; justify-content: center; }
+
+        .numero-grande {
+            font-size: 128px;
+            font-weight: 800;
+            line-height: 0.9;
+            letter-spacing: -0.04em;
+            background: var(--grad);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            margin-bottom: 18px;
+        }
+
+        .principal h2 { margin: 0; font-size: 46px; line-height: 1.1; font-weight: 800; color: var(--tinta); letter-spacing: -0.015em; }
+        .principal .gancho { margin-top: 26px; font-size: 22px; line-height: 1.45; color: var(--primary); font-weight: 600; border-left: 3px solid var(--secondary); padding-left: 16px; }
+        .principal .gancho p { margin: 0 0 0.3em; }
+
+        .enlace-material {
+            position: absolute;
+            left: 72px;
+            bottom: 30px;
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--gris);
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 6px 12px;
+            margin-left: -12px;
+            border-radius: 999px;
+            transition: all 0.2s;
+        }
+
+        .enlace-material:hover { background: var(--lila); color: var(--primary); }
+
+        .ra-caja { margin-top: 8px; }
+        .ra-caja .etq { font-size: 11px; text-transform: uppercase; letter-spacing: 0.16em; font-weight: 700; color: rgba(var(--primary-rgb), 0.62); margin-bottom: 8px; }
+        .ra-caja .ra { font-size: 26px; line-height: 1.35; color: var(--primary); font-weight: 600; border-left: 3px solid var(--secondary); padding-left: 16px; }
+
+        .chips { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 26px; }
+        .chips span { font-size: 14px; padding: 5px 13px; border-radius: 999px; background: rgba(var(--primary-rgb), 0.08); color: var(--primary); font-weight: 500; }
+
+        /* ============================================================
+           IDEA CLAVE, PREGUNTA y CIERRE
+        ============================================================ */
+        .diapo.idea {
+            background: linear-gradient(135deg, rgba(var(--primary-rgb), 0.055) 0%, rgba(14, 116, 144, 0.05) 45%, rgba(var(--secondary-rgb), 0.10) 100%), #fff;
+        }
+
+        .idea .marco { justify-content: center; padding: 60px 110px 70px; }
+        .idea .etq-idea { display: flex; align-items: center; gap: 12px; font-size: 12.5px; text-transform: uppercase; letter-spacing: 0.18em; font-weight: 700; color: rgba(var(--primary-rgb), 0.62); margin-bottom: 26px; }
+        .idea .etq-idea .punto { width: 38px; height: 38px; border-radius: 999px; background: var(--grad); color: #fff; display: flex; align-items: center; justify-content: center; font-size: 15px; box-shadow: 0 4px 12px rgba(var(--primary-rgb), 0.25); }
+        .idea h2 { margin: 0; font-size: 46px; line-height: 1.2; font-weight: 700; color: var(--primary); border-left: 6px solid var(--secondary); padding-left: 30px; letter-spacing: -0.01em; }
+        .idea .cuerpo { flex: 0 1 auto; margin-top: 28px; padding-left: 36px; color: #475569; font-size: calc(24px * var(--k)); }
+
+        .chip-ejercicio {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 11.5px;
+            text-transform: uppercase;
+            letter-spacing: 0.12em;
+            font-weight: 700;
+            color: #fff;
+            border-radius: 6px;
+            padding: 5px 11px;
+            background: var(--primary);
+            margin-bottom: 8px;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.12);
+        }
+
+        .pregunta .cabecera h2 { font-size: 31px; }
+
+        .diapo.cierre { background: var(--grad-navy); color: #fff; }
+        .cierre .brillo { position: absolute; inset: 0; background: radial-gradient(700px 400px at 100% 100%, rgba(var(--secondary-rgb), 0.22), transparent 70%); pointer-events: none; }
+        .cierre .cabecera { border-bottom-color: rgba(255, 255, 255, 0.12); }
+        .cierre .cabecera h2 { color: #fff; }
+        .cierre .antetitulo { color: var(--gold); }
+        .cierre .cuerpo { color: rgba(255, 255, 255, 0.88); }
+        .cierre .cuerpo strong { color: #fff; }
+        .cierre .cuerpo h3 { color: #F472B6; }
+        .cierre .cuerpo code:not(pre code) { background: rgba(255, 255, 255, 0.12); color: #fff; }
+        .cierre .cuerpo ul { list-style: none; padding-left: 0; }
+        .cierre .cuerpo ul > li { position: relative; padding-left: 1.7em; margin-bottom: 0.55em; }
+        .cierre .cuerpo ul > li::before {
+            content: '\f00c';
+            font-family: 'Font Awesome 6 Free';
+            font-weight: 900;
+            position: absolute;
+            left: 0;
+            top: 0.2em;
+            width: 1.15em;
+            height: 1.15em;
+            border-radius: 999px;
+            background: var(--grad);
+            color: #fff;
+            font-size: 0.72em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .cierre .caja { color: var(--texto); }
+        .cierre .pie { color: rgba(255, 255, 255, 0.45); }
+        .cierre .pie .num { color: rgba(255, 255, 255, 0.7); }
+
+        .cierre .firma-cierre { margin-top: auto; padding-top: 18px; font-size: 13.5px; color: rgba(255, 255, 255, 0.6); font-style: italic; flex-shrink: 0; }
+
+        /* Variantes de maquetación que se piden desde la fuente */
+        .diapo.centro .cuerpo { text-align: center; align-items: center; }
+        .diapo.denso .cuerpo { font-size: calc(20px * var(--k)); }
+        .diapo.codigo-grande .codigo { --kc: 1.18; }
+
+        /* ============================================================
+           CONTROLES — los del material: progreso, menú, anterior/siguiente
+        ============================================================ */
+        #progreso { position: fixed; top: 0; left: 0; right: 0; height: 6px; background: rgba(226, 232, 240, 0.7); z-index: 20; }
+        #progreso > div { height: 100%; background: var(--grad); transition: width 0.5s ease; width: 0; }
+
+        .btn-redondo {
+            position: fixed;
+            z-index: 60;
+            width: 42px;
+            height: 42px;
+            border-radius: 999px;
+            border: 0;
+            color: #fff;
+            cursor: pointer;
+            box-shadow: 0 6px 16px rgba(var(--primary-rgb), 0.3);
+            transition: transform 0.2s, opacity 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 15px;
+        }
+
+        .btn-redondo:hover { transform: scale(1.1); }
+        #btn-menu { top: 16px; left: 16px; }
+
+        #controles {
+            position: fixed;
+            right: 18px;
+            bottom: 16px;
+            z-index: 30;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(255, 255, 255, 0.92);
+            backdrop-filter: blur(6px);
+            padding: 6px 6px 6px 16px;
+            border-radius: 999px;
+            box-shadow: 0 6px 22px rgba(0, 26, 77, 0.16);
+            transition: opacity 0.35s;
+        }
+
+        #contador { font-size: 11px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--secondary-texto); margin-right: 6px; white-space: nowrap; }
+        #contador span { color: var(--gris); font-weight: 600; }
+
+        .btn-nav {
+            border: 0;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 13px;
+            font-weight: 600;
+            padding: 8px 14px;
+            border-radius: 999px;
+            transition: all 0.2s;
+        }
+
+        .btn-nav.ant { background: transparent; color: var(--navy); }
+        .btn-nav.ant:hover { background: #F1F5F9; }
+        .btn-nav.sig { background: var(--grad); color: #fff; }
+        .btn-nav.sig:hover { opacity: 0.9; }
+        .btn-nav:disabled { opacity: 0.3; cursor: default; }
+
+        body.quieto #controles, body.quieto #btn-menu { opacity: 0; pointer-events: none; }
+        body.quieto { cursor: none; }
+        body.quieto #controles:focus-within, body.quieto #btn-menu:focus-visible { opacity: 1; pointer-events: auto; }
+
+        /* Índice: la barra lateral del material, como panel */
+        #velo { position: fixed; inset: 0; background: rgba(0, 10, 30, 0.35); z-index: 40; opacity: 0; pointer-events: none; transition: opacity 0.3s; }
+        #indice {
+            position: fixed;
+            top: 0;
+            left: 0;
+            bottom: 0;
+            width: 21rem;
+            z-index: 50;
+            transform: translateX(-100%);
+            visibility: hidden;
+            transition: transform 0.3s ease, visibility 0s linear 0.3s;
+            overflow-y: auto;
+            color: #fff;
+            display: flex;
+            flex-direction: column;
+        }
+
+        body.con-indice #indice { transform: none; visibility: visible; transition: transform 0.3s ease; }
+        body.con-indice #velo { opacity: 1; pointer-events: auto; }
+        #indice .cab { padding: 72px 24px 20px; border-bottom: 1px solid rgba(255, 255, 255, 0.1); }
+        #indice nav { padding: 14px; flex: 1; }
+        #indice .item-seccion { cursor: pointer; margin-bottom: 4px; border: 0; background: transparent; width: 100%; text-align: left; font-family: inherit; }
+        #indice .item-seccion:hover { color: #fff; background: rgba(255, 255, 255, 0.1); }
+        #indice .item-seccion.actual, #indice .item-seccion.actual:hover { background: var(--grad); color: #fff; box-shadow: 0 8px 18px rgba(var(--secondary-rgb), 0.28); }
+        body.con-indice #btn-menu { opacity: 1; pointer-events: auto; }
+        #indice .sub { margin: 2px 0 10px 38px; display: flex; flex-direction: column; gap: 1px; }
+        #indice .sub button { background: none; border: 0; color: rgba(255, 255, 255, 0.55); text-align: left; font-size: 12.5px; padding: 5px 8px; border-radius: 6px; cursor: pointer; line-height: 1.3; }
+        #indice .sub button:hover { color: #fff; background: rgba(255, 255, 255, 0.08); }
+        #indice .sub button.actual { color: #fff; font-weight: 600; box-shadow: inset 2px 0 0 var(--secondary); }
+        #indice .pie-indice { padding: 16px 24px; font-size: 10.5px; color: rgba(255, 255, 255, 0.42); border-top: 1px solid rgba(255, 255, 255, 0.1); line-height: 1.5; }
+
+        /* Notas del presentador */
+        #notas {
+            position: fixed;
+            left: 50%;
+            bottom: 74px;
+            transform: translate(-50%, 20px);
+            width: min(900px, calc(100vw - 40px));
+            max-height: 34vh;
+            overflow-y: auto;
+            z-index: 35;
+            background: rgba(255, 255, 255, 0.97);
+            border-radius: 16px;
+            box-shadow: 0 16px 50px rgba(0, 26, 77, 0.25);
+            border-top: 4px solid var(--secondary);
+            padding: 16px 22px;
+            font-size: 15.5px;
+            line-height: 1.55;
+            opacity: 0;
+            pointer-events: none;
+            transition: all 0.3s;
+        }
+
+        #notas { visibility: hidden; }
+        body.con-notas #notas { opacity: 1; transform: translate(-50%, 0); pointer-events: auto; visibility: visible; }
+        .etq-notas { font-size: 10.5px; text-transform: uppercase; letter-spacing: 0.14em; font-weight: 700; color: var(--secondary-texto); margin-bottom: 6px; }
+        .notas-vacias { color: var(--gris-claro); font-style: italic; }
+        #notas p, .notas p { margin: 0 0 0.55em; }
+        #notas ul, .notas ul { margin: 0 0 0.55em; padding-left: 1.2em; }
+
+        /* Ayuda y pantalla en negro */
+        #ayuda { position: fixed; inset: 0; z-index: 70; background: rgba(0, 10, 30, 0.55); display: none; align-items: center; justify-content: center; }
+        body.con-ayuda #ayuda { display: flex; }
+        #ayuda .tarjeta-ayuda { background: #fff; border-radius: 18px; padding: 26px 30px; width: min(560px, calc(100vw - 32px)); box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3); border-top: 5px solid var(--primary); }
+        #ayuda h3 { margin: 0 0 14px; color: var(--navy); font-size: 18px; }
+        #ayuda table { width: 100%; border-collapse: collapse; font-size: 14px; }
+        #ayuda td { padding: 6px 4px; border-bottom: 1px solid #F1F5F9; }
+        #ayuda td:first-child { white-space: nowrap; width: 42%; }
+        #ayuda kbd { font-family: 'Fira Code', monospace; font-size: 12px; background: #F1F5F9; border: 1px solid #CBD5E1; border-bottom-width: 2px; border-radius: 5px; padding: 1px 6px; margin-right: 3px; }
+
+        #negro { position: fixed; inset: 0; z-index: 80; background: #000; display: none; }
+        body.en-negro #negro { display: block; }
+
+        #ir-a {
+            position: fixed; top: 16px; left: 50%; transform: translateX(-50%); z-index: 65;
+            background: var(--navy); color: #fff; font-weight: 700; font-size: 15px; padding: 8px 18px;
+            border-radius: 999px; display: none; box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
+        }
+
+        body.revision #controles, body.revision #btn-menu { display: none; }
+        body.revision .paso { transition: none; }
+        body.revision .diapo.activa > .marco { animation: none; }
+
+        /* Revisión: diapositivas que no caben */
+        .aviso-revision {
+            position: absolute; top: 10px; right: 10px; z-index: 5;
+            background: #B91C1C; color: #fff; font-size: 12px; font-weight: 700;
+            padding: 4px 10px; border-radius: 6px;
+        }
+
+        /* ============================================================
+           VISTA DEL PRESENTADOR (?presentador)
+        ============================================================ */
+        body.presentador { background: #0B1330; }
+        body.presentador #btn-menu, body.presentador #controles, body.presentador #notas, body.presentador #progreso { display: none; }
+        #panel-presentador { display: none; }
+        body.presentador #panel-presentador {
+            display: grid;
+            position: fixed;
+            inset: 0;
+            grid-template-columns: 1.55fr 1fr;
+            grid-template-rows: auto 1fr;
+            gap: 18px;
+            padding: 18px;
+            color: #fff;
+            z-index: 10;
+            pointer-events: none;
+        }
+        #panel-presentador .barra { grid-column: 1 / -1; display: flex; justify-content: space-between; align-items: center; font-size: 14px; color: rgba(255, 255, 255, 0.7); }
+        #panel-presentador .reloj { font-size: 30px; font-weight: 700; color: #fff; font-variant-numeric: tabular-nums; }
+        #panel-presentador .reloj small { font-size: 13px; color: var(--gold); font-weight: 600; margin-left: 8px; letter-spacing: 0.1em; text-transform: uppercase; }
+        #panel-presentador .hueco { border-radius: 10px; }
+        #panel-presentador .derecha { display: flex; flex-direction: column; gap: 14px; min-height: 0; pointer-events: auto; }
+        #panel-presentador .etq { font-size: 11px; text-transform: uppercase; letter-spacing: 0.14em; font-weight: 700; color: var(--gold); margin-bottom: 6px; }
+        #vista-siguiente { position: relative; aspect-ratio: 16 / 9; background: #fff; border-radius: 10px; overflow: hidden; }
+        #vista-siguiente .diapo { visibility: visible; opacity: 1; transform-origin: top left; width: 1280px; height: 720px; }
+        #vista-siguiente .paso { opacity: 1; transform: none; }
+        #notas-presentador { flex: 1; min-height: 0; overflow-y: auto; background: #fff; color: var(--texto); border-radius: 12px; padding: 16px 20px; font-size: 20px; line-height: 1.5; }
+
+        /* ============================================================
+           IMPRESIÓN — una diapositiva por página, con todo revelado
+        ============================================================ */
+        @media print {
+            @page { size: 1280px 720px; margin: 0; }
+            html, body { overflow: visible; height: auto; background: #fff; }
+            #escenario { position: static; }
+            #mazo { position: static; transform: none !important; box-shadow: none; width: 1280px; height: auto; overflow: visible; }
+            .diapo { position: relative; visibility: visible; opacity: 1; width: 1280px; height: 720px; page-break-after: always; break-after: page; overflow: hidden; }
+            .diapo.activa > .marco { animation: none; }
+            .paso { opacity: 1; transform: none; }
+            #progreso, #btn-menu, #controles, #indice, #velo, #notas, #ayuda, #negro, #ir-a, #panel-presentador, .btn-copiar, .enlace-material, .aviso-revision { display: none !important; }
+            * { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+        }
+
+    </style>
+</head>
+
+<body>
+    <div id="progreso"><div></div></div>
+
+    <button id="btn-menu" class="btn-redondo lp-gradient" title="Índice (M)" aria-label="Mostrar el índice">
+        <i aria-hidden="true" class="fas fa-bars"></i>
+    </button>
+
+    <div id="velo"></div>
+    <aside id="indice" class="lp-header" aria-label="Índice de la presentación"></aside>
+
+    <main id="escenario">
+        <div id="mazo">
+<section class="diapo portada" data-tipo="portada">
+    <div class="brillo"></div>
+    <div class="marco">
+        <div>
+            <div class="institucion">Fundación Universitaria Compensar</div>
+            <div class="asignatura">Análisis Estadístico de la Información</div>
+        </div>
+        <div>
+            <span class="chip-semana">Sesión 5 · 2 horas</span>
+            <h1>La muestra que se eligió sola</h1>
+            <div class="subtitulo">Métodos de muestreo, sesgo frente a error muestral y el sesgo de no respuesta de la calificación, y cómo corregirlo ponderando</div>
+            <div class="temas"><span>Marco y unidad</span><span>Muestreo probabilístico</span><span>Estratificado y conglomerados</span><span>Sesgo y error muestral</span><span>No respuesta</span><span>Ponderación</span></div>
+        </div>
+        <div class="base">
+            <div class="lema">Antes de la cifra, pregunta quién respondió.</div>
+            <div class="firma"><strong>Javier Mauricio Sierra</strong></div>
+        </div>
+    </div>
+    <div class="barra-grad"></div>
+</section>
+<section class="diapo dividida" data-tipo="agenda">
+    <div class="marco">
+        <div class="lateral">
+            <div class="institucion">Fundación Universitaria Compensar</div>
+            <div class="asignatura">Análisis Estadístico de la Información</div>
+            <div class="capitulo">Sesión 5 · <span>La muestra que se eligió sola</span></div>
+            <hr>
+            <div class="lista-secciones"><div class="item-seccion "><i aria-hidden="true" class="fas fa-door-open"></i><span>Apertura</span></div><div class="item-seccion "><i aria-hidden="true" class="fas fa-shuffle"></i><span>Muestreo</span></div><div class="item-seccion "><i aria-hidden="true" class="fas fa-user-check"></i><span>Sesgo y no respuesta</span></div><div class="item-seccion "><i aria-hidden="true" class="fas fa-keyboard"></i><span>Práctica y cierre</span></div></div>
+        </div>
+        <div class="principal">
+            <div class="antetitulo">Hoja de ruta</div>
+            <h2 style="margin-bottom:34px">Lo que vamos a construir hoy</h2>
+            <div class="ra-caja"><div class="etq">Objetivo de la sesión</div><div class="ra">Distinguir los métodos de muestreo probabilísticos de los que no lo son, separar el sesgo del error muestral, reconocer de qué depende la no respuesta de la calificación y corregir su sesgo ponderando, sabiendo qué supone esa corrección y qué no arregla.</div></div>
+            <div class="chips"><span>Marco y unidad</span><span>Muestreo probabilístico</span><span>Estratificado y conglomerados</span><span>Sesgo y error muestral</span><span>No respuesta</span><span>Ponderación</span></div>
+            <div class="pie" style="left:72px;right:72px"><span></span><span></span><span class="num">2 / 36</span></div>
+        </div>
+    </div>
+</section>
+<section class="diapo dividida seccion" data-tipo="seccion">
+    <div class="marco">
+        <div class="lateral">
+            <div class="institucion">Fundación Universitaria Compensar</div>
+            <div class="asignatura">Análisis Estadístico de la Información</div>
+            <div class="capitulo">Sesión 5 · <span>La muestra que se eligió sola</span></div>
+            <hr>
+            <div class="lista-secciones"><div class="item-seccion actual"><i aria-hidden="true" class="fas fa-door-open"></i><span>Apertura</span></div><div class="item-seccion "><i aria-hidden="true" class="fas fa-shuffle"></i><span>Muestreo</span></div><div class="item-seccion "><i aria-hidden="true" class="fas fa-user-check"></i><span>Sesgo y no respuesta</span></div><div class="item-seccion "><i aria-hidden="true" class="fas fa-keyboard"></i><span>Práctica y cierre</span></div></div>
+        </div>
+        <div class="principal">
+            <div class="numero-grande">01</div>
+            <h2>Apertura</h2>
+            <div class="gancho"><p>¿Qué tan satisfecha está la clientela?</p></div>
+            
+            <div class="pie" style="left:72px;right:72px"><span></span><span></span><span class="num">3 / 36</span></div>
+        </div>
+    </div>
+</section>
+<section class="diapo ">
+    
+    <div class="marco">
+        <div class="cabecera">
+            <div class="ficha-icono"><i aria-hidden="true" class="fas fa-door-open"></i></div>
+            <div><div class="antetitulo">Apertura</div><h2>Dos horas en cinco momentos, con diez minutos de holgura</h2></div>
+        </div>
+        <div class="cuerpo"><div class="flujo">
+<div class="paso-flujo"><span class="num">1</span><span class="t">Apertura</span><span class="d">12 min: coevaluación y la cifra del tablero</span></div>
+<div class="flecha-flujo">→</div>
+<div class="paso-flujo"><span class="num">2</span><span class="t">Muestreo</span><span class="d">27 min: cuatro métodos al azar y los que no lo son</span></div>
+<div class="flecha-flujo">→</div>
+<div class="paso-flujo"><span class="num">3</span><span class="t">Sesgo y no respuesta</span><span class="d">30 min: quién calificó y cómo ponderar</span></div>
+<div class="flecha-flujo">→</div>
+<div class="paso-flujo"><span class="num">4</span><span class="t">Práctica guiada</span><span class="d">33 min en Colab</span></div>
+<div class="flecha-flujo">→</div>
+<div class="paso-flujo"><span class="num">5</span><span class="t">Cierre</span><span class="d">8 min</span></div>
+</div>
+<p>Hoy la pregunta no es solo qué dice la cifra, sino <strong>quién respondió</strong>.</p></div>
+        
+    </div>
+    <div class="pie"><span class="sello">Sesión 5 · La muestra que se eligió sola</span><span>Análisis Estadístico de la Información · UCompensar</span><span class="num">4 / 36</span></div>
+</section>
+<section class="diapo ">
+    
+    <div class="marco">
+        <div class="cabecera">
+            <div class="ficha-icono"><i aria-hidden="true" class="fas fa-door-open"></i></div>
+            <div><div class="antetitulo">Apertura</div><h2>Otra pareja revisa las tres preguntas de tu tablero</h2></div>
+        </div>
+        <div class="cuerpo"><div class="flujo">
+<div class="paso-flujo"><span class="num">1</span><span class="t">Intercambia</span><span class="d">con otra pareja, comparte tus tres preguntas y sus indicadores</span></div>
+<div class="flecha-flujo">→</div>
+<div class="paso-flujo"><span class="num">2</span><span class="t">Revisa</span><span class="d">las de la otra pareja, con los tres criterios · 4 min</span></div>
+<div class="flecha-flujo">→</div>
+<div class="paso-flujo"><span class="num">3</span><span class="t">Devuelve</span><span class="d">una sugerencia concreta por pregunta · 2 min</span></div>
+</div>
+<table><thead><tr><th>Criterio</th><th>Pregunta</th></tr></thead><tbody>
+<tr><td><strong>La gerencia</strong></td><td>¿La haría la gerencia y se responde con <code>pedidos.csv</code>?</td></tr>
+<tr><td><strong>El indicador</strong></td><td>¿Dice qué cuenta y sobre qué total?</td></tr>
+<tr><td><strong>Cada semana</strong></td><td>¿Se puede calcular semana a semana?</td></tr>
+</tbody></table></div>
+        
+    </div>
+    <div class="pie"><span class="sello">Sesión 5 · La muestra que se eligió sola</span><span>Análisis Estadístico de la Información · UCompensar</span><span class="num">5 / 36</span></div>
+</section>
+<section class="diapo pregunta">
+    
+    <div class="marco">
+        <div class="cabecera">
+            <div class="ficha-icono"><i aria-hidden="true" class="fas fa-door-open"></i></div>
+            <div><div><span class="chip-ejercicio" style="background:var(--primary)"><i aria-hidden="true" class="fas fa-circle-question"></i>Pregunta para la clase</span></div><h2>¿Qué cifra pondrías en el tablero para decir qué tan satisfecha está la clientela?</h2></div>
+        </div>
+        <div class="cuerpo"><p>En <code>pedidos.csv</code>, la columna <code>calificacion</code> trae de 1 a 5 estrellas. Escribe en el chat la cifra que pondrías.</p>
+<div class="paso"><div class="caja respuesta"><span class="caja-etiqueta"><i aria-hidden="true" class="fas fa-check"></i>Respuesta</span><div class="caja-cuerpo"><p><strong>El 79,1 % de 4 o 5 estrellas</strong>, como pide la lista mínima. Pero ¿79 % <strong>de quiénes</strong>? De los 7099 pedidos que se calificaron: el 59,2 % de los 12 000. Los demás no dijeron nada.</p></div></div></div></div>
+        
+    </div>
+    <div class="pie"><span class="sello">Sesión 5 · La muestra que se eligió sola</span><span>Análisis Estadístico de la Información · UCompensar</span><span class="num">6 / 36</span></div>
+</section>
+<section class="diapo idea">
+    <div class="marco">
+        <div class="etq-idea"><span class="punto"><i aria-hidden="true" class="fas fa-compass"></i></span>Idea clave</div>
+        <h2>Antes de la cifra, pregunta quién respondió</h2>
+        <div class="cuerpo"><p>Las calificaciones de la app son una muestra que nadie diseñó: <strong>se eligió sola</strong>. Es la pregunta 4 del diagnóstico de la sesión 1: quien opina puede no parecerse al resto.</p></div>
+    </div>
+    <div class="pie"><span class="sello">Sesión 5 · La muestra que se eligió sola</span><span>Análisis Estadístico de la Información · UCompensar</span><span class="num">7 / 36</span></div>
+</section>
+<section class="diapo dividida seccion" data-tipo="seccion">
+    <div class="marco">
+        <div class="lateral">
+            <div class="institucion">Fundación Universitaria Compensar</div>
+            <div class="asignatura">Análisis Estadístico de la Información</div>
+            <div class="capitulo">Sesión 5 · <span>La muestra que se eligió sola</span></div>
+            <hr>
+            <div class="lista-secciones"><div class="item-seccion hecha"><i aria-hidden="true" class="fas fa-door-open"></i><span>Apertura</span></div><div class="item-seccion actual"><i aria-hidden="true" class="fas fa-shuffle"></i><span>Muestreo</span></div><div class="item-seccion "><i aria-hidden="true" class="fas fa-user-check"></i><span>Sesgo y no respuesta</span></div><div class="item-seccion "><i aria-hidden="true" class="fas fa-keyboard"></i><span>Práctica y cierre</span></div></div>
+        </div>
+        <div class="principal">
+            <div class="numero-grande">02</div>
+            <h2>Muestreo</h2>
+            <div class="gancho"><p>Si la gerencia llamara a 400 pedidos, ¿a cuáles?</p></div>
+            
+            <div class="pie" style="left:72px;right:72px"><span></span><span></span><span class="num">8 / 36</span></div>
+        </div>
+    </div>
+</section>
+<section class="diapo ">
+    
+    <div class="marco">
+        <div class="cabecera">
+            <div class="ficha-icono"><i aria-hidden="true" class="fas fa-shuffle"></i></div>
+            <div><div class="antetitulo">Muestreo</div><h2>Para llamar a 400 pedidos hace falta un marco, y el de Tingua solo trae los entregados</h2></div>
+        </div>
+        <div class="cuerpo"><div class="tarjetas" style="--n:3">
+<div class="tarjeta"><h3>El marco</h3><p>La lista de la que se sortea: <code>pedidos.csv</code>. Solo trae los pedidos <strong>entregados</strong>: un pedido cancelado nunca saldría. Es un problema de <strong>cobertura</strong>.</p></div>
+<div class="tarjeta"><h3>La unidad</h3><p>El <strong>pedido</strong>, no el cliente: la tabla no dice quién pidió. Cada pedido es una fila.</p></div>
+<div class="tarjeta"><h3>El blanco</h3><p>Comparamos los métodos con el <strong>tiempo de entrega</strong>, que conocemos para todos: \(\mu = 35{,}13\) min.</p></div>
+</div></div>
+        
+    </div>
+    <div class="pie"><span class="sello">Sesión 5 · La muestra que se eligió sola</span><span>Análisis Estadístico de la Información · UCompensar</span><span class="num">9 / 36</span></div>
+</section>
+<section class="diapo ">
+    
+    <div class="marco">
+        <div class="cabecera">
+            <div class="ficha-icono"><i aria-hidden="true" class="fas fa-shuffle"></i></div>
+            <div><div class="antetitulo">Muestreo</div><h2>En un muestreo probabilístico, cada pedido tiene una probabilidad conocida de entrar</h2></div>
+        </div>
+        <div class="cuerpo"><div class="tarjetas" style="--n:2">
+<div class="tarjeta"><h3>Probabilístico</h3><p>Cada pedido tiene una probabilidad <strong>conocida y mayor que cero</strong> de entrar. Eso permite inferir: \(\bar x\) estima \(\mu\), y en la sesión 6 mediremos cuánto puede alejarse.</p></div>
+<div class="tarjeta"><h3>No probabilístico</h3><p>Se elige lo que está a la mano o se deja que cada quien decida si entra. Nadie sabe la probabilidad de entrar, y no hay forma de medir cuánto puede alejarse \(\bar x\) de \(\mu\).</p></div>
+</div></div>
+        
+    </div>
+    <div class="pie"><span class="sello">Sesión 5 · La muestra que se eligió sola</span><span>Análisis Estadístico de la Información · UCompensar</span><span class="num">10 / 36</span></div>
+</section>
+<section class="diapo ">
+    
+    <div class="marco">
+        <div class="cabecera">
+            <div class="ficha-icono"><i aria-hidden="true" class="fas fa-shuffle"></i></div>
+            <div><div class="antetitulo">Muestreo</div><h2>Aleatorio simple: cualquier grupo de 400 pedidos tiene la misma probabilidad de salir</h2></div>
+        </div>
+        <div class="cuerpo"><div class="codigo" data-lang="python" data-foco=""><div class="codigo-cabecera"><span class="codigo-titulo"><i aria-hidden="true" class="fab fa-python"></i>[mas]</span><button class="btn-copiar" title="Copiar"><i aria-hidden="true" class="fas fa-copy"></i> Copiar</button></div><pre><code>semilla = 1
+mu = pedidos["tiempo_entrega_min"].mean()
+mas = pedidos.sample(n=400, random_state=semilla)
+x_mas = mas["tiempo_entrega_min"].mean()
+print(f"μ = {mu:.2f} min · x̄ = {x_mas:.2f} min")
+print("De Bucaramanga:", (mas["ciudad"] == "Bucaramanga").sum(), "pedidos")
+#&gt; μ = 35.13 min · x̄ = 34.35 min
+#&gt; De Bucaramanga: 35 pedidos</code></pre></div>
+<ul>
+<li>La <strong>semilla</strong> permite repetir la misma muestra</li>
+<li>\(\bar x = 34{,}35\) min, cerca de \(\mu\)</li>
+<li>Trae 35 pedidos de Bucaramanga: con otra semilla, otro número</li>
+</ul></div>
+        
+    </div>
+    <div class="pie"><span class="sello">Sesión 5 · La muestra que se eligió sola</span><span>Análisis Estadístico de la Información · UCompensar</span><span class="num">11 / 36</span></div>
+</section>
+<section class="diapo ">
+    
+    <div class="marco">
+        <div class="cabecera">
+            <div class="ficha-icono"><i aria-hidden="true" class="fas fa-shuffle"></i></div>
+            <div><div class="antetitulo">Muestreo</div><h2>Sistemático: un inicio al azar y, desde ahí, uno de cada 30</h2></div>
+        </div>
+        <div class="cuerpo"><div class="columnas centradas" style="grid-template-columns:minmax(0, 3fr) minmax(0, 2fr)">
+<div class="col"><div class="codigo" data-lang="python" data-foco=""><div class="codigo-cabecera"><span class="codigo-titulo"><i aria-hidden="true" class="fab fa-python"></i>[sistematico]</span><button class="btn-copiar" title="Copiar"><i aria-hidden="true" class="fas fa-copy"></i> Copiar</button></div><pre><code>paso = len(pedidos) // 400
+inicio = np.random.default_rng(semilla).integers(paso)
+sistematica = pedidos.iloc[inicio::paso]
+x_sis = sistematica["tiempo_entrega_min"].mean()
+print("Inicio:", inicio, "· pedidos:", len(sistematica))
+print(f"x̄ = {x_sis:.2f} min")
+#&gt; Inicio: 14 · pedidos: 400
+#&gt; x̄ = 35.36 min</code></pre></div></div>
+<div class="col"><ul>
+<li>El paso es \(12\,000 / 400 = 30\)</li>
+<li>Solo se sortea el inicio, entre 0 y 29</li>
+<li>\(\bar x = 35{,}36\) min, cerca de \(\mu\)</li>
+</ul></div>
+</div></div>
+        
+    </div>
+    <div class="pie"><span class="sello">Sesión 5 · La muestra que se eligió sola</span><span>Análisis Estadístico de la Información · UCompensar</span><span class="num">12 / 36</span></div>
+</section>
+<section class="diapo ">
+    
+    <div class="marco">
+        <div class="cabecera">
+            <div class="ficha-icono"><i aria-hidden="true" class="fas fa-shuffle"></i></div>
+            <div><div class="antetitulo">Muestreo</div><h2>El estratificado garantiza la parte de cada ciudad</h2></div>
+        </div>
+        <div class="cuerpo"><div class="codigo" data-lang="python" data-foco=""><div class="codigo-cabecera"><span class="codigo-titulo"><i aria-hidden="true" class="fab fa-python"></i>[estratificado]</span><button class="btn-copiar" title="Copiar"><i aria-hidden="true" class="fas fa-copy"></i> Copiar</button></div><pre><code>estratificada = pedidos.groupby("ciudad").sample(
+    frac=1/30, random_state=semilla)
+print("Pedidos:", len(estratificada))
+pd.DataFrame({"estratificada": estratificada["ciudad"].value_counts(),
+              "aleatoria simple": mas["ciudad"].value_counts()})
+#&gt; Pedidos: 401
+#&gt;               estratificada  aleatoria simple
+#&gt; ciudad
+#&gt; Bogotá                  157               144
+#&gt; Medellín                 89                97
+#&gt; Cali                     66                77
+#&gt; Barranquilla             49                47
+#&gt; Bucaramanga              40                35</code></pre></div>
+<ul>
+<li>La misma fracción en cada ciudad: 401 pedidos, porque cada ciudad redondea, y siempre 40 de Bucaramanga</li>
+<li>Un <strong>estrato</strong> es el grupo que se sortea por separado: aquí, la ciudad, <strong>no</strong> la columna <code>estrato</code></li>
+</ul></div>
+        
+    </div>
+    <div class="pie"><span class="sello">Sesión 5 · La muestra que se eligió sola</span><span>Análisis Estadístico de la Información · UCompensar</span><span class="num">13 / 36</span></div>
+</section>
+<section class="diapo ">
+    
+    <div class="marco">
+        <div class="cabecera">
+            <div class="ficha-icono"><i aria-hidden="true" class="fas fa-shuffle"></i></div>
+            <div><div class="antetitulo">Muestreo</div><h2>Por conglomerados se sortean días enteros, y el tamaño depende de cuáles salen</h2></div>
+        </div>
+        <div class="cuerpo"><div class="columnas centradas" style="grid-template-columns:minmax(0, 3fr) minmax(0, 2fr)">
+<div class="col"><div class="codigo" data-lang="python" data-foco=""><div class="codigo-cabecera"><span class="codigo-titulo"><i aria-hidden="true" class="fab fa-python"></i>[conglomerados]</span><button class="btn-copiar" title="Copiar"><i aria-hidden="true" class="fas fa-copy"></i> Copiar</button></div><pre><code>fechas = pedidos["fecha"].drop_duplicates()
+dias = fechas.sample(n=6, random_state=semilla)
+conglomerados = pedidos[pedidos["fecha"].isin(dias)]
+print("Pedidos:", len(conglomerados))
+conglomerados["fecha"].value_counts().sort_index()
+#&gt; Pedidos: 404
+#&gt; fecha
+#&gt; 2026-02-05    47
+#&gt; 2026-02-24    58
+#&gt; 2026-04-04    86
+#&gt; 2026-04-24    76
+#&gt; 2026-04-28    65
+#&gt; 2026-06-12    72
+#&gt; Name: count, dtype: int64</code></pre></div></div>
+<div class="col"><ul>
+<li>Un <strong>conglomerado</strong> es un grupo que entra entero: se sortean 6 días y entran <strong>todos</strong> sus pedidos</li>
+<li>Con las semillas de tres cifras, salen de 312 a 499 pedidos</li>
+<li>Sirve cuando hay una lista de grupos y no una de unidades</li>
+</ul></div>
+</div></div>
+        
+    </div>
+    <div class="pie"><span class="sello">Sesión 5 · La muestra que se eligió sola</span><span>Análisis Estadístico de la Información · UCompensar</span><span class="num">14 / 36</span></div>
+</section>
+<section class="diapo ">
+    
+    <div class="marco">
+        <div class="cabecera">
+            <div class="ficha-icono"><i aria-hidden="true" class="fas fa-shuffle"></i></div>
+            <div><div class="antetitulo">Muestreo</div><h2>Las cuatro muestras al azar caen cerca de μ; la de conveniencia, en 39,11 min</h2></div>
+        </div>
+        <div class="cuerpo"><div class="columnas centradas" style="grid-template-columns:minmax(0, 3fr) minmax(0, 2fr)">
+<div class="col"><figure class="figura" style="--alto:420px"><div class="lienzo"><svg xmlns:xlink="http://www.w3.org/1999/xlink" width="100%" viewBox="0 0 512.575625 267.59952" xmlns="http://www.w3.org/2000/svg" version="1.1">
+ <defs>
+  <style type="text/css">*{stroke-linejoin: round; stroke-linecap: butt}</style>
+ </defs>
+ <g id="figure_1">
+  <g id="patch_1">
+   <path d="M 0 267.59952 
+L 512.575625 267.59952 
+L 512.575625 0 
+L 0 0 
+z
+" style="fill: #ffffff"/>
+  </g>
+  <g id="axes_1">
+   <g id="patch_2">
+    <path d="M 139.117813 223.398504 
+L 458.940857 223.398504 
+L 458.940857 24.597656 
+L 139.117813 24.597656 
+z
+" style="fill: #ffffff"/>
+   </g>
+   <g id="matplotlib.axis_1">
+    <g id="xtick_1">
+     <g id="line2d_1">
+      <defs>
+       <path id="m6f57504814" d="M 0 0 
+L 0 3.5 
+" style="stroke: #475569; stroke-width: 0.8"/>
+      </defs>
+      <g>
+       <use xlink:href="#m6f57504814" x="169.944842" y="223.398504" style="fill: #475569; stroke: #475569; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="text_1">
+      <text style="font-size: 13px; font-family: Roboto, 'Helvetica Neue', Arial, sans-serif; text-anchor: middle; fill: #475569" x="169.944842" y="240.275457" transform="rotate(-0 169.944842 240.275457)">34</text>
+     </g>
+    </g>
+    <g id="xtick_2">
+     <g id="line2d_2">
+      <g>
+       <use xlink:href="#m6f57504814" x="217.243699" y="223.398504" style="fill: #475569; stroke: #475569; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="text_2">
+      <text style="font-size: 13px; font-family: Roboto, 'Helvetica Neue', Arial, sans-serif; text-anchor: middle; fill: #475569" x="217.243699" y="240.275457" transform="rotate(-0 217.243699 240.275457)">35</text>
+     </g>
+    </g>
+    <g id="xtick_3">
+     <g id="line2d_3">
+      <g>
+       <use xlink:href="#m6f57504814" x="264.542556" y="223.398504" style="fill: #475569; stroke: #475569; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="text_3">
+      <text style="font-size: 13px; font-family: Roboto, 'Helvetica Neue', Arial, sans-serif; text-anchor: middle; fill: #475569" x="264.542556" y="240.275457" transform="rotate(-0 264.542556 240.275457)">36</text>
+     </g>
+    </g>
+    <g id="xtick_4">
+     <g id="line2d_4">
+      <g>
+       <use xlink:href="#m6f57504814" x="311.841412" y="223.398504" style="fill: #475569; stroke: #475569; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="text_4">
+      <text style="font-size: 13px; font-family: Roboto, 'Helvetica Neue', Arial, sans-serif; text-anchor: middle; fill: #475569" x="311.841412" y="240.275457" transform="rotate(-0 311.841412 240.275457)">37</text>
+     </g>
+    </g>
+    <g id="xtick_5">
+     <g id="line2d_5">
+      <g>
+       <use xlink:href="#m6f57504814" x="359.140269" y="223.398504" style="fill: #475569; stroke: #475569; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="text_5">
+      <text style="font-size: 13px; font-family: Roboto, 'Helvetica Neue', Arial, sans-serif; text-anchor: middle; fill: #475569" x="359.140269" y="240.275457" transform="rotate(-0 359.140269 240.275457)">38</text>
+     </g>
+    </g>
+    <g id="xtick_6">
+     <g id="line2d_6">
+      <g>
+       <use xlink:href="#m6f57504814" x="406.439126" y="223.398504" style="fill: #475569; stroke: #475569; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="text_6">
+      <text style="font-size: 13px; font-family: Roboto, 'Helvetica Neue', Arial, sans-serif; text-anchor: middle; fill: #475569" x="406.439126" y="240.275457" transform="rotate(-0 406.439126 240.275457)">39</text>
+     </g>
+    </g>
+    <g id="xtick_7">
+     <g id="line2d_7">
+      <g>
+       <use xlink:href="#m6f57504814" x="453.737983" y="223.398504" style="fill: #475569; stroke: #475569; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="text_7">
+      <text style="font-size: 13px; font-family: Roboto, 'Helvetica Neue', Arial, sans-serif; text-anchor: middle; fill: #475569" x="453.737983" y="240.275457" transform="rotate(-0 453.737983 240.275457)">40</text>
+     </g>
+    </g>
+    <g id="text_8">
+     <text style="font-size: 13px; font-family: Roboto, 'Helvetica Neue', Arial, sans-serif; text-anchor: middle; fill: #334155" x="299.029335" y="257.276473" transform="rotate(-0 299.029335 257.276473)">Media del tiempo de entrega (min)</text>
+    </g>
+   </g>
+   <g id="matplotlib.axis_2">
+    <g id="ytick_1">
+     <g id="line2d_8">
+      <defs>
+       <path id="m99bfb22a11" d="M 0 0 
+L -3.5 0 
+" style="stroke: #475569; stroke-width: 0.8"/>
+      </defs>
+      <g>
+       <use xlink:href="#m99bfb22a11" x="139.117813" y="69.156467" style="fill: #475569; stroke: #475569; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="text_9">
+      <text style="font-size: 13px; font-family: Roboto, 'Helvetica Neue', Arial, sans-serif; text-anchor: end; fill: #475569" x="132.117813" y="74.095451" transform="rotate(-0 132.117813 74.095451)">Aleatoria simple</text>
+     </g>
+    </g>
+    <g id="ytick_2">
+     <g id="line2d_9">
+      <g>
+       <use xlink:href="#m99bfb22a11" x="139.117813" y="103.432475" style="fill: #475569; stroke: #475569; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="text_10">
+      <text style="font-size: 13px; font-family: Roboto, 'Helvetica Neue', Arial, sans-serif; text-anchor: end; fill: #475569" x="132.117813" y="108.63146" transform="rotate(-0 132.117813 108.63146)">Sistemática</text>
+     </g>
+    </g>
+    <g id="ytick_3">
+     <g id="line2d_10">
+      <g>
+       <use xlink:href="#m99bfb22a11" x="139.117813" y="137.708484" style="fill: #475569; stroke: #475569; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="text_11">
+      <text style="font-size: 13px; font-family: Roboto, 'Helvetica Neue', Arial, sans-serif; text-anchor: end; fill: #475569" x="132.117813" y="142.647468" transform="rotate(-0 132.117813 142.647468)">Estratificada</text>
+     </g>
+    </g>
+    <g id="ytick_4">
+     <g id="line2d_11">
+      <g>
+       <use xlink:href="#m99bfb22a11" x="139.117813" y="171.984492" style="fill: #475569; stroke: #475569; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="text_12">
+      <text style="font-size: 13px; font-family: Roboto, 'Helvetica Neue', Arial, sans-serif; text-anchor: end; fill: #475569" x="132.117813" y="176.923476" transform="rotate(-0 132.117813 176.923476)">Por conglomerados</text>
+     </g>
+    </g>
+    <g id="ytick_5">
+     <g id="line2d_12">
+      <g>
+       <use xlink:href="#m99bfb22a11" x="139.117813" y="206.2605" style="fill: #475569; stroke: #475569; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="text_13">
+      <text style="font-size: 13px; font-family: Roboto, 'Helvetica Neue', Arial, sans-serif; text-anchor: end; fill: #475569" x="132.117813" y="211.199485" transform="rotate(-0 132.117813 211.199485)">Por conveniencia</text>
+     </g>
+    </g>
+   </g>
+   <g id="LineCollection_1">
+    <path d="M 223.389003 52.018463 
+L 223.389003 223.398504 
+" clip-path="url(#pd614d8e8b7)" style="fill: none; stroke-dasharray: 7.4,3.2; stroke-dashoffset: 0; stroke: #3a0f47; stroke-width: 2"/>
+   </g>
+   <g id="patch_3">
+    <path d="M 139.117813 223.398504 
+L 139.117813 24.597656 
+" style="fill: none; stroke: #94a3b8; stroke-width: 0.8; stroke-linejoin: miter; stroke-linecap: square"/>
+   </g>
+   <g id="patch_4">
+    <path d="M 139.117812 223.398504 
+L 458.940857 223.398504 
+" style="fill: none; stroke: #94a3b8; stroke-width: 0.8; stroke-linejoin: miter; stroke-linecap: square"/>
+   </g>
+   <g id="PathCollection_1">
+    <defs>
+     <path id="C0_0_31872e03c9" d="M 0 5.244044 
+C 1.390737 5.244044 2.7247 4.691499 3.708099 3.708099 
+C 4.691499 2.7247 5.244044 1.390737 5.244044 -0 
+C 5.244044 -1.390737 4.691499 -2.7247 3.708099 -3.708099 
+C 2.7247 -4.691499 1.390737 -5.244044 0 -5.244044 
+C -1.390737 -5.244044 -2.7247 -4.691499 -3.708099 -3.708099 
+C -4.691499 -2.7247 -5.244044 -1.390737 -5.244044 0 
+C -5.244044 1.390737 -4.691499 2.7247 -3.708099 3.708099 
+C -2.7247 4.691499 -1.390737 5.244044 0 5.244044 
+z
+"/>
+    </defs>
+    <g clip-path="url(#pd614d8e8b7)">
+     <use xlink:href="#C0_0_31872e03c9" x="186.416669" y="69.156467" style="fill: #8a2e9e; stroke: #8a2e9e"/>
+    </g>
+    <g clip-path="url(#pd614d8e8b7)">
+     <use xlink:href="#C0_0_31872e03c9" x="234.188514" y="103.432475" style="fill: #8a2e9e; stroke: #8a2e9e"/>
+    </g>
+    <g clip-path="url(#pd614d8e8b7)">
+     <use xlink:href="#C0_0_31872e03c9" x="234.063691" y="137.708484" style="fill: #8a2e9e; stroke: #8a2e9e"/>
+    </g>
+    <g clip-path="url(#pd614d8e8b7)">
+     <use xlink:href="#C0_0_31872e03c9" x="198.546601" y="171.984492" style="fill: #8a2e9e; stroke: #8a2e9e"/>
+    </g>
+    <g clip-path="url(#pd614d8e8b7)">
+     <use xlink:href="#C0_0_31872e03c9" x="411.642" y="206.2605" style="fill: #f46201; stroke: #f46201"/>
+    </g>
+   </g>
+   <g id="text_14">
+    <text style="font-size: 13px; font-family: Roboto, 'Helvetica Neue', Arial, sans-serif; text-anchor: end; fill: #1e293b" x="176.416669" y="72.53342" transform="rotate(-0 176.416669 72.53342)">34.35</text>
+   </g>
+   <g id="text_15">
+    <text style="font-size: 13px; font-family: Roboto, 'Helvetica Neue', Arial, sans-serif; text-anchor: start; fill: #1e293b" x="244.188514" y="106.809428" transform="rotate(-0 244.188514 106.809428)">35.36</text>
+   </g>
+   <g id="text_16">
+    <text style="font-size: 13px; font-family: Roboto, 'Helvetica Neue', Arial, sans-serif; text-anchor: start; fill: #1e293b" x="244.063691" y="141.085437" transform="rotate(-0 244.063691 141.085437)">35.36</text>
+   </g>
+   <g id="text_17">
+    <text style="font-size: 13px; font-family: Roboto, 'Helvetica Neue', Arial, sans-serif; text-anchor: end; fill: #1e293b" x="188.546601" y="175.361445" transform="rotate(-0 188.546601 175.361445)">34.60</text>
+   </g>
+   <g id="text_18">
+    <text style="font-size: 13px; font-family: Roboto, 'Helvetica Neue', Arial, sans-serif; text-anchor: start; fill: #1e293b" x="421.642" y="209.637453" transform="rotate(-0 421.642 209.637453)">39.11</text>
+   </g>
+   <g id="text_19">
+    <text style="font-size: 13px; font-family: Roboto, 'Helvetica Neue', Arial, sans-serif; text-anchor: start; fill: #1e293b" x="223.389003" y="38.30806" transform="rotate(-0 223.389003 38.30806)">μ = 35.13 min (los 12 000 pedidos)</text>
+   </g>
+   <g id="text_20">
+    <text style="font-weight: 700; font-size: 15px; font-family: Roboto, 'Helvetica Neue', Arial, sans-serif; text-anchor: start; fill: #1e293b" x="139.117813" y="18.597656" transform="rotate(-0 139.117813 18.597656)">La muestra por conveniencia cae lejos de μ</text>
+   </g>
+  </g>
+ </g>
+ <defs>
+  <clipPath id="pd614d8e8b7">
+   <rect x="139.117813" y="24.597656" width="319.823044" height="198.800848"/>
+  </clipPath>
+ </defs>
+</svg></div><figcaption>La media de cada muestra frente a la de los 12 000 pedidos (celda metodos_grafica)</figcaption></figure></div>
+<div class="col"><ul>
+<li><strong>Por conveniencia:</strong> los primeros 400 pedidos de Bogotá, los más a la mano</li>
+<li>En Bogotá los pedidos tardan más: la muestra hereda ese <strong>sesgo</strong>, un error que empuja siempre hacia el mismo lado</li>
+<li>Una sola muestra no dice qué método es <strong>más preciso</strong>: eso, con muchas muestras, en la sesión 6</li>
+</ul></div>
+</div></div>
+        
+    </div>
+    <div class="pie"><span class="sello">Sesión 5 · La muestra que se eligió sola</span><span>Análisis Estadístico de la Información · UCompensar</span><span class="num">15 / 36</span></div>
+</section>
+<section class="diapo ">
+    
+    <div class="marco">
+        <div class="cabecera">
+            <div class="ficha-icono"><i aria-hidden="true" class="fas fa-shuffle"></i></div>
+            <div><div class="antetitulo">Muestreo</div><h2>Por conveniencia, voluntario o por cuotas: sin azar, el error no se puede medir</h2></div>
+        </div>
+        <div class="cuerpo"><div class="tarjetas" style="--n:3">
+<div class="tarjeta"><h3>Por conveniencia</h3><p>Lo que está a la mano: los primeros 400 pedidos de Bogotá.</p></div>
+<div class="tarjeta"><h3>Voluntario</h3><p>Responde quien quiere: una encuesta abierta en la web.</p></div>
+<div class="tarjeta"><h3>Por cuotas</h3><p>Se llenan cupos por grupo, pero dentro de cada cupo se elige a mano.</p></div>
+</div>
+<p>La calificación de la app es una muestra <strong>voluntaria</strong>.</p></div>
+        
+    </div>
+    <div class="pie"><span class="sello">Sesión 5 · La muestra que se eligió sola</span><span>Análisis Estadístico de la Información · UCompensar</span><span class="num">16 / 36</span></div>
+</section>
+<section class="diapo idea">
+    <div class="marco">
+        <div class="etq-idea"><span class="punto"><i aria-hidden="true" class="fas fa-compass"></i></span>Idea clave</div>
+        <h2>Más datos no corrigen un sesgo</h2>
+        <div class="cuerpo"><p>En 1936, la revista <em>Literary Digest</em> envió 10 millones de cuestionarios y recibió 2 376 523 respuestas: el 57 % de los votos por Landon o Roosevelt fue para Landon. En la elección, Landon sacó el 36,5 % del voto popular y Roosevelt, el 60,8 %.</p></div>
+    </div>
+    <div class="pie"><span class="sello">Sesión 5 · La muestra que se eligió sola</span><span>Análisis Estadístico de la Información · UCompensar</span><span class="num">17 / 36</span></div>
+</section>
+<section class="diapo pregunta">
+    
+    <div class="marco">
+        <div class="cabecera">
+            <div class="ficha-icono"><i aria-hidden="true" class="fas fa-shuffle"></i></div>
+            <div><div><span class="chip-ejercicio" style="background:var(--primary)"><i aria-hidden="true" class="fas fa-circle-question"></i>Pregunta para la clase</span></div><h2>¿Qué método es cada uno? ¿Cuáles son probabilísticos?</h2></div>
+        </div>
+        <div class="cuerpo"><ol>
+<li>80 pedidos sorteados en cada ciudad</li>
+<li>Una encuesta en la app que sortea un bono entre quienes respondan</li>
+<li>Las facturas 7, 57, 107…: una de cada 50, desde una sorteada</li>
+<li>En cada ciudad, el encuestador llama a los que quiera hasta completar 80</li>
+<li>20 barrios sorteados, con todas sus viviendas</li>
+</ol>
+<div class="paso"><div class="caja respuesta"><span class="caja-etiqueta"><i aria-hidden="true" class="fas fa-check"></i>Respuesta</span><div class="caja-cuerpo"><p><strong>1</strong> estratificado: para el total, cada ciudad pesa según su tamaño · <strong>2</strong> voluntario: el sorteo es del premio, no de la muestra · <strong>3</strong> sistemático · <strong>4</strong> por cuotas: cupos sin sorteo · <strong>5</strong> por conglomerados. Probabilísticos: 1, 3 y 5</p></div></div></div></div>
+        
+    </div>
+    <div class="pie"><span class="sello">Sesión 5 · La muestra que se eligió sola</span><span>Análisis Estadístico de la Información · UCompensar</span><span class="num">18 / 36</span></div>
+</section>
+<section class="diapo dividida seccion" data-tipo="seccion">
+    <div class="marco">
+        <div class="lateral">
+            <div class="institucion">Fundación Universitaria Compensar</div>
+            <div class="asignatura">Análisis Estadístico de la Información</div>
+            <div class="capitulo">Sesión 5 · <span>La muestra que se eligió sola</span></div>
+            <hr>
+            <div class="lista-secciones"><div class="item-seccion hecha"><i aria-hidden="true" class="fas fa-door-open"></i><span>Apertura</span></div><div class="item-seccion hecha"><i aria-hidden="true" class="fas fa-shuffle"></i><span>Muestreo</span></div><div class="item-seccion actual"><i aria-hidden="true" class="fas fa-user-check"></i><span>Sesgo y no respuesta</span></div><div class="item-seccion "><i aria-hidden="true" class="fas fa-keyboard"></i><span>Práctica y cierre</span></div></div>
+        </div>
+        <div class="principal">
+            <div class="numero-grande">03</div>
+            <h2>Sesgo y no respuesta</h2>
+            <div class="gancho"><p>¿Quién calificó?</p></div>
+            
+            <div class="pie" style="left:72px;right:72px"><span></span><span></span><span class="num">19 / 36</span></div>
+        </div>
+    </div>
+</section>
+<section class="diapo ">
+    
+    <div class="marco">
+        <div class="cabecera">
+            <div class="ficha-icono"><i aria-hidden="true" class="fas fa-user-check"></i></div>
+            <div><div class="antetitulo">Sesgo y no respuesta</div><h2>El error muestral baja cuando crece n; el sesgo, no</h2></div>
+        </div>
+        <div class="cuerpo"><div class="tarjetas" style="--n:2">
+<div class="tarjeta"><h3>Error muestral</h3><p>Es <strong>azar</strong>: cada muestra cae en un lugar distinto alrededor de \(\mu\). Baja cuando crece \(n\). Medirlo es el tema de la sesión 6.</p></div>
+<div class="tarjeta"><h3>Sesgo</h3><p>Es <strong>sistemático</strong>: empuja siempre hacia el mismo lado. <strong>No</strong> baja cuando crece \(n\): el <em>Literary Digest</em> tenía más de dos millones de respuestas.</p></div>
+</div></div>
+        
+    </div>
+    <div class="pie"><span class="sello">Sesión 5 · La muestra que se eligió sola</span><span>Análisis Estadístico de la Información · UCompensar</span><span class="num">20 / 36</span></div>
+</section>
+<section class="diapo ">
+    
+    <div class="marco">
+        <div class="cabecera">
+            <div class="ficha-icono"><i aria-hidden="true" class="fas fa-user-check"></i></div>
+            <div><div class="antetitulo">Sesgo y no respuesta</div><h2>Cuatro sesgos, cuatro preguntas que hacerle a una muestra</h2></div>
+        </div>
+        <div class="cuerpo"><table><thead><tr><th>Sesgo</th><th>Pregunta</th><th>En Tingua</th></tr></thead><tbody>
+<tr><td><strong>Cobertura</strong></td><td>¿El marco deja fuera a alguien?</td><td>Los pedidos cancelados no están en <code>pedidos.csv</code></td></tr>
+<tr><td><strong>Selección o autoselección</strong></td><td>¿Quien entra se parece al resto?</td><td>Los primeros 400 de Bogotá; la calificación voluntaria</td></tr>
+<tr><td><strong>No respuesta</strong></td><td>¿Quien no responde se parece a quien sí?</td><td>El 40,8 % de los pedidos no tiene calificación</td></tr>
+<tr><td><strong>Medición</strong></td><td>¿Se mide bien lo que se quiere medir?</td><td>El tope de 14 km de la distancia (sesión 4)</td></tr>
+</tbody></table>
+<p>La app pide calificar a <strong>todos</strong>, y de todos sabemos el tiempo: la calificación la tratamos como <strong>no respuesta</strong>.</p></div>
+        
+    </div>
+    <div class="pie"><span class="sello">Sesión 5 · La muestra que se eligió sola</span><span>Análisis Estadístico de la Información · UCompensar</span><span class="num">21 / 36</span></div>
+</section>
+<section class="diapo ">
+    
+    <div class="marco">
+        <div class="cabecera">
+            <div class="ficha-icono"><i aria-hidden="true" class="fas fa-user-check"></i></div>
+            <div><div class="antetitulo">Sesgo y no respuesta</div><h2>Los pedidos de más de 55 min se califican más</h2></div>
+        </div>
+        <div class="cuerpo"><div class="columnas centradas" style="grid-template-columns:minmax(0, 3fr) minmax(0, 2fr)">
+<div class="col"><figure class="figura" style="--alto:420px"><div class="lienzo"><svg xmlns:xlink="http://www.w3.org/1999/xlink" width="100%" viewBox="0 0 469.19952 267.59952" xmlns="http://www.w3.org/2000/svg" version="1.1">
+ <defs>
+  <style type="text/css">*{stroke-linejoin: round; stroke-linecap: butt}</style>
+ </defs>
+ <g id="figure_1">
+  <g id="patch_1">
+   <path d="M 0 267.59952 
+L 469.19952 267.59952 
+L 469.19952 0 
+L 0 0 
+z
+" style="fill: #ffffff"/>
+  </g>
+  <g id="axes_1">
+   <g id="patch_2">
+    <path d="M 56.014766 222.877489 
+L 461.99952 222.877489 
+L 461.99952 25.197656 
+L 56.014766 25.197656 
+z
+" style="fill: #ffffff"/>
+   </g>
+   <g id="patch_3">
+    <path d="M 74.468618 222.877489 
+L 117.889447 222.877489 
+L 117.889447 98.339194 
+L 74.468618 98.339194 
+z
+" clip-path="url(#p74e63a1063)" style="fill: #8a2e9e"/>
+   </g>
+   <g id="patch_4">
+    <path d="M 128.744655 222.877489 
+L 172.165484 222.877489 
+L 172.165484 106.502368 
+L 128.744655 106.502368 
+z
+" clip-path="url(#p74e63a1063)" style="fill: #8a2e9e"/>
+   </g>
+   <g id="patch_5">
+    <path d="M 183.020691 222.877489 
+L 226.441521 222.877489 
+L 226.441521 105.864842 
+L 183.020691 105.864842 
+z
+" clip-path="url(#p74e63a1063)" style="fill: #8a2e9e"/>
+   </g>
+   <g id="patch_6">
+    <path d="M 237.296728 222.877489 
+L 280.717557 222.877489 
+L 280.717557 108.22966 
+L 237.296728 108.22966 
+z
+" clip-path="url(#p74e63a1063)" style="fill: #8a2e9e"/>
+   </g>
+   <g id="patch_7">
+    <path d="M 291.572765 222.877489 
+L 334.993594 222.877489 
+L 334.993594 113.753197 
+L 291.572765 113.753197 
+z
+" clip-path="url(#p74e63a1063)" style="fill: #8a2e9e"/>
+   </g>
+   <g id="patch_8">
+    <path d="M 345.848802 222.877489 
+L 389.269631 222.877489 
+L 389.269631 60.521887 
+L 345.848802 60.521887 
+z
+" clip-path="url(#p74e63a1063)" style="fill: #f46201"/>
+   </g>
+   <g id="patch_9">
+    <path d="M 400.124838 222.877489 
+L 443.545668 222.877489 
+L 443.545668 66.315061 
+L 400.124838 66.315061 
+z
+" clip-path="url(#p74e63a1063)" style="fill: #f46201"/>
+   </g>
+   <g id="matplotlib.axis_1">
+    <g id="xtick_1">
+     <g id="line2d_1">
+      <defs>
+       <path id="m6f57504814" d="M 0 0 
+L 0 3.5 
+" style="stroke: #475569; stroke-width: 0.8"/>
+      </defs>
+      <g>
+       <use xlink:href="#m6f57504814" x="96.179033" y="222.877489" style="fill: #475569; stroke: #475569; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="text_1">
+      <text style="font-size: 13px; font-family: Roboto, 'Helvetica Neue', Arial, sans-serif; text-anchor: middle; fill: #475569" x="96.179033" y="239.755457" transform="rotate(-0 96.179033 239.755457)">hasta 15</text>
+     </g>
+    </g>
+    <g id="xtick_2">
+     <g id="line2d_2">
+      <g>
+       <use xlink:href="#m6f57504814" x="150.455069" y="222.877489" style="fill: #475569; stroke: #475569; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="text_2">
+      <text style="font-size: 13px; font-family: Roboto, 'Helvetica Neue', Arial, sans-serif; text-anchor: middle; fill: #475569" x="150.455069" y="239.754442" transform="rotate(-0 150.455069 239.754442)">15–25</text>
+     </g>
+    </g>
+    <g id="xtick_3">
+     <g id="line2d_3">
+      <g>
+       <use xlink:href="#m6f57504814" x="204.731106" y="222.877489" style="fill: #475569; stroke: #475569; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="text_3">
+      <text style="font-size: 13px; font-family: Roboto, 'Helvetica Neue', Arial, sans-serif; text-anchor: middle; fill: #475569" x="204.731106" y="239.754442" transform="rotate(-0 204.731106 239.754442)">25–35</text>
+     </g>
+    </g>
+    <g id="xtick_4">
+     <g id="line2d_4">
+      <g>
+       <use xlink:href="#m6f57504814" x="259.007143" y="222.877489" style="fill: #475569; stroke: #475569; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="text_4">
+      <text style="font-size: 13px; font-family: Roboto, 'Helvetica Neue', Arial, sans-serif; text-anchor: middle; fill: #475569" x="259.007143" y="239.754442" transform="rotate(-0 259.007143 239.754442)">35–45</text>
+     </g>
+    </g>
+    <g id="xtick_5">
+     <g id="line2d_5">
+      <g>
+       <use xlink:href="#m6f57504814" x="313.283179" y="222.877489" style="fill: #475569; stroke: #475569; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="text_5">
+      <text style="font-size: 13px; font-family: Roboto, 'Helvetica Neue', Arial, sans-serif; text-anchor: middle; fill: #475569" x="313.283179" y="239.754442" transform="rotate(-0 313.283179 239.754442)">45–55</text>
+     </g>
+    </g>
+    <g id="xtick_6">
+     <g id="line2d_6">
+      <g>
+       <use xlink:href="#m6f57504814" x="367.559216" y="222.877489" style="fill: #475569; stroke: #475569; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="text_6">
+      <text style="font-size: 13px; font-family: Roboto, 'Helvetica Neue', Arial, sans-serif; text-anchor: middle; fill: #475569" x="367.559216" y="239.754442" transform="rotate(-0 367.559216 239.754442)">55–65</text>
+     </g>
+    </g>
+    <g id="xtick_7">
+     <g id="line2d_7">
+      <g>
+       <use xlink:href="#m6f57504814" x="421.835253" y="222.877489" style="fill: #475569; stroke: #475569; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="text_7">
+      <text style="font-size: 13px; font-family: Roboto, 'Helvetica Neue', Arial, sans-serif; text-anchor: middle; fill: #475569" x="421.835253" y="240.275457" transform="rotate(-0 421.835253 240.275457)">más de 65</text>
+     </g>
+    </g>
+    <g id="text_8">
+     <text style="font-size: 13px; font-family: Roboto, 'Helvetica Neue', Arial, sans-serif; text-anchor: middle; fill: #334155" x="259.007143" y="257.276473" transform="rotate(-0 259.007143 257.276473)">Tiempo de entrega (min)</text>
+    </g>
+   </g>
+   <g id="matplotlib.axis_2">
+    <g id="ytick_1">
+     <g id="line2d_8">
+      <defs>
+       <path id="m99bfb22a11" d="M 0 0 
+L -3.5 0 
+" style="stroke: #475569; stroke-width: 0.8"/>
+      </defs>
+      <g>
+       <use xlink:href="#m99bfb22a11" x="56.014766" y="222.877489" style="fill: #475569; stroke: #475569; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="text_9">
+      <text style="font-size: 13px; font-family: Roboto, 'Helvetica Neue', Arial, sans-serif; text-anchor: end; fill: #475569" x="49.014766" y="227.815965" transform="rotate(-0 49.014766 227.815965)">0</text>
+     </g>
+    </g>
+    <g id="ytick_2">
+     <g id="line2d_9">
+      <g>
+       <use xlink:href="#m99bfb22a11" x="56.014766" y="183.341522" style="fill: #475569; stroke: #475569; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="text_10">
+      <text style="font-size: 13px; font-family: Roboto, 'Helvetica Neue', Arial, sans-serif; text-anchor: end; fill: #475569" x="49.014766" y="188.279999" transform="rotate(-0 49.014766 188.279999)">20</text>
+     </g>
+    </g>
+    <g id="ytick_3">
+     <g id="line2d_10">
+      <g>
+       <use xlink:href="#m99bfb22a11" x="56.014766" y="143.805556" style="fill: #475569; stroke: #475569; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="text_11">
+      <text style="font-size: 13px; font-family: Roboto, 'Helvetica Neue', Arial, sans-serif; text-anchor: end; fill: #475569" x="49.014766" y="148.744032" transform="rotate(-0 49.014766 148.744032)">40</text>
+     </g>
+    </g>
+    <g id="ytick_4">
+     <g id="line2d_11">
+      <g>
+       <use xlink:href="#m99bfb22a11" x="56.014766" y="104.269589" style="fill: #475569; stroke: #475569; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="text_12">
+      <text style="font-size: 13px; font-family: Roboto, 'Helvetica Neue', Arial, sans-serif; text-anchor: end; fill: #475569" x="49.014766" y="109.208066" transform="rotate(-0 49.014766 109.208066)">60</text>
+     </g>
+    </g>
+    <g id="ytick_5">
+     <g id="line2d_12">
+      <g>
+       <use xlink:href="#m99bfb22a11" x="56.014766" y="64.733623" style="fill: #475569; stroke: #475569; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="text_13">
+      <text style="font-size: 13px; font-family: Roboto, 'Helvetica Neue', Arial, sans-serif; text-anchor: end; fill: #475569" x="49.014766" y="69.672099" transform="rotate(-0 49.014766 69.672099)">80</text>
+     </g>
+    </g>
+    <g id="ytick_6">
+     <g id="line2d_13">
+      <g>
+       <use xlink:href="#m99bfb22a11" x="56.014766" y="25.197656" style="fill: #475569; stroke: #475569; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="text_14">
+      <text style="font-size: 13px; font-family: Roboto, 'Helvetica Neue', Arial, sans-serif; text-anchor: end; fill: #475569" x="49.014766" y="30.136133" transform="rotate(-0 49.014766 30.136133)">100</text>
+     </g>
+    </g>
+    <g id="text_15">
+     <text style="font-size: 13px; font-family: Roboto, 'Helvetica Neue', Arial, sans-serif; text-anchor: middle; fill: #334155" x="17.077969" y="124.037572" transform="rotate(-90 17.077969 124.037572)">% de pedidos calificados</text>
+    </g>
+   </g>
+   <g id="line2d_14">
+    <path d="M 56.014766 105.933395 
+L 461.99952 105.933395 
+" clip-path="url(#p74e63a1063)" style="fill: none; stroke-dasharray: 7.4,3.2; stroke-dashoffset: 0; stroke: #3a0f47; stroke-width: 2"/>
+   </g>
+   <g id="patch_10">
+    <path d="M 56.014766 222.877489 
+L 56.014766 25.197656 
+" style="fill: none; stroke: #94a3b8; stroke-width: 0.8; stroke-linejoin: miter; stroke-linecap: square"/>
+   </g>
+   <g id="patch_11">
+    <path d="M 56.014766 222.877489 
+L 461.99952 222.877489 
+" style="fill: none; stroke: #94a3b8; stroke-width: 0.8; stroke-linejoin: miter; stroke-linecap: square"/>
+   </g>
+   <g id="text_16">
+    <text style="font-weight: 700; font-size: 15px; font-family: Roboto, 'Helvetica Neue', Arial, sans-serif; text-anchor: start; fill: #1e293b" x="56.014766" y="19.197656" transform="rotate(-0 56.014766 19.197656)">Los pedidos de más de 55 min se califican más</text>
+   </g>
+   <g id="legend_1">
+    <g id="patch_12">
+     <path d="M 65.114766 94.620703 
+L 275.018047 94.620703 
+Q 277.618047 94.620703 277.618047 92.020703 
+L 277.618047 34.297656 
+Q 277.618047 31.697656 275.018047 31.697656 
+L 65.114766 31.697656 
+Q 62.514766 31.697656 62.514766 34.297656 
+L 62.514766 92.020703 
+Q 62.514766 94.620703 65.114766 94.620703 
+z
+" style="fill: #ffffff; opacity: 0.8; stroke: #cccccc; stroke-linejoin: miter"/>
+    </g>
+    <g id="line2d_15">
+     <path d="M 67.714766 42.225625 
+L 80.714766 42.225625 
+L 93.714766 42.225625 
+" style="fill: none; stroke-dasharray: 7.4,3.2; stroke-dashoffset: 0; stroke: #3a0f47; stroke-width: 2"/>
+    </g>
+    <g id="text_17">
+     <text style="font-size: 13px; font-family: Roboto, 'Helvetica Neue', Arial, sans-serif; text-anchor: start; fill: #1e293b" x="104.114766" y="46.775625" transform="rotate(-0 104.114766 46.775625)">Todos los pedidos: 59.2 %</text>
+    </g>
+    <g id="patch_13">
+     <path d="M 67.714766 66.276641 
+L 93.714766 66.276641 
+L 93.714766 57.176641 
+L 67.714766 57.176641 
+z
+" style="fill: #8a2e9e"/>
+    </g>
+    <g id="text_18">
+     <text style="font-size: 13px; font-family: Roboto, 'Helvetica Neue', Arial, sans-serif; text-anchor: start; fill: #1e293b" x="104.114766" y="66.276641" transform="rotate(-0 104.114766 66.276641)">55 min o menos</text>
+    </g>
+    <g id="patch_14">
+     <path d="M 67.714766 86.297656 
+L 93.714766 86.297656 
+L 93.714766 77.197656 
+L 67.714766 77.197656 
+z
+" style="fill: #f46201"/>
+    </g>
+    <g id="text_19">
+     <text style="font-size: 13px; font-family: Roboto, 'Helvetica Neue', Arial, sans-serif; text-anchor: start; fill: #1e293b" x="104.114766" y="86.297656" transform="rotate(-0 104.114766 86.297656)">Más de 55 min</text>
+    </g>
+   </g>
+  </g>
+ </g>
+ <defs>
+  <clipPath id="p74e63a1063">
+   <rect x="56.014766" y="25.197656" width="405.984754" height="197.679832"/>
+  </clipPath>
+ </defs>
+</svg></div><figcaption>Porcentaje de pedidos calificados por tramo de tiempo (celda tasa_tiempo)</figcaption></figure></div>
+<div class="col"><ul>
+<li>En los dos tramos de más de 55 min se califica el 82,1 y el 79,2 %</li>
+<li>Del resto: de 55,2 a 63,0 %</li>
+<li>Todos los pedidos: 59,2 %</li>
+</ul></div>
+</div></div>
+        
+    </div>
+    <div class="pie"><span class="sello">Sesión 5 · La muestra que se eligió sola</span><span>Análisis Estadístico de la Información · UCompensar</span><span class="num">22 / 36</span></div>
+</section>
+<section class="diapo ">
+    
+    <div class="marco">
+        <div class="cabecera">
+            <div class="ficha-icono"><i aria-hidden="true" class="fas fa-user-check"></i></div>
+            <div><div class="antetitulo">Sesgo y no respuesta</div><h2>Por ciudad, suscripción o lluvia, la tasa de calificación casi no cambia</h2></div>
+        </div>
+        <div class="cuerpo"><div class="columnas centradas" style="grid-template-columns:minmax(0, 2fr) minmax(0, 1fr)">
+<div class="col"><div class="codigo" data-lang="python" data-foco=""><div class="codigo-cabecera"><span class="codigo-titulo"><i aria-hidden="true" class="fab fa-python"></i>[tasa_grupos]</span><button class="btn-copiar" title="Copiar"><i aria-hidden="true" class="fas fa-copy"></i> Copiar</button></div><pre><code>tasa_grupos = pd.concat({
+    columna: califico.groupby(pedidos[columna]).mean() * 100
+    for columna in ["ciudad", "suscriptor", "lluvia"]})
+tasa_grupos.round(1)
+#&gt; ciudad      Barranquilla    59.5
+#&gt;             Bogotá          59.7
+#&gt;             Bucaramanga     59.2
+#&gt;             Cali            59.8
+#&gt;             Medellín        57.6
+#&gt; suscriptor  No              58.9
+#&gt;             Sí              59.9
+#&gt; lluvia      No              59.1
+#&gt;             Sí              59.5
+#&gt; Name: calificacion, dtype: float64</code></pre></div></div>
+<div class="col"><ul>
+<li>Va de 57,6 a 59,9 %; por tramo de tiempo, de 55,2 a 82,1 %</li>
+<li><code>califico</code> es True si el pedido tiene calificación</li>
+<li>La media de True y False es una proporción</li>
+</ul></div>
+</div></div>
+        
+    </div>
+    <div class="pie"><span class="sello">Sesión 5 · La muestra que se eligió sola</span><span>Análisis Estadístico de la Información · UCompensar</span><span class="num">23 / 36</span></div>
+</section>
+<section class="diapo ">
+    
+    <div class="marco">
+        <div class="cabecera">
+            <div class="ficha-icono"><i aria-hidden="true" class="fas fa-user-check"></i></div>
+            <div><div class="antetitulo">Sesgo y no respuesta</div><h2>Tres tipos de faltantes: al azar, según lo que vemos o según lo que no vemos</h2></div>
+        </div>
+        <div class="cuerpo"><div class="tarjetas" style="--n:3">
+<div class="tarjeta"><h3>Completamente al azar</h3><p>Solo se pierde \(n\): los calificados se parecen a todos.</p></div>
+<div class="tarjeta"><h3>Según algo que vemos</h3><p>En Tingua, el tiempo: con el mismo tiempo, los calificados se parecen a los demás. Se <strong>pondera</strong>: funciona porque el tiempo se conoce <strong>también</strong> para los no calificados.</p></div>
+<div class="tarjeta"><h3>Según lo que no vemos</h3><p>Por ejemplo, que con el mismo tiempo se califiquen más los pedidos de clientes muy molestos. Hay que salir a preguntar.</p></div>
+</div>
+<p>Que no dependa de lo que no vemos es un <strong>supuesto</strong>: en la vida real no se puede comprobar.</p></div>
+        
+    </div>
+    <div class="pie"><span class="sello">Sesión 5 · La muestra que se eligió sola</span><span>Análisis Estadístico de la Información · UCompensar</span><span class="num">24 / 36</span></div>
+</section>
+<section class="diapo ">
+    
+    <div class="marco">
+        <div class="cabecera">
+            <div class="ficha-icono"><i aria-hidden="true" class="fas fa-user-check"></i></div>
+            <div><div class="antetitulo">Sesgo y no respuesta</div><h2>Los de más de 55 min: 3,5 % de los pedidos y 63,1 % de las calificaciones de 1 o 2</h2></div>
+        </div>
+        <div class="cuerpo"><div class="columnas centradas" style="grid-template-columns:minmax(0, 3fr) minmax(0, 2fr)">
+<div class="col"><figure class="figura" style="--alto:420px"><div class="lienzo"><svg xmlns:xlink="http://www.w3.org/1999/xlink" width="100%" viewBox="0 0 524.907422 267.59952" xmlns="http://www.w3.org/2000/svg" version="1.1">
+ <defs>
+  <style type="text/css">*{stroke-linejoin: round; stroke-linecap: butt}</style>
+ </defs>
+ <g id="figure_1">
+  <g id="patch_1">
+   <path d="M 0 267.59952 
+L 524.907422 267.59952 
+L 524.907422 0 
+L 0 0 
+z
+" style="fill: #ffffff"/>
+  </g>
+  <g id="axes_1">
+   <g id="patch_2">
+    <path d="M 56.534766 240.398504 
+L 461.99952 240.398504 
+L 461.99952 25.197656 
+L 56.534766 25.197656 
+z
+" style="fill: #ffffff"/>
+   </g>
+   <g id="patch_3">
+    <path d="M 74.964982 240.398504 
+L 180.280502 240.398504 
+L 180.280502 232.938208 
+L 74.964982 232.938208 
+z
+" clip-path="url(#pd89a1223ce)" style="fill: #f46201"/>
+   </g>
+   <g id="patch_4">
+    <path d="M 206.609383 240.398504 
+L 311.924903 240.398504 
+L 311.924903 230.152288 
+L 206.609383 230.152288 
+z
+" clip-path="url(#pd89a1223ce)" style="fill: #f46201"/>
+   </g>
+   <g id="patch_5">
+    <path d="M 338.253783 240.398504 
+L 443.569304 240.398504 
+L 443.569304 104.518482 
+L 338.253783 104.518482 
+z
+" clip-path="url(#pd89a1223ce)" style="fill: #f46201"/>
+   </g>
+   <g id="matplotlib.axis_1">
+    <g id="xtick_1">
+     <g id="line2d_1">
+      <defs>
+       <path id="m6f57504814" d="M 0 0 
+L 0 3.5 
+" style="stroke: #475569; stroke-width: 0.8"/>
+      </defs>
+      <g>
+       <use xlink:href="#m6f57504814" x="127.622742" y="240.398504" style="fill: #475569; stroke: #475569; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="text_1">
+      <text style="font-size: 13px; font-family: Roboto, 'Helvetica Neue', Arial, sans-serif; text-anchor: middle; fill: #475569" x="127.622742" y="257.276473" transform="rotate(-0 127.622742 257.276473)">Pedidos</text>
+     </g>
+    </g>
+    <g id="xtick_2">
+     <g id="line2d_2">
+      <g>
+       <use xlink:href="#m6f57504814" x="259.267143" y="240.398504" style="fill: #475569; stroke: #475569; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="text_2">
+      <text style="font-size: 13px; font-family: Roboto, 'Helvetica Neue', Arial, sans-serif; text-anchor: middle; fill: #475569" x="259.267143" y="257.276473" transform="rotate(-0 259.267143 257.276473)">Calificaciones</text>
+     </g>
+    </g>
+    <g id="xtick_3">
+     <g id="line2d_3">
+      <g>
+       <use xlink:href="#m6f57504814" x="390.911544" y="240.398504" style="fill: #475569; stroke: #475569; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="text_3">
+      <text style="font-size: 13px; font-family: Roboto, 'Helvetica Neue', Arial, sans-serif; text-anchor: middle; fill: #475569" x="390.911544" y="257.276473" transform="rotate(-0 390.911544 257.276473)">De 1 o 2 estrellas</text>
+     </g>
+    </g>
+   </g>
+   <g id="matplotlib.axis_2">
+    <g id="ytick_1">
+     <g id="line2d_4">
+      <defs>
+       <path id="m99bfb22a11" d="M 0 0 
+L -3.5 0 
+" style="stroke: #475569; stroke-width: 0.8"/>
+      </defs>
+      <g>
+       <use xlink:href="#m99bfb22a11" x="56.534766" y="240.398504" style="fill: #475569; stroke: #475569; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="text_4">
+      <text style="font-size: 13px; font-family: Roboto, 'Helvetica Neue', Arial, sans-serif; text-anchor: end; fill: #475569" x="49.534766" y="245.336981" transform="rotate(-0 49.534766 245.336981)">0</text>
+     </g>
+    </g>
+    <g id="ytick_2">
+     <g id="line2d_5">
+      <g>
+       <use xlink:href="#m99bfb22a11" x="56.534766" y="197.358335" style="fill: #475569; stroke: #475569; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="text_5">
+      <text style="font-size: 13px; font-family: Roboto, 'Helvetica Neue', Arial, sans-serif; text-anchor: end; fill: #475569" x="49.534766" y="202.296811" transform="rotate(-0 49.534766 202.296811)">20</text>
+     </g>
+    </g>
+    <g id="ytick_3">
+     <g id="line2d_6">
+      <g>
+       <use xlink:href="#m99bfb22a11" x="56.534766" y="154.318165" style="fill: #475569; stroke: #475569; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="text_6">
+      <text style="font-size: 13px; font-family: Roboto, 'Helvetica Neue', Arial, sans-serif; text-anchor: end; fill: #475569" x="49.534766" y="159.256642" transform="rotate(-0 49.534766 159.256642)">40</text>
+     </g>
+    </g>
+    <g id="ytick_4">
+     <g id="line2d_7">
+      <g>
+       <use xlink:href="#m99bfb22a11" x="56.534766" y="111.277996" style="fill: #475569; stroke: #475569; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="text_7">
+      <text style="font-size: 13px; font-family: Roboto, 'Helvetica Neue', Arial, sans-serif; text-anchor: end; fill: #475569" x="49.534766" y="116.216472" transform="rotate(-0 49.534766 116.216472)">60</text>
+     </g>
+    </g>
+    <g id="ytick_5">
+     <g id="line2d_8">
+      <g>
+       <use xlink:href="#m99bfb22a11" x="56.534766" y="68.237826" style="fill: #475569; stroke: #475569; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="text_8">
+      <text style="font-size: 13px; font-family: Roboto, 'Helvetica Neue', Arial, sans-serif; text-anchor: end; fill: #475569" x="49.534766" y="73.176302" transform="rotate(-0 49.534766 73.176302)">80</text>
+     </g>
+    </g>
+    <g id="ytick_6">
+     <g id="line2d_9">
+      <g>
+       <use xlink:href="#m99bfb22a11" x="56.534766" y="25.197656" style="fill: #475569; stroke: #475569; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="text_9">
+      <text style="font-size: 13px; font-family: Roboto, 'Helvetica Neue', Arial, sans-serif; text-anchor: end; fill: #475569" x="49.534766" y="30.136133" transform="rotate(-0 49.534766 30.136133)">100</text>
+     </g>
+    </g>
+    <g id="text_10">
+     <text style="font-size: 13px; font-family: Roboto, 'Helvetica Neue', Arial, sans-serif; text-anchor: middle; fill: #334155" x="17.597969" y="132.79808" transform="rotate(-90 17.597969 132.79808)">% que son de más de 55 min</text>
+    </g>
+   </g>
+   <g id="patch_6">
+    <path d="M 56.534766 240.398504 
+L 56.534766 25.197656 
+" style="fill: none; stroke: #94a3b8; stroke-width: 0.8; stroke-linejoin: miter; stroke-linecap: square"/>
+   </g>
+   <g id="patch_7">
+    <path d="M 56.534766 240.398504 
+L 461.99952 240.398504 
+" style="fill: none; stroke: #94a3b8; stroke-width: 0.8; stroke-linejoin: miter; stroke-linecap: square"/>
+   </g>
+   <g id="text_11">
+    <text style="font-size: 13px; font-family: Roboto, 'Helvetica Neue', Arial, sans-serif; text-anchor: middle; fill: #1e293b" x="127.622742" y="228.634191" transform="rotate(-0 127.622742 228.634191)">3.5 %</text>
+   </g>
+   <g id="text_12">
+    <text style="font-size: 13px; font-family: Roboto, 'Helvetica Neue', Arial, sans-serif; text-anchor: middle; fill: #1e293b" x="259.267143" y="225.848272" transform="rotate(-0 259.267143 225.848272)">4.8 %</text>
+   </g>
+   <g id="text_13">
+    <text style="font-size: 13px; font-family: Roboto, 'Helvetica Neue', Arial, sans-serif; text-anchor: middle; fill: #1e293b" x="390.911544" y="100.214465" transform="rotate(-0 390.911544 100.214465)">63.1 %</text>
+   </g>
+   <g id="text_14">
+    <text style="font-weight: 700; font-size: 15px; font-family: Roboto, 'Helvetica Neue', Arial, sans-serif; text-anchor: start; fill: #1e293b" x="56.534766" y="19.197656" transform="rotate(-0 56.534766 19.197656)">Más de 55 min: pocos pedidos, mucho peso en el 1 o 2</text>
+   </g>
+  </g>
+ </g>
+ <defs>
+  <clipPath id="pd89a1223ce">
+   <rect x="56.534766" y="25.197656" width="405.464754" height="215.200848"/>
+  </clipPath>
+ </defs>
+</svg></div><figcaption>Peso de los pedidos de más de 55 min (celda quien_pesa)</figcaption></figure></div>
+<div class="col"><ul>
+<li>Son 416 pedidos; sus 338 calificaciones son el 4,8 % de las 7099</li>
+<li>De las 312 calificaciones de 1 o 2 estrellas, 197 son suyas</li>
+<li>Como se califican más, pesan de más en la <strong>insatisfacción</strong>, el % de 1 o 2 estrellas: por eso la miramos desde aquí</li>
+</ul></div>
+</div></div>
+        
+    </div>
+    <div class="pie"><span class="sello">Sesión 5 · La muestra que se eligió sola</span><span>Análisis Estadístico de la Información · UCompensar</span><span class="num">25 / 36</span></div>
+</section>
+<section class="diapo ">
+    
+    <div class="marco">
+        <div class="cabecera">
+            <div class="ficha-icono"><i aria-hidden="true" class="fas fa-user-check"></i></div>
+            <div><div class="antetitulo">Sesgo y no respuesta</div><h2>Ponderar: cada calificación cuenta por los pedidos que representa en su grupo</h2></div>
+        </div>
+        <div class="cuerpo"><p>$$ \hat p_w = \frac{\sum w_i \, y_i}{\sum w_i} \qquad w_i = \frac{\text{pedidos de su grupo}}{\text{calificados de su grupo}} $$</p>
+<p>La suma va <strong>solo sobre los calificados</strong>; \(w_i\) es el peso del grupo del pedido \(i\), y \(y_i = 1\) si el pedido tiene 1 o 2 estrellas (si no, 0). Con estos pesos, los de más de 55 min vuelven a pesar lo que pesan entre los pedidos: el 3,5 %, no el 4,8 % de las calificaciones.</p></div>
+        
+    </div>
+    <div class="pie"><span class="sello">Sesión 5 · La muestra que se eligió sola</span><span>Análisis Estadístico de la Información · UCompensar</span><span class="num">26 / 36</span></div>
+</section>
+<section class="diapo ">
+    
+    <div class="marco">
+        <div class="cabecera">
+            <div class="ficha-icono"><i aria-hidden="true" class="fas fa-user-check"></i></div>
+            <div><div class="antetitulo">Sesgo y no respuesta</div><h2>Ponderar baja la insatisfacción de 4,4 % a 3,7 %: un 17 % menos, en proporción</h2></div>
+        </div>
+        <div class="cuerpo"><div class="columnas centradas" style="grid-template-columns:minmax(0, 2fr) minmax(0, 1fr)">
+<div class="col"><div class="codigo" data-lang="python" data-foco=""><div class="codigo-cabecera"><span class="codigo-titulo"><i aria-hidden="true" class="fab fa-python"></i>[ponderar]</span><button class="btn-copiar" title="Copiar"><i aria-hidden="true" class="fas fa-copy"></i> Copiar</button></div><pre><code>datos = pedidos
+grupo = pd.Series(np.where(datos["tiempo_entrega_min"] &gt; 55,
+                           "más de 55 min", "55 min o menos"),
+                  index=datos.index)
+calificado = datos["calificacion"].notna()
+peso = grupo.value_counts() / grupo[calificado].value_counts()
+print("Pesos:", peso.round(2).to_dict())
+w = grupo[calificado].map(peso)
+estrellas = datos.loc[calificado, "calificacion"]
+y = (estrellas &lt;= 2).astype(int)
+sin_ponderar = y.mean() * 100
+ponderado = (w * y).sum() / w.sum() * 100
+print(f"1 o 2 estrellas: {sin_ponderar:.2f} % → {ponderado:.2f} %")
+#&gt; Pesos: {'55 min o menos': 1.71, 'más de 55 min': 1.23}
+#&gt; 1 o 2 estrellas: 4.39 % → 3.66 %
+#&gt; 4 o 5 estrellas: 79.07 % → 80.09 %</code></pre></div></div>
+<div class="col"><ul>
+<li>El 4 o 5 (dos líneas más, en el cuaderno o <em>notebook</em>) sube de 79,1 a 80,1 %: un punto sobre 79</li>
+<li>En proporción, la no respuesta pesa más en lo raro</li>
+<li>Es una <strong>estimación</strong>: vale si, dentro de cada grupo de tiempo, los pedidos sin calificación se parecen a los calificados</li>
+</ul></div>
+</div></div>
+        
+    </div>
+    <div class="pie"><span class="sello">Sesión 5 · La muestra que se eligió sola</span><span>Análisis Estadístico de la Información · UCompensar</span><span class="num">27 / 36</span></div>
+</section>
+<section class="diapo ">
+    
+    <div class="marco">
+        <div class="cabecera">
+            <div class="ficha-icono"><i aria-hidden="true" class="fas fa-user-check"></i></div>
+            <div><div class="antetitulo">Sesgo y no respuesta</div><h2>Solo en un caso ficticio se puede comprobar: ponderar acercó el 1 o 2 a la verdad</h2></div>
+        </div>
+        <div class="cuerpo"><div class="codigo" data-lang="python" data-foco=""><div class="codigo-cabecera"><span class="codigo-titulo"><i aria-hidden="true" class="fab fa-python"></i>[comprobacion]</span><button class="btn-copiar" title="Copiar"><i aria-hidden="true" class="fas fa-copy"></i> Copiar</button></div><pre><code>completa = pedidos["id_pedido"].map(calificacion_completa())
+print(f"1 o 2: {sin_ponderar:.2f} % sin ponderar · "
+      f"{ponderado:.2f} % ponderado · "
+      f"{(completa &lt;= 2).mean() * 100:.2f} % de verdad")
+#&gt; 1 o 2: 4.39 % sin ponderar · 3.66 % ponderado · 3.80 % de verdad</code></pre></div>
+<ul>
+<li>La verdad es 3,80 %: ponderar pasó de 4,39 a 3,66 % y quedó más cerca</li>
+<li>En el 4 o 5 no la acercó, algo poco común: el azar de quién calificó empujaba al lado contrario del sesgo. <strong>Ponderar quita el sesgo, no el azar</strong> (sesión 6)</li>
+<li>En la vida real esta celda no existe: <strong>no la uses en el tablero</strong></li>
+</ul></div>
+        
+    </div>
+    <div class="pie"><span class="sello">Sesión 5 · La muestra que se eligió sola</span><span>Análisis Estadístico de la Información · UCompensar</span><span class="num">28 / 36</span></div>
+</section>
+<section class="diapo pregunta">
+    
+    <div class="marco">
+        <div class="cabecera">
+            <div class="ficha-icono"><i aria-hidden="true" class="fas fa-user-check"></i></div>
+            <div><div><span class="chip-ejercicio" style="background:var(--primary)"><i aria-hidden="true" class="fas fa-circle-question"></i>Pregunta para la clase</span></div><h2>La gerencia propone sortear 400 pedidos y mirar su calificación: ¿qué le respondes?</h2></div>
+        </div>
+        <div class="cuerpo"><p>La muestra se sortea como en la primera parte, y la calificación sale de <code>pedidos.csv</code>. ¿Eso arregla la no respuesta?</p>
+<div class="paso"><div class="caja respuesta"><span class="caja-etiqueta"><i aria-hidden="true" class="fas fa-check"></i>Respuesta</span><div class="caja-cuerpo"><p><strong>No.</strong> Cerca del 41 % no tendrá calificación, y los que sí la tienen siguen siendo voluntarios. El sorteo decide quién <strong>entra</strong> a la muestra, no quién <strong>responde</strong>. Lo que sí ayuda: llamar a los 400 sorteados e insistir hasta que respondan, o ponderar por lo que se ve.</p></div></div></div></div>
+        
+    </div>
+    <div class="pie"><span class="sello">Sesión 5 · La muestra que se eligió sola</span><span>Análisis Estadístico de la Información · UCompensar</span><span class="num">29 / 36</span></div>
+</section>
+<section class="diapo ">
+    
+    <div class="marco">
+        <div class="cabecera">
+            <div class="ficha-icono"><i aria-hidden="true" class="fas fa-user-check"></i></div>
+            <div><div class="antetitulo">Sesgo y no respuesta</div><h2>Para tu tablero: el indicador no cambia; la tasa de calificación lo acompaña</h2></div>
+        </div>
+        <div class="cuerpo"><ul>
+<li>El indicador sigue siendo el <strong>% de 4 o 5 estrellas entre los calificados</strong>, con su \(n\): cuántos se calificaron</li>
+<li><strong>Recomendado:</strong> mostrar la tasa de calificación de cada semana y advertir en la nota sobre los datos que el % es solo de los calificados</li>
+<li><strong>Opcional:</strong> ponderar, que no siempre se puede: en 13 de las 135 combinaciones de ciudad y semana hay pedidos de más de 55 min y ninguno calificado</li>
+</ul></div>
+        
+    </div>
+    <div class="pie"><span class="sello">Sesión 5 · La muestra que se eligió sola</span><span>Análisis Estadístico de la Información · UCompensar</span><span class="num">30 / 36</span></div>
+</section>
+<section class="diapo idea">
+    <div class="marco">
+        <div class="etq-idea"><span class="punto"><i aria-hidden="true" class="fas fa-compass"></i></span>La respuesta a la gerencia</div>
+        <h2>Estimamos que cerca de 8 de cada 10 pedidos tendrían 4 o 5 estrellas</h2>
+        <div class="cuerpo"><p>…si, dentro de cada grupo de tiempo, los pedidos sin calificación se parecen a los calificados. La insatisfacción es <strong>menor</strong> de lo que dicen las calificaciones.</p></div>
+    </div>
+    <div class="pie"><span class="sello">Sesión 5 · La muestra que se eligió sola</span><span>Análisis Estadístico de la Información · UCompensar</span><span class="num">31 / 36</span></div>
+</section>
+<section class="diapo dividida seccion" data-tipo="seccion">
+    <div class="marco">
+        <div class="lateral">
+            <div class="institucion">Fundación Universitaria Compensar</div>
+            <div class="asignatura">Análisis Estadístico de la Información</div>
+            <div class="capitulo">Sesión 5 · <span>La muestra que se eligió sola</span></div>
+            <hr>
+            <div class="lista-secciones"><div class="item-seccion hecha"><i aria-hidden="true" class="fas fa-door-open"></i><span>Apertura</span></div><div class="item-seccion hecha"><i aria-hidden="true" class="fas fa-shuffle"></i><span>Muestreo</span></div><div class="item-seccion hecha"><i aria-hidden="true" class="fas fa-user-check"></i><span>Sesgo y no respuesta</span></div><div class="item-seccion actual"><i aria-hidden="true" class="fas fa-keyboard"></i><span>Práctica y cierre</span></div></div>
+        </div>
+        <div class="principal">
+            <div class="numero-grande">04</div>
+            <h2>Práctica y cierre</h2>
+            <div class="gancho"><p>Treinta y tres minutos con el cuaderno (<em>notebook</em>): tres ejercicios con verificador.</p></div>
+            
+            <div class="pie" style="left:72px;right:72px"><span></span><span></span><span class="num">32 / 36</span></div>
+        </div>
+    </div>
+</section>
+<section class="diapo ">
+    
+    <div class="marco">
+        <div class="cabecera">
+            <div class="ficha-icono"><i aria-hidden="true" class="fas fa-keyboard"></i></div>
+            <div><div class="antetitulo">Práctica y cierre</div><h2>Práctica guiada: tres ejercicios en el notebook</h2></div>
+        </div>
+        <div class="cuerpo"><div class="flujo">
+<div class="paso-flujo"><span class="num">1</span><span class="t">Estratificada proporcional</span><span class="d">el 2 % de cada ciudad, con tu semilla · 12 min</span></div>
+<div class="flecha-flujo">→</div>
+<div class="paso-flujo"><span class="num">2</span><span class="t">La insatisfacción de Bogotá</span><span class="d">ponderada, cambiando una sola línea · 14 min</span></div>
+<div class="flecha-flujo">→</div>
+<div class="paso-flujo"><span class="num">3</span><span class="t">Opcional: conglomerados</span><span class="d">6 días con tu semilla · 7 min o en casa</span></div>
+</div>
+<p><a href="https://colab.research.google.com/github/JotaMao1985/ANaLISIS-ESTADiSTICO-DE-LA-INFORMACIoN_Ucomp/blob/main/notebooks/sesion-5-la-muestra-que-se-eligio-sola.ipynb" target="_blank" rel="noopener">Abrir el notebook de la sesión 5 en Colab</a>. Antes del ejercicio 1: <strong>Entorno de ejecución → Ejecutar anteriores</strong>. Las respuestas escritas van en «Tus respuestas», que no se verifica.</p></div>
+        
+    </div>
+    <div class="pie"><span class="sello">Sesión 5 · La muestra que se eligió sola</span><span>Análisis Estadístico de la Información · UCompensar</span><span class="num">33 / 36</span></div>
+</section>
+<section class="diapo pregunta">
+    
+    <div class="marco">
+        <div class="cabecera">
+            <div class="ficha-icono"><i aria-hidden="true" class="fas fa-keyboard"></i></div>
+            <div><div><span class="chip-ejercicio" style="background:var(--primary)"><i aria-hidden="true" class="fas fa-circle-question"></i>Pregunta para la clase</span></div><h2>En otra app de domicilios, ¿qué tipo de faltante es cada uno, y qué harías?</h2></div>
+        </div>
+        <div class="cuerpo"><ol>
+<li>Los pedidos que llegan con algo dañado casi nunca se califican; la app no registra daños</li>
+<li>De noche se califica menos que de día</li>
+<li>Una falla borró las calificaciones de los pedidos cuyo código termina en 7</li>
+<li>Quien paga en efectivo califica menos que quien usa tarjeta</li>
+</ol>
+<div class="paso"><div class="caja respuesta"><span class="caja-etiqueta"><i aria-hidden="true" class="fas fa-check"></i>Respuesta</span><div class="caja-cuerpo"><p><strong>1</strong> según lo que no vemos: hay que salir a preguntar · <strong>2</strong> según algo que vemos, la franja: se pondera por ella · <strong>3</strong> completamente al azar: solo se pierde \(n\) · <strong>4</strong> según algo que vemos, el medio de pago: se pondera por él</p></div></div></div></div>
+        
+    </div>
+    <div class="pie"><span class="sello">Sesión 5 · La muestra que se eligió sola</span><span>Análisis Estadístico de la Información · UCompensar</span><span class="num">34 / 36</span></div>
+</section>
+<section class="diapo cierre">
+    <div class="brillo"></div>
+    <div class="marco">
+        <div class="cabecera">
+            <div class="ficha-icono"><i aria-hidden="true" class="fas fa-keyboard"></i></div>
+            <div><div class="antetitulo">Práctica y cierre</div><h2>Lo que te llevas hoy</h2></div>
+        </div>
+        <div class="cuerpo"><ul>
+<li>Antes de la cifra, <strong>¿de quiénes?</strong>: el 79,1 % es de los pedidos que se calificaron</li>
+<li>En un muestreo <strong>probabilístico</strong>, cada pedido tiene una probabilidad conocida de entrar</li>
+<li>El <strong>error muestral</strong> baja con \(n\); el <strong>sesgo</strong>, no</li>
+<li>Si la no respuesta depende de algo que <strong>vemos</strong>, se <strong>pondera</strong>; que no dependa de lo que no vemos es un supuesto</li>
+<li>Ponderar quita el sesgo de lo que vemos, <strong>no el azar</strong></li>
+</ul></div>
+        <div class="firma-cierre">Antes de la cifra, pregunta quién respondió. — Javier Mauricio Sierra</div>
+    </div>
+    <div class="pie"><span class="sello">Sesión 5 · La muestra que se eligió sola</span><span>Análisis Estadístico de la Información · UCompensar</span><span class="num">35 / 36</span></div>
+</section>
+<section class="diapo ">
+    
+    <div class="marco">
+        <div class="cabecera">
+            <div class="ficha-icono"><i aria-hidden="true" class="fas fa-keyboard"></i></div>
+            <div><div class="antetitulo">Práctica y cierre</div><h2>La sesión 6 abre con el prototipo de tu tablero</h2></div>
+        </div>
+        <div class="cuerpo"><ul>
+<li><strong>Termina</strong> la práctica: los verificadores revisan los tres ejercicios</li>
+<li><strong>Construye</strong> un prototipo con los cuatro indicadores semanales y su \(n\): otra pareja lo revisará al abrir la sesión 6</li>
+<li><strong>Lee</strong> la sección 5.1 de <em>OpenIntro Statistics</em> (4.ª ed.), «Point estimates and sampling variability»; la 5.2 es opcional</li>
+</ul>
+<p><strong>Próxima sesión:</strong> ¿cuánto confiar en una muestra? La distribución muestral, el error estándar y los intervalos de confianza.</p></div>
+        
+    </div>
+    <div class="pie"><span class="sello">Sesión 5 · La muestra que se eligió sola</span><span>Análisis Estadístico de la Información · UCompensar</span><span class="num">36 / 36</span></div>
+</section>
+        </div>
+    </main>
+
+    <nav id="controles" aria-label="Navegación">
+        <span id="contador"></span>
+        <button class="btn-nav ant" id="btn-ant" aria-label="Anterior"><i aria-hidden="true" class="fas fa-chevron-left"></i> Anterior</button>
+        <button class="btn-nav sig" id="btn-sig" aria-label="Siguiente">Siguiente <i aria-hidden="true" class="fas fa-chevron-right"></i></button>
+    </nav>
+
+    <aside id="notas" aria-live="polite"></aside>
+    <div id="ir-a"></div>
+    <div id="negro"></div>
+
+    <div id="ayuda">
+        <div class="tarjeta-ayuda">
+            <h3>Atajos del teclado</h3>
+            <table>
+                <tr><td><kbd>→</kbd><kbd>Espacio</kbd><kbd>AvPág</kbd></td><td>Siguiente (y revela lo pendiente)</td></tr>
+                <tr><td><kbd>←</kbd><kbd>RePág</kbd></td><td>Anterior</td></tr>
+                <tr><td><kbd>Inicio</kbd><kbd>Fin</kbd></td><td>Primera · última</td></tr>
+                <tr><td><kbd>12</kbd><kbd>Enter</kbd></td><td>Ir a la diapositiva 12</td></tr>
+                <tr><td><kbd>M</kbd></td><td>Índice por secciones</td></tr>
+                <tr><td><kbd>N</kbd></td><td>Notas del presentador</td></tr>
+                <tr><td><kbd>P</kbd></td><td>Vista del presentador (otra ventana)</td></tr>
+                <tr><td><kbd>F</kbd></td><td>Pantalla completa</td></tr>
+                <tr><td><kbd>B</kbd><kbd>.</kbd></td><td>Pantalla en negro</td></tr>
+                <tr><td><kbd>Esc</kbd></td><td>Cerrar paneles</td></tr>
+            </table>
+        </div>
+    </div>
+
+    <div id="panel-presentador">
+        <div class="barra">
+            <div><span id="p-contador"></span> · <span id="p-titulo"></span></div>
+            <div class="reloj"><span id="p-cronometro">00:00</span><small id="p-hora"></small></div>
+        </div>
+        <div class="hueco" id="p-hueco"></div>
+        <div class="derecha">
+            <div>
+                <div class="etq">A continuación</div>
+                <div id="vista-siguiente"></div>
+            </div>
+            <div class="etq" style="margin-bottom:-8px">Notas</div>
+            <div id="notas-presentador" class="notas"></div>
+        </div>
+    </div>
+
+    <script id="datos-mazo" type="application/json">{"config": {"asignatura": "Análisis Estadístico de la Información", "numero": "5", "titulo": "La muestra que se eligió sola", "ra": "", "horas": "", "stack": [], "institucion": "Fundación Universitaria Compensar", "sigla": "UCompensar", "unidad": "Sesión", "storageKey": "ucompensar_análisis_estadístico_de_la_información_5"}, "diapos": [{"titulo": "Portada", "seccion": "", "k": -1, "notas": ""}, {"titulo": "Hoja de ruta", "seccion": "", "k": -1, "notas": ""}, {"titulo": "Apertura", "seccion": "Apertura", "k": 0, "notas": "<p>Es la tercera pregunta de la gerencia. Pedir desde ya que abran el cuaderno de la sesión 5 (portada del curso → «Abrir en Colab») y ejecuten la primera celda y [cargar]: crean los mismos datos y declaran las escalas. Hoy [cargar] también importa numpy.<\/p>"}, {"titulo": "Dos horas en cinco momentos, con diez minutos de holgura", "seccion": "Apertura", "k": 0, "notas": "<p>Hitos de reloj: la diapositiva 8 en el minuto 12; la 15, en el 28; la 19, en el 39; la 25, en el 52; la 28, en el 61; la 32, en el 69; la 34, en el 102, y la 36, en el 108. Se termina en el minuto 110: quedan 10 de holgura. Hito fijo: la práctica (diapositiva 33) empieza a más tardar en el minuto 72. Durante la exposición solo miran; ejecutan todo en la práctica. Si a los 12 min no se ha llegado a la 8, a los 28 no se ha llegado a la 15, a los 39 no se ha llegado a la 19 o a los 52 no se ha llegado a la 25, recortar en este orden lo que todavía no se haya pasado: (1) la tasa por grupos, diapositiva 23: decir en una frase que por ciudad, suscripción o lluvia va de 57,6 a 59,9 % y dejar la celda [tasa_grupos] para el notebook (−1 min); (2) el sistemático, diapositiva 12: queda solo en el notebook (−2 min); (3) el <em>Literary Digest<\/em>, diapositiva 17: en un minuto, solo la idea y las dos cifras del resultado (−2 min); (4) la pregunta de clasificar métodos, diapositiva 18: solo los casos 1, 2 y 4, en el chat y sin discutirla (−1 min); (5) la pregunta de la diapositiva 29: solo en el chat, sin discutirla (−1 min). Si se recortó el sistemático, al llegar a la 18 definirlo en una frase: «un inicio al azar y, desde ahí, uno de cada k». No se recortan la ponderación, la comprobación, «Para tu tablero» ni la práctica.<\/p>"}, {"titulo": "Otra pareja revisa las tres preguntas de tu tablero", "seccion": "Apertura", "k": 0, "notas": "<p>Es la coevaluación prometida al cierre de la sesión 4, en parejas cruzadas: en salas de grupos, una pareja con otra; siete minutos en total. Al volver, pedir en el chat la herramienta de cada pareja (Streamlit, Shiny, Power BI o Looker Studio) para saber cuántas hay de cada una. El segundo criterio es el de hoy: «¿sobre qué total?» se vuelve «¿de quiénes?» en la diapositiva siguiente.<\/p>"}, {"titulo": "¿Qué cifra pondrías en el tablero para decir qué tan satisfecha está la clientela?", "seccion": "Apertura", "k": 0, "notas": "<p>Un minuto en el chat antes de revelar. Si alguien propone el promedio de estrellas, recordar la regla del curso: la satisfacción se resume con una proporción, nunca con la media de las estrellas. Si alguien propone la mediana (4 estrellas), es válida según esa regla; la lista mínima pide el %, porque se lee mejor semana a semana. La repregunta es la de la sesión: una cifra sin «de quiénes» está incompleta. Faltan 4901 calificaciones, el 40,8 %.<\/p>"}, {"titulo": "Antes de la cifra, pregunta quién respondió", "seccion": "Apertura", "k": 0, "notas": "<p>Es el lema de la sesión. En la sesión 1, la respuesta correcta a «juzgar la satisfacción solo con las reseñas» fue la A: quienes escriben reseñas pueden no parecerse al resto. Hoy lo medimos en Tingua. Transición: primero, cómo se diseña una muestra que no se elige sola.<\/p>"}, {"titulo": "Muestreo", "seccion": "Muestreo", "k": 1, "notas": "<p>La gerencia quiere llamar a 400 pedidos para preguntar por su satisfacción. Es el muestreo del syllabus: la puerta de entrada a la estadística inferencial.<\/p>"}, {"titulo": "Para llamar a 400 pedidos hace falta un marco, y el de Tingua solo trae los entregados", "seccion": "Muestreo", "k": 1, "notas": "<p>En la vida real, μ no se conoce: aquí sí, y por eso sirve para ver qué tan cerca cae cada método. Es la idea de la sesión 1: un parámetro es fijo y casi nunca se conoce. Si alguien pregunta por clientes: sin <code>id_cliente<\/code>, una persona que pidió diez veces tiene diez filas; muestrear pedidos no es muestrear personas. Si preguntan por qué no se comparan con la calificación: le faltan 4901 valores, y ese es justo el problema de la segunda parte.<\/p>"}, {"titulo": "En un muestreo probabilístico, cada pedido tiene una probabilidad conocida de entrar", "seccion": "Muestreo", "k": 1, "notas": "<p>«Mayor que cero» importa: si un grupo no puede salir nunca (los cancelados), la muestra no dice nada de él, por grande que sea. Si las probabilidades son distintas, como en un estratificado con el mismo número por ciudad, \\(\\bar x\\) estima \\(\\mu\\) con pesos: lo veremos al ponderar. Transición: cuatro maneras de sortear, una celda cada una; en la práctica las ejecutan.<\/p>"}, {"titulo": "Aleatorio simple: cualquier grupo de 400 pedidos tiene la misma probabilidad de salir", "seccion": "Muestreo", "k": 1, "notas": "<p>Es la celda de la sesión 1, ahora con 400 pedidos. Con las semillas de tres cifras, de 100 a 999, la aleatoria simple trae entre 22 y 59 pedidos de Bucaramanga: el azar no garantiza la parte de cada ciudad. Lo retomamos en el estratificado.<\/p>"}, {"titulo": "Sistemático: un inicio al azar y, desde ahí, uno de cada 30", "seccion": "Muestreo", "k": 1, "notas": "<p>Es la diapositiva recortable 2: si falta tiempo, queda en el notebook. iloc[inicio::paso] toma la fila del inicio y una de cada 30. El riesgo es un ciclo en el archivo: si la lista tuviera un patrón que se repite cada 30 filas (por ejemplo, ordenada por turno y que cada turno ocupara 30 filas), el sistemático tomaría siempre el mismo momento del ciclo. pedidos.csv está ordenado por fecha y franja, sin ese ciclo. Es el método de «1 de cada 50 facturas».<\/p>"}, {"titulo": "El estratificado garantiza la parte de cada ciudad", "seccion": "Muestreo", "k": 1, "notas": "<p>groupby(\"ciudad\").sample(frac=1/30) sortea 1 de cada 30 pedidos en cada ciudad. Bucaramanga tiene 1190 pedidos: 1190/30 da 39,7, que redondea a 40 (con el 2 % del ejercicio 1, 23,8 redondea a 24). La aleatoria simple de la misma semilla trajo 35. El aviso de la última viñeta evita una confusión frecuente: la columna estrato es el estrato socioeconómico de la dirección. Puente a la segunda parte: si se sacara el mismo número de pedidos por ciudad (por ejemplo, 80 de cada una), Bucaramanga quedaría sobrerrepresentada y habría que ponderar para estimar el total.<\/p>"}, {"titulo": "Por conglomerados se sortean días enteros, y el tamaño depende de cuáles salen", "seccion": "Muestreo", "k": 1, "notas": "<p>isin deja los pedidos cuya fecha está entre los 6 días sorteados. Un día tiene de 42 a 107 pedidos: de viernes a domingo hay más. Advertencia de la vida real: lo que comparte un grupo lo vuelve más parecido por dentro; en una ciudad real, si un día llueve, llueve para muchos de sus pedidos a la vez, y 6 días informan menos que 400 pedidos sueltos. En Tingua, la lluvia se sorteó pedido por pedido. Si dentro de cada día sorteado se eligieran después algunos pedidos, sería un muestreo multietapa. Contraste para la pregunta de la 18: en el estratificado se sortea dentro de <strong>todos<\/strong> los grupos; por conglomerados se sortean <strong>algunos<\/strong> grupos, que entran enteros.<\/p>"}, {"titulo": "Las cuatro muestras al azar caen cerca de μ; la de conveniencia, en 39,11 min", "seccion": "Muestreo", "k": 1, "notas": "<p>La celda [comparar] arma la tabla: 400 pedidos en la aleatoria simple y en la sistemática, 401 en la estratificada, 404 en la de conglomerados y 400 en la de conveniencia. La media de los pedidos de Bogotá es 39,52 min. Las cifras de la gráfica van con punto porque las escribe Python. La sistemática y la estratificada coinciden en 35,36 por azar (35,358 y 35,356): son muestras distintas, y con otra semilla se separan. Que las cuatro al azar caigan cerca no prueba que siempre lo hagan: con las semillas de tres cifras, la más lejana de las cuatro quedó a 2,45 min de μ, y alguna pasa de 1 min en el 33 % de las semillas; la de conveniencia está siempre a 3,98, porque no depende de la semilla. Cuánto se mueven es justo lo que mide la sesión 6. Si hay tiempo, que cada quien ponga su semilla de tres cifras, ejecute hasta [comparar] y escriba en el chat su \\(\\bar x\\) aleatoria y la de conveniencia: todos verán 39,11 en la segunda.<\/p>"}, {"titulo": "Por conveniencia, voluntario o por cuotas: sin azar, el error no se puede medir", "seccion": "Muestreo", "k": 1, "notas": "<p>Por cuotas se parece al estratificado (un cupo por ciudad), pero sin sorteo dentro del cupo: quien encuesta elige a quién. Volver al lema: las calificaciones son una muestra que se eligió sola. Transición: ¿y si la muestra voluntaria es enorme?<\/p>"}, {"titulo": "Más datos no corrigen un sesgo", "seccion": "Muestreo", "k": 1, "notas": "<p>Es la diapositiva recortable 3: en un minuto, solo la idea y el resultado. Fuentes: Squire, P. (1988). Why the 1936 Literary Digest poll failed. <em>Public Opinion Quarterly<\/em>, 52(1), 125–133: el sesgo del marco y la no respuesta se sumaron, y con respuesta completa el <em>Digest<\/em> habría acertado el ganador. Lusinchi, D. (2012). «President» Landon and the 1936 Literary Digest poll: Were automobile and telephone owners to blame? <em>Social Science History<\/em>, 36(1), 23–54: discute la explicación de siempre, que las listas de teléfonos y automóviles dejaban fuera a los votantes de Roosevelt. Respondió menos de 1 de cada 4 (el 23,8 %): también fue un problema de no respuesta, el de la segunda parte. Un paralelo reciente: Bradley <em>et al.<\/em> (2021). Unrepresentative big surveys significantly overestimated US vaccine uptake. <em>Nature<\/em>, 600, 695–700: en mayo de 2021, una encuesta en línea con unas 250 000 respuestas por semana sobrestimó en 17 puntos la vacunación en EE. UU., y un panel de unas 1000 personas por semana, bien diseñado, se acercó más. Lo que se lleva el grupo: millones de respuestas no corrigen un sesgo; lo que importa es quién respondió.<\/p>"}, {"titulo": "¿Qué método es cada uno? ¿Cuáles son probabilísticos?", "seccion": "Muestreo", "k": 1, "notas": "<p>La 3 arranca en una factura sorteada entre las primeras 50. Es la diapositiva recortable 4: si falta tiempo, que respondan en el chat los casos 1, 2 y 4 y se pasa sin discutir. Un minuto; en el chat, cinco respuestas en una línea. La palabra «sorteo» no decide: en la 2 también hay sorteo, pero del premio, y quien responde se elige solo. La 1 y la 4 son el contraste de la sesión: los mismos cupos por ciudad, con sorteo dentro de cada uno (estratificado) o sin él (cuotas). En la 1, Bucaramanga, con menos pedidos, queda sobrerrepresentada: para estimar el total, cada pedido tiene que pesar según su ciudad. Esa idea, ponderar, es la que usaremos con la calificación.<\/p>"}, {"titulo": "Sesgo y no respuesta", "seccion": "Sesgo y no respuesta", "k": 2, "notas": "<p>Volvemos a la pregunta de la apertura: el 79,1 % de 4 o 5 estrellas viene de una muestra voluntaria. ¿Se parece a todos los pedidos?<\/p>"}, {"titulo": "El error muestral baja cuando crece n; el sesgo, no", "seccion": "Sesgo y no respuesta", "k": 2, "notas": "<p>Imagen: tirar al blanco. El error muestral es la dispersión de los tiros; el sesgo, la mira desviada. Más tiros juntan los disparos, pero no los acercan al centro si la mira está mal. La muestra por conveniencia de Bogotá tiene sesgo; las cuatro al azar, solo error muestral.<\/p>"}, {"titulo": "Cuatro sesgos, cuatro preguntas que hacerle a una muestra", "seccion": "Sesgo y no respuesta", "k": 2, "notas": "<p>Las cuatro preguntas sirven para la nota sobre los datos del tablero. Autoselección y no respuesta se parecen: en la primera, cada quien decide si entra; en la segunda, alguien que fue elegido no responde. En la calificación de Tingua se mezclan, y la tratamos como no respuesta porque de todos los pedidos sabemos el tiempo: veremos de qué depende y cómo corregirla. El tope de 14 km es un problema de medición porque el registro no guarda el valor real.<\/p>"}, {"titulo": "Los pedidos de más de 55 min se califican más", "seccion": "Sesgo y no respuesta", "k": 2, "notas": "<p>pd.cut parte el tiempo con cortes explícitos; cada tramo incluye su borde de arriba: «55–65» son los pedidos de más de 55 y hasta 65 minutos. Las barras empiezan en cero. Los tramos de las puntas tienen pocos pedidos: 100 hasta 15 min, 291 de 55 a 65 y 125 de más de 65; con tan pocos, el 63,0 % del primer tramo se mueve mucho por azar. Por qué 55: es donde la tasa salta, y por eso los grupos de hoy son «55 min o menos» y «más de 55 min». No llamarlos «lentos»: en la sesión 4, lento era pasar la valla de 59,15 min. La baja a 55,2 % en 45–55 (1259 pedidos) también puede ser azar: no conviertas ruido en noticia. Ya se asomó en la sesión 4: de los 66 extremos se calificaron 48, y 47 con 1 estrella. Preguntar: ¿por qué calificaría más quien esperó más?<\/p>"}, {"titulo": "Por ciudad, suscripción o lluvia, la tasa de calificación casi no cambia", "seccion": "Sesgo y no respuesta", "k": 2, "notas": "<p>Es la diapositiva recortable 1: si falta tiempo, basta con el título. El título dice lo que se ve en estas tres columnas; que nada más mueva la tasa no se puede comprobar. pd.concat junta las tres tasas en una sola serie con dos niveles. De estas tres columnas, ninguna mueve la tasa como el tiempo. Si alguien pregunta por la distancia: también la mueve, pero a través del tiempo, porque los pedidos lejanos tardan más y más de ellos pasan de 55 min. Eso no prueba que no haya otra cosa detrás: solo podemos revisar lo que está en la tabla.<\/p>"}, {"titulo": "Tres tipos de faltantes: al azar, según lo que vemos o según lo que no vemos", "seccion": "Sesgo y no respuesta", "k": 2, "notas": "<p>En inglés se llaman MCAR (<em>missing completely at random<\/em>), MAR (<em>missing at random<\/em>) y MNAR (<em>missing not at random<\/em>). La tasa de calificación muestra de qué variable observada depende la no respuesta; lo que no vemos, por definición, no aparece en ninguna columna. Salir a preguntar es hacer seguimiento: sortear algunos pedidos sin calificación y llamarlos hasta obtener su respuesta.<\/p>"}, {"titulo": "Los de más de 55 min: 3,5 % de los pedidos y 63,1 % de las calificaciones de 1 o 2", "seccion": "Sesgo y no respuesta", "k": 2, "notas": "<p>Es la clave de la sesión: la no respuesta pesa más en lo raro. Un grupo pequeño que se califica más infla poco el total de calificaciones (de 3,5 a 4,8 %), pero domina las de 1 o 2 estrellas, que son pocas. Ojo: las dominan sobre todo porque esperar más de 55 min trae calificaciones bajas; que se califiquen más les suma unos puntos de más, y esos puntos son el sesgo que la ponderación quita. Con cifras: si se calificaran en la misma proporción en los dos grupos (ponderado), serían el 55,2 % de las de 1 o 2; calificar más les suma unos 8 puntos. La gerencia preguntó por el 4 o 5, pero el sesgo se ve en el 1 o 2, que es raro. Transición: ¿cómo devolverle a cada grupo su peso real?<\/p>"}, {"titulo": "Ponderar: cada calificación cuenta por los pedidos que representa en su grupo", "seccion": "Sesgo y no respuesta", "k": 2, "notas": "<p>Cómo se lee en voz alta: «p sombrero sub w es la suma de w sub i por y sub i, dividida entre la suma de los w sub i»; y el peso: «pedidos de su grupo entre calificados de su grupo». La suma recorre solo los pedidos calificados, y y sub i vale 1 si el pedido tiene 1 o 2 estrellas. El peso es el inverso de la tasa de calificación del grupo: con una tasa de 58,36 % en «55 min o menos», cada calificación representa a 1,71 pedidos; con 81,25 % en «más de 55 min» (338 de 416), a 1,23. Es la misma idea del estratificado con el mismo número por ciudad: cada unidad pesa según cuántas representa. Los dos grupos son una decisión del analista: si alguien propone ponderar por los siete tramos de la gráfica, también vale, y da 3,75 % en el 1 o 2 y 79,70 % en el 4 o 5; el supuesto pasa a ser «dentro de cada tramo».<\/p>"}, {"titulo": "Ponderar baja la insatisfacción de 4,4 % a 3,7 %: un 17 % menos, en proporción", "seccion": "Sesgo y no respuesta", "k": 2, "notas": "<p>El grupo se arma con np.where: un texto por pedido. La línea datos = pedidos va sola a propósito: en el ejercicio 2 solo cambia esa. Las dos líneas que calculan el 4 o 5 están en el notebook. Nunca np.average sobre la calificación: devuelve, sin avisar, la media de las estrellas. La baja de 4,39 a 3,66 es de 0,73 puntos; en proporción, un 17 %. En el 4 o 5 la corrección es de 1,02 puntos, poca en proporción, porque casi todos califican bien. Transición: ¿se acercó a la verdad? En la vida real no lo sabríamos; en Tingua, sí.<\/p>"}, {"titulo": "Solo en un caso ficticio se puede comprobar: ponderar acercó el 1 o 2 a la verdad", "seccion": "Sesgo y no respuesta", "k": 2, "notas": "<p>Tingua es inventado, así que el generador sabe qué calificación habría dado cada pedido; calificacion_completa(), en la celda oculta, la recupera y se cruza por código con map. Se usa solo aquí. La celda [comprobacion_45] hace lo mismo con el 4 o 5: 79,07 % sin ponderar, 80,09 % ponderado y 79,23 % de verdad. Este resultado es poco común: el ponderado se aleja de la verdad mucho más de lo habitual (para el docente: unos 2,9 errores estándar; el término es de la sesión 6, no decirlo en clase), por el azar de quién calificó dentro del grupo de 55 min o menos. Por ciudad, ponderar acerca el 1 o 2 en 4 de 5 ciudades (en Medellín, por muy poco) y el 4 o 5 en 3 de 5. No decir que la ponderación «arregla» la cifra: quita el sesgo que depende del tiempo, si el supuesto se cumple, y deja el azar.<\/p>"}, {"titulo": "La gerencia propone sortear 400 pedidos y mirar su calificación: ¿qué le respondes?", "seccion": "Sesgo y no respuesta", "k": 2, "notas": "<p>Un minuto en el chat. El 40,8 % de los pedidos no tiene calificación. Sortear arregla el sesgo de selección, no el de no respuesta. Llamar a los 400 sorteados e insistir hasta obtener respuesta es el seguimiento de la diapositiva 24: así se juntan las dos partes de la sesión. Además, 400 pedidos tienen más azar que los 7099 calificados: eso se mide en la sesión 6.<\/p>"}, {"titulo": "Para tu tablero: el indicador no cambia; la tasa de calificación lo acompaña", "seccion": "Sesgo y no respuesta", "k": 2, "notas": "<p>Sin pedidos calificados en un grupo, su peso queda indefinido: no hay a quién darle el peso. La celda [semanas_calificacion] del notebook calcula la tasa de calificación por semana ISO y marca las semanas 1 y 27, que están incompletas; va de 53,9 a 63,0 % según la semana. Decir en voz alta: «no conviertas ruido en noticia»; una semana con unos puntos menos de tasa no es una tendencia. La calificación oculta nunca va en el tablero.<\/p>"}, {"titulo": "Estimamos que cerca de 8 de cada 10 pedidos tendrían 4 o 5 estrellas", "seccion": "Sesgo y no respuesta", "k": 2, "notas": "<p>Así se contesta la pregunta de la gerencia: una estimación (80,1 %, ponderada), su supuesto dicho en voz alta y la conclusión práctica. «Estimamos» y el «si…» no son debilidad: son la parte honesta de la cifra. La segunda frase sale del 1 o 2: de 4,4 a 3,7 %. Si preguntan por qué se usa la ponderada si en el 4 o 5 se alejó de la verdad: en la vida real la verdad no se conoce; la ponderada quita el sesgo que vemos, y su azar se mide en la sesión 6. Por eso «cerca de 8 de cada 10» y no «80,1 %». Transición: en la práctica, la misma ponderación, solo con los pedidos de Bogotá.<\/p>"}, {"titulo": "Práctica y cierre", "seccion": "Práctica y cierre", "k": 3, "notas": ""}, {"titulo": "Práctica guiada: tres ejercicios en el notebook", "seccion": "Práctica y cierre", "k": 3, "notas": "<p>Cada ejercicio termina con un verificador que da pistas sin la respuesta. Clave del 1: con frac=0.02, 94 pedidos de Bogotá, 53 de Medellín, 39 de Cali, 29 de Barranquilla y 24 de Bucaramanga (el verificador acepta ±1 por ciudad, y rechaza los primeros pedidos de cada ciudad o uno de cada tantos desde el primero: no hay sorteo); siempre 24 de Bucaramanga porque cada ciudad redondea su propio 2 %. Con una aleatoria simple de 240 se esperan 23,8, pero con las semillas de tres cifras salen de 12 a 40, y exactamente 24 solo en el 9 %. frac=2, n=0.02 o frac junto con n hacen fallar a pandas antes del verificador: la plantilla lo advierte. Clave del 2: en Bogotá, 7,51 % sin ponderar y 6,14 % ponderado, con sus propios pesos (1,72 y 1,17); con ≥ 55 da 6,16 y también vale. En puntos, la corrección de Bogotá (1,37) casi duplica la del total (0,73) porque allí los pedidos de más de 55 min son el 6,1 % de sus pedidos, frente al 3,5 % en el total (287 de los 416 son suyos); en proporción, las dos se parecen: 18 % y 17 %. w.sum() da 4707, los pedidos de Bogotá: cada calificación representa a los pedidos de su grupo, y entre todas suman todos. Si la plantilla corre sin cambiar la línea datos =, el verificador avisa que son las cifras de todos los pedidos. Clave del 3: el tamaño depende de los días que salgan (de 312 a 499 pedidos con las semillas de tres cifras). La distancia de su \\(\\bar x\\) a μ es error muestral: cambia con la semilla y se achica con más días; los 3,98 min de la de conveniencia son sesgo: no cambian con la semilla ni con más pedidos de Bogotá. El verificador rechaza 6 días seguidos o a paso fijo desde el primero. «Tus respuestas» trae además la pregunta de qué quita la ponderación y la autoevaluación, para quien estudia en casa.<\/p>"}, {"titulo": "En otra app de domicilios, ¿qué tipo de faltante es cada uno, y qué harías?", "seccion": "Práctica y cierre", "k": 3, "notas": "<p>Es la autoevaluación de cierre: dos minutos, y en el chat las cuatro respuestas en una línea. La 1 es la difícil: el daño explica por qué no califican, pero no está en ninguna columna, así que ponderar no lo corrige. En la 3, el último dígito del código no tiene que ver con la satisfacción. Hay dos casos de «según algo que vemos»: no se resuelve por descarte. Se dice «otra app» porque en Tingua la tasa casi no cambia con la franja (de 58,5 a 60,7 %) ni con el medio de pago (de 58,6 a 60,1 %). Está también en «Tus respuestas» del notebook.<\/p>"}, {"titulo": "Lo que te llevas hoy", "seccion": "Práctica y cierre", "k": 3, "notas": "<p>Leer las cinco en voz alta y preguntar cuál les costó más. Cerrar con el lema: antes de la cifra, pregunta quién respondió.<\/p>"}, {"titulo": "La sesión 6 abre con el prototipo de tu tablero", "seccion": "Práctica y cierre", "k": 3, "notas": "<p>El prototipo es el hito «sesiones 5 y 6» del proyecto. La sección 5.1 de OpenIntro (Diez, Çetinkaya-Rundel y Barr, 4.ª edición, de acceso abierto) separa el error muestral del sesgo con el lenguaje de hoy; la 5.2 empieza los intervalos de confianza. Lo que la sesión 6 recibe: el n del indicador de satisfacción es el número de pedidos calificados, no el de pedidos, y un intervalo de confianza mide el azar, no el sesgo.<\/p>"}], "secciones": [{"titulo": "Apertura", "icono": "fa-door-open", "primera": 2, "diapos": [2, 3, 4, 5, 6]}, {"titulo": "Muestreo", "icono": "fa-shuffle", "primera": 7, "diapos": [7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17]}, {"titulo": "Sesgo y no respuesta", "icono": "fa-user-check", "primera": 18, "diapos": [18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30]}, {"titulo": "Práctica y cierre", "icono": "fa-keyboard", "primera": 31, "diapos": [31, 32, 33, 34, 35]}], "iconos": {}, "graficas": {}}</script>
+
+    <script>
+    (() => {
+        'use strict';
+        const DATOS = JSON.parse(document.getElementById('datos-mazo').textContent);
+        const CFG = DATOS.config;
+        const params = new URLSearchParams(location.search);
+        const MODO_PRESENTADOR = params.has('presentador');
+        const MODO_REVISION = params.has('revisar');
+        const TODO_VISIBLE = params.has('todo');   // revela todos los pasos (capturas)
+        const CLAVE = (CFG.storageKey || 'lpcore') + '_diapositivas';
+
+        const mazo = document.getElementById('mazo');
+        const diapos = Array.from(mazo.querySelectorAll(':scope > .diapo'));
+        const N = diapos.length;
+        const $ = (id) => document.getElementById(id);
+
+        const leer = (k) => { try { return localStorage.getItem(k); } catch (e) { return null; } };
+        const guardar = (k, v) => { try { localStorage.setItem(k, v); } catch (e) { } };
+
+        /* ---------- Resaltado de código, como `resaltar` de LP-CORE ------- */
+        // El pseudocódigo de Lógica de Programación Financiera: la misma gramática
+        // que registra el capítulo (Prism no la trae).
+        if (window.Prism && !Prism.languages.pseudo) {
+            Prism.languages.pseudo = {
+                'comment': { pattern: /\/\/.*/, greedy: true },
+                'string': { pattern: /"(?:[^"\\\n]|\\.)*"/, greedy: true },
+                'keyword': /\b(?:FinSi|FinMientras|FinPara|FinSegun|FinFuncion|FinProcedimiento|FinRepita|Inicio|Fin|Si|Entonces|SinoSi|Sino|Segun|Caso|DeOtroModo|Mientras|Hacer|Para|Repita|Hasta|Con|Paso|Leer|Escribir|Funcion|Procedimiento|Retornar|Llamar)\b/,
+                'builtin': /\b(?:Entero|Real|Cadena|Caracter|Logico|Arreglo|Matriz|Constante|Verdadero|Falso)\b/,
+                'function': /\b(?:Y|O|NO|MOD|DIV|abs|raiz|redondear|potencia|longitud)\b/,
+                'number': /\b\d+(?:\.\d+)?\b/,
+                'operator': /<-|←|>=|<=|<>|[+\-*\/=<>]/,
+                'punctuation': /[(),;\[\]]/,
+            };
+        }
+        const GRAMATICA = { pseudo: 'pseudo', pseudocodigo: 'pseudo', python: 'python', py: 'python', shell: 'bash', bash: 'bash', sh: 'bash', docker: 'docker', dockerfile: 'docker', yaml: 'yaml', yml: 'yaml', sql: 'sql', toml: 'toml', json: 'json', r: 'r', vba: 'visual-basic', js: 'javascript', javascript: 'javascript' };
+        const PREFIJO_SALIDA = { python: '#>', py: '#>', r: '#>', shell: '#>', bash: '#>', vba: "'>", pseudo: '//>', pseudocodigo: '//>' };
+        const escaparHtml = (s) => s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+
+        const resaltarBloques = () => {
+            document.querySelectorAll('.codigo').forEach((bloque) => {
+                const code = bloque.querySelector('pre code');
+                if (!code || code.dataset.hecho) return;
+                const fuente = code.textContent;
+                bloque._fuente = fuente;
+                const lang = bloque.dataset.lang || 'text';
+                const nombre = GRAMATICA[lang];
+                const gram = nombre && window.Prism && Prism.languages[nombre];
+                let html = gram ? Prism.highlight(fuente, gram, nombre) : escaparHtml(fuente);
+                const pref = PREFIJO_SALIDA[lang];
+                const foco = new Set((bloque.dataset.foco || '').split(',').filter(Boolean).flatMap((r) => {
+                    const [a, b] = r.split('-').map(Number);
+                    return Array.from({ length: (b || a) - a + 1 }, (_, i) => a + i);
+                }));
+                // Un token de varias líneas (una cadena """…""", un comentario /* … */) llega como un
+                // solo <span>: se cierra al final de cada línea y se reabre en la siguiente, para que
+                // cada .linea quede bien anidada.
+                let abiertas = [];
+                html = html.split('\n').map((linea) => {
+                    const prefijo = abiertas.join('');
+                    for (const m of linea.matchAll(/<(\/?)span\b[^>]*>/g)) {
+                        if (m[1]) abiertas.pop(); else abiertas.push(m[0]);
+                    }
+                    return prefijo + linea + '</span>'.repeat(abiertas.length);
+                }).map((linea, i) => {
+                    const plano = linea.replace(/<[^>]*>/g, '').replace(/&gt;/g, '>').replace(/&lt;/g, '<').replace(/&amp;/g, '&').trimStart();
+                    const clases = ['linea'];
+                    if (pref && plano.startsWith(pref)) clases.push('lp-salida');
+                    if (foco.has(i + 1)) clases.push('foco');
+                    return `<span class="${clases.join(' ')}">${linea}${plano ? '' : ' '}</span>`;
+                }).join('\n');
+                code.innerHTML = html;
+                code.dataset.hecho = '1';
+                if (foco.size) bloque.classList.add('con-foco');
+            });
+        };
+
+        document.addEventListener('click', (e) => {
+            const btn = e.target.closest('.btn-copiar');
+            if (!btn) return;
+            const bloque = btn.closest('.codigo');
+            const texto = bloque._fuente ?? bloque.querySelector('code').textContent;
+            navigator.clipboard.writeText(texto).then(() => {
+                btn.classList.add('copiado');
+                btn.innerHTML = '<i aria-hidden="true" class="fas fa-check"></i> Copiado';
+                setTimeout(() => { btn.classList.remove('copiado'); btn.innerHTML = '<i aria-hidden="true" class="fas fa-copy"></i> Copiar'; }, 2000);
+            }).catch(() => { });
+        });
+
+        /* ---------- Gráficas de Plotly (solo si el mazo trae alguna) ---------- */
+        const dibujarGraficas = () => {
+            const nodos = document.querySelectorAll('.grafica[data-fuente]');
+            if (!nodos.length || !window.Plotly) return;
+            nodos.forEach((el) => {
+                if (el.dataset.hecha) return;
+                const g = DATOS.graficas[el.dataset.fuente];
+                if (!g) return;
+                const layout = Object.assign({}, g.layout || {}, {
+                    autosize: true,
+                    font: Object.assign({ size: 14, color: '#1E293B' }, (g.layout || {}).font || {}, { family: getComputedStyle(document.documentElement).getPropertyValue('--fuente').trim() || 'Montserrat, sans-serif' }),
+                    paper_bgcolor: 'rgba(0,0,0,0)',
+                });
+                delete layout.width; delete layout.height;
+                // Con la tipografía del curso las etiquetas miden otra cosa que
+                // en el material: que cada eje reserve su propio margen.
+                Object.keys(layout).filter((k) => /^[xy]axis\d*$/.test(k)).forEach((k) => {
+                    layout[k] = Object.assign({}, layout[k], { automargin: true });
+                });
+                Plotly.newPlot(el, g.data, layout, { displayModeBar: false, responsive: true });
+                el.dataset.hecha = '1';
+            });
+        };
+
+        /* ---------- Ajuste: lo que no cabe se encoge, hasta un límite ---------- */
+        const K_MIN = 0.7;
+        const desborda = (d) => {
+            const c = d.querySelector('.cuerpo');
+            if (!c) return false;
+            if (c.scrollHeight > c.clientHeight + 2) return true;
+            if (Array.from(c.querySelectorAll('pre')).some((el) => el.scrollHeight > el.clientHeight + 2)) return true;
+            if (Array.from(c.querySelectorAll('pre, table, .tarjetas, .flujo, .columnas')).some((el) => el.scrollWidth > el.clientWidth + 2)) return true;
+            // Una fórmula, una imagen o un diagrama más anchos que su columna no
+            // agrandan la rejilla: invaden la columna de al lado. Se mide contra
+            // la caja que los contiene.
+            return Array.from(c.querySelectorAll('mjx-container, img, svg, .grafica')).some((el) => {
+                if (el.closest('.codigo')) return false;
+                if (el.tagName.toLowerCase() === 'svg' && el.parentElement && el.parentElement.closest('mjx-container, .grafica, svg')) return false;
+                const marco = el.closest('.columnas > *, .tarjeta, .caja, td, th') || c;
+                const m = marco.getBoundingClientRect();
+                // MathJax deja el contenedor del ancho de la columna y desborda por dentro.
+                const r = (el.querySelector(':scope > svg, :scope > mjx-math') || el).getBoundingClientRect();
+                return r.width > 0 && (r.right > m.right + 2 || r.left < m.left - 2);
+            });
+        };
+
+        const ajustar = () => {
+            const informe = [];
+            diapos.forEach((d, i) => {
+                d.querySelectorAll(':scope > .aviso-revision').forEach((a) => a.remove());
+                let k = parseFloat(d.dataset.k || '1');
+                d.style.setProperty('--k', k);
+                while (desborda(d) && k > K_MIN + 1e-6) {
+                    k = Math.max(K_MIN, +(k - 0.03).toFixed(3));
+                    d.style.setProperty('--k', k);
+                }
+                const sigue = desborda(d);
+                if (sigue || k < 0.88) informe.push({ n: i + 1, titulo: DATOS.diapos[i].titulo, escala: k, desborda: sigue });
+                if (MODO_REVISION && (sigue || k < 0.88)) {
+                    const a = document.createElement('div');
+                    a.className = 'aviso-revision';
+                    a.textContent = sigue ? 'NO CABE' : `encogida a ${Math.round(k * 100)} %`;
+                    d.appendChild(a);
+                }
+            });
+            return informe;
+        };
+
+        /* ---------- Escala del lienzo ---------- */
+        const escalar = () => {
+            if (MODO_PRESENTADOR) return escalarPresentador();
+            const s = Math.min(window.innerWidth / 1280, window.innerHeight / 720);
+            mazo.style.transform = `translate(-50%, -50%) scale(${s})`;
+        };
+
+        /* ---------- Estado ---------- */
+        const inicial = () => {
+            const h = parseInt(location.hash.replace('#', ''), 10);
+            if (Number.isInteger(h) && h >= 1 && h <= N) return h - 1;
+            const g = parseInt(leer(CLAVE), 10);
+            return Number.isInteger(g) && g >= 0 && g < N ? g : 0;
+        };
+
+        let actual = -1;
+        let paso = 0;
+        const pasosDe = (i) => Array.from(diapos[i].querySelectorAll('.paso'));
+
+        const canal = ('BroadcastChannel' in window) ? new BroadcastChannel('diapositivas-' + CLAVE) : null;
+        let silencio = false;
+
+        const mostrar = (i, p = 0, emitir = true) => {
+            i = Math.max(0, Math.min(N - 1, i));
+            if (i !== actual) {
+                diapos.forEach((d, j) => d.classList.toggle('activa', j === i));
+                actual = i;
+            }
+            const pasos = pasosDe(i);
+            paso = (p < 0 || TODO_VISIBLE) ? pasos.length : Math.min(p, pasos.length);
+            pasos.forEach((el, j) => el.classList.toggle('visto', j < paso));
+            const meta = DATOS.diapos[i];
+            $('progreso').firstElementChild.style.width = `${((i + 1) / N) * 100}%`;
+            $('contador').innerHTML = `${i + 1} / ${N}${meta.seccion ? ` <span>· ${meta.seccion}</span>` : ''}`;
+            $('btn-ant').disabled = i === 0 && paso === 0;
+            $('btn-sig').disabled = i === N - 1 && paso >= pasos.length;
+            $('notas').innerHTML = `<div class="etq-notas">Notas · ${i + 1}. ${meta.titulo || ''}</div>` + (meta.notas || '<p class="notas-vacias">Esta diapositiva no tiene notas.</p>');
+            if (!MODO_PRESENTADOR) {
+                if (location.hash !== '#' + (i + 1)) history.replaceState(null, '', '#' + (i + 1));
+                guardar(CLAVE, String(i));
+            }
+            pintarIndice();
+            if (MODO_PRESENTADOR) pintarPresentador();
+            if (emitir && canal && !silencio) canal.postMessage({ tipo: 'ir', i, paso });
+        };
+
+        const siguiente = () => {
+            const pasos = pasosDe(actual);
+            if (paso < pasos.length) return mostrar(actual, paso + 1);
+            if (actual < N - 1) mostrar(actual + 1, 0);
+        };
+
+        const anterior = () => {
+            if (paso > 0) return mostrar(actual, paso - 1);
+            if (actual > 0) mostrar(actual - 1, -1);
+        };
+
+        if (canal) {
+            canal.onmessage = (e) => {
+                const m = e.data || {};
+                silencio = true;
+                if (m.tipo === 'ir') mostrar(m.i, m.paso, false);
+                if (m.tipo === 'sig') siguiente();
+                if (m.tipo === 'ant') anterior();
+                silencio = false;
+                if ((m.tipo === 'sig' || m.tipo === 'ant') && canal) canal.postMessage({ tipo: 'ir', i: actual, paso });
+            };
+        }
+
+        /* ---------- Índice: la barra lateral del material ---------- */
+        const iconoSvg = (nombre) => (nombre && nombre.startsWith('fa-')) ? `<i aria-hidden="true" class="fas ${nombre}"></i>`
+            : (DATOS.iconos[nombre] || DATOS.iconos.BookOpen || '<i aria-hidden="true" class="fas fa-book-open"></i>');
+
+        const construirIndice = () => {
+            const ind = $('indice');
+            const secciones = DATOS.secciones;
+            let html = `<div class="cab">
+                <div class="institucion" style="font-size:10.5px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--gold)">${CFG.institucion || ''}</div>
+                <div style="font-size:18px;font-weight:700;margin-top:4px;line-height:1.25">${CFG.asignatura || ''}</div>
+                <div style="font-size:12px;color:rgba(255,255,255,.6);margin-top:5px">${CFG.unidad || 'Semana'} ${CFG.numero || ''} · <span style="color:var(--secondary);font-weight:600">${CFG.titulo || ''}</span></div>
+            </div><nav>`;
+            html += `<button class="item-seccion" data-ir="0">${iconoSvg('BookOpen')}<span>Portada</span></button>`;
+            secciones.forEach((s, k) => {
+                html += `<button class="item-seccion" data-seccion="${k}" data-ir="${s.primera}">${iconoSvg(s.icono)}<span>${s.titulo}</span></button>`;
+                html += `<div class="sub" data-sub="${k}">` + s.diapos.map((j) => `<button data-ir="${j}">${j + 1}. ${DATOS.diapos[j].titulo || '—'}</button>`).join('') + `</div>`;
+            });
+            html += `</nav><div class="pie-indice"><p style="margin:0">${CFG.ra || ''}${CFG.horas ? ' · ' + CFG.horas + ' horas' : ''}</p><p style="margin:4px 0 0">${Array.isArray(CFG.stack) ? CFG.stack.join(' · ') : (CFG.stack || '')}</p></div>`;
+            ind.innerHTML = html;
+            ind.addEventListener('click', (e) => {
+                const b = e.target.closest('[data-ir]');
+                if (!b) return;
+                mostrar(parseInt(b.dataset.ir, 10), 0);
+                document.body.classList.remove('con-indice');
+            });
+        };
+
+        const pintarIndice = () => {
+            const k = DATOS.diapos[actual].k;
+            document.querySelectorAll('#indice [data-seccion]').forEach((b) => b.classList.toggle('actual', +b.dataset.seccion === k));
+            document.querySelectorAll('#indice [data-sub]').forEach((s) => { s.style.display = +s.dataset.sub === k ? '' : 'none'; });
+            document.querySelectorAll('#indice .sub button').forEach((b) => b.classList.toggle('actual', +b.dataset.ir === actual));
+            const portada = document.querySelector('#indice [data-ir="0"].item-seccion');
+            if (portada) portada.classList.toggle('actual', k === -1);
+        };
+
+        /* ---------- Vista del presentador ---------- */
+        const t0 = Date.now();
+        const escalarPresentador = () => {
+            const hueco = $('p-hueco').getBoundingClientRect();
+            const s = Math.min(hueco.width / 1280, hueco.height / 720);
+            mazo.style.transform = `translate(-50%, -50%) scale(${s})`;
+            mazo.style.left = `${hueco.left + hueco.width / 2}px`;
+            mazo.style.top = `${hueco.top + hueco.height / 2}px`;
+            const vs = $('vista-siguiente');
+            const d = vs.firstElementChild;
+            if (d) d.style.transform = `scale(${vs.clientWidth / 1280})`;
+        };
+
+        const pintarPresentador = () => {
+            const meta = DATOS.diapos[actual];
+            $('p-contador').textContent = `${actual + 1} / ${N}`;
+            $('p-titulo').textContent = meta.titulo || '';
+            $('notas-presentador').innerHTML = meta.notas || '<p class="notas-vacias">Sin notas.</p>';
+            const vs = $('vista-siguiente');
+            vs.innerHTML = '';
+            const pasos = pasosDe(actual);
+            const fuente = paso < pasos.length ? diapos[actual] : diapos[actual + 1];
+            if (fuente) {
+                const copia = fuente.cloneNode(true);
+                copia.classList.add('activa');
+                copia.querySelectorAll('.grafica').forEach((g) => { g.innerHTML = ''; });
+                vs.appendChild(copia);
+            } else {
+                vs.innerHTML = '<div style="display:flex;height:100%;align-items:center;justify-content:center;color:#64748B;font-weight:600">Fin de la presentación</div>';
+            }
+            escalarPresentador();
+        };
+
+        if (MODO_PRESENTADOR) {
+            document.body.classList.add('presentador');
+            setInterval(() => {
+                const s = Math.floor((Date.now() - t0) / 1000);
+                $('p-cronometro').textContent = `${String(Math.floor(s / 60)).padStart(2, '0')}:${String(s % 60).padStart(2, '0')}`;
+                $('p-hora').textContent = new Date().toLocaleTimeString('es-CO', { hour: '2-digit', minute: '2-digit' });
+            }, 1000);
+            mazo.style.boxShadow = 'none';
+            mazo.style.borderRadius = '10px';
+        }
+
+        /* ---------- Teclado, ratón y tacto ---------- */
+        let numero = '';
+        let tNumero = null;
+        const irA = $('ir-a');
+
+        const alternar = (clase, forzar) => {
+            const r = document.body.classList.toggle(clase, forzar);
+            const abierto = document.body.classList.contains('con-indice');
+            $('btn-menu').innerHTML = `<i aria-hidden="true" class="fas ${abierto ? 'fa-times' : 'fa-bars'}"></i>`;
+            $('btn-menu').title = abierto ? 'Ocultar el índice (M)' : 'Índice (M)';
+            return r;
+        };
+
+        document.addEventListener('keydown', (e) => {
+            if (e.metaKey || e.ctrlKey || e.altKey) return;
+            const t = e.key;
+            // Enter o Espacio sobre un enlace o botón enfocado lo activan: no pasan diapositiva
+            if ((t === 'Enter' || t === ' ') && !numero && e.target.closest && e.target.closest('a[href], button')) return;
+            if (/^[0-9]$/.test(t)) {
+                numero += t;
+                irA.textContent = `Ir a ${numero}`;
+                irA.style.display = 'block';
+                clearTimeout(tNumero);
+                tNumero = setTimeout(() => { numero = ''; irA.style.display = 'none'; }, 2500);
+                return;
+            }
+            if (t === 'Enter' && numero) {
+                mostrar(parseInt(numero, 10) - 1, 0);
+                numero = ''; irA.style.display = 'none';
+                e.preventDefault();
+                return;
+            }
+            switch (t) {
+                case 'ArrowRight': case 'ArrowDown': case 'PageDown': case ' ': case 'Enter':
+                    e.preventDefault(); siguiente(); break;
+                case 'ArrowLeft': case 'ArrowUp': case 'PageUp': case 'Backspace':
+                    e.preventDefault(); anterior(); break;
+                case 'Home': e.preventDefault(); mostrar(0, 0); break;
+                case 'End': e.preventDefault(); mostrar(N - 1, 0); break;
+                case 'm': case 'M': alternar('con-indice'); break;
+                case 'n': case 'N': alternar('con-notas'); break;
+                case 'b': case 'B': case '.': alternar('en-negro'); break;
+                case '?': case 'h': case 'H': alternar('con-ayuda'); break;
+                case 'f': case 'F':
+                    if (document.fullscreenElement) document.exitFullscreen();
+                    else document.documentElement.requestFullscreen().catch(() => { });
+                    break;
+                case 'p': case 'P':
+                    if (!MODO_PRESENTADOR) {
+                        const u = new URL(location.href);
+                        u.searchParams.set('presentador', '1');
+                        u.hash = '#' + (actual + 1);
+                        window.open(u.toString(), 'presentador-' + CLAVE, 'width=1280,height=760');
+                    }
+                    break;
+                case 'Escape':
+                    ['con-notas', 'con-ayuda', 'en-negro'].forEach((c) => document.body.classList.remove(c));
+                    alternar('con-indice', false);
+                    break;
+            }
+        });
+
+        $('btn-sig').addEventListener('click', siguiente);
+        $('btn-ant').addEventListener('click', anterior);
+        $('btn-menu').addEventListener('click', () => alternar('con-indice'));
+        $('velo').addEventListener('click', () => alternar('con-indice', false));
+        $('ayuda').addEventListener('click', () => alternar('con-ayuda', false));
+        $('negro').addEventListener('click', () => alternar('en-negro', false));
+
+        document.addEventListener('click', (e) => {
+            const a = e.target.closest('.enlace-material');
+            if (!a) return;
+            // El material guarda la lección abierta en su `storageKey`: se deja
+            // apuntando a la sección y se abre. Así el enlace aterriza en ella.
+            if (a.dataset.indice && CFG.storageKey) guardar(CFG.storageKey, a.dataset.indice);
+        });
+
+        let tQuieto = null;
+        const despertar = () => {
+            document.body.classList.remove('quieto');
+            clearTimeout(tQuieto);
+            tQuieto = setTimeout(() => {
+                if (!document.body.classList.contains('con-indice')) document.body.classList.add('quieto');
+            }, 2800);
+        };
+        document.addEventListener('mousemove', despertar);
+        document.addEventListener('mousedown', despertar);
+
+        let x0 = null;
+        document.addEventListener('touchstart', (e) => { x0 = e.touches[0].clientX; }, { passive: true });
+        document.addEventListener('touchend', (e) => {
+            if (x0 === null) return;
+            const dx = e.changedTouches[0].clientX - x0;
+            if (Math.abs(dx) > 50) (dx < 0 ? siguiente : anterior)();
+            x0 = null;
+        });
+
+        window.addEventListener('resize', escalar);
+        window.addEventListener('hashchange', () => {
+            const h = parseInt(location.hash.replace('#', ''), 10);
+            if (Number.isInteger(h) && h - 1 !== actual) mostrar(h - 1, 0);
+        });
+
+        /* ---------- Arranque ---------- */
+        if (MODO_REVISION) document.body.classList.add('revision');
+        construirIndice();
+        resaltarBloques();
+        escalar();
+        mostrar(inicial(), 0, false);
+        despertar();
+
+        // Se mide cuando todo tiene ya su tamaño final. MathJax llega `async`:
+        // aquí casi nunca ha cargado, y con las fuentes en caché `fonts.ready`
+        // se resolvía antes que él, así que las fórmulas se medían como una
+        // línea de TeX sin componer y el texto de debajo se salía al
+        // componerlas. En Chrome sin ventana, con las fuentes por descargar,
+        // salía bien por casualidad: `revisar.py` no lo veía. El `load` de la
+        // ventana espera al guion de MathJax (llegue o falle) y a las imágenes;
+        // después se espera a que MathJax componga.
+        const cargada = new Promise((r) => {
+            if (document.readyState === 'complete') r();
+            else window.addEventListener('load', r, { once: true });
+        });
+        const listo = cargada.then(() => Promise.all([
+            document.fonts ? document.fonts.ready : null,
+            window.MathJax && MathJax.startup ? MathJax.startup.promise.then(() => MathJax.typesetPromise ? MathJax.typesetPromise() : null).catch(() => { }) : null,
+        ]));
+        // Si algo tarda más que el plazo, se ajusta con lo que haya y se
+        // vuelve a ajustar al terminar; mientras tanto el informe es provisional.
+        const PLAZO_CARGA = 5000;
+        let completo = false;
+        const ajustarYInformar = () => {
+            dibujarGraficas();
+            const informe = ajustar();
+            if (window.Plotly) document.querySelectorAll('.grafica[data-hecha]').forEach((g) => { try { Plotly.Plots.resize(g); } catch (e) { } });
+            if (MODO_PRESENTADOR) pintarPresentador();
+            let pre = $('informe-revision');
+            if (!pre) {
+                pre = document.createElement('pre');
+                pre.id = 'informe-revision';
+                pre.hidden = true;
+                document.body.appendChild(pre);
+            }
+            pre.textContent = JSON.stringify(Object.assign({ total: N, avisos: informe }, completo ? {} : { provisional: true }));
+            if (MODO_REVISION) console.log('[revisión]', JSON.stringify(informe));
+        };
+        const plazo = setTimeout(ajustarYInformar, PLAZO_CARGA);
+        listo.then(() => {
+            clearTimeout(plazo);
+            completo = true;
+            ajustarYInformar();
+        });
+    })();
+    </script>
+</body>
+
+</html>

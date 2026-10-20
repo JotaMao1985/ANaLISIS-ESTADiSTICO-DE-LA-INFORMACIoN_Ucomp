@@ -27,7 +27,8 @@
 # 1. **Archivo → Guardar una copia en Drive** para que tus cambios no se pierdan.
 # 2. Ejecuta las celdas **en orden** con **Mayús + Enter**. Varias usan resultados de las anteriores.
 #    Si Colab avisa que el cuaderno no es de Google, elige **Ejecutar de todos modos**.
-# 3. Si Colab se reinicia o una celda falla al repetirla, usa **Entorno de ejecución → Ejecutar anteriores**.
+# 3. Si Colab se reinicia o una celda falla al repetirla, haz clic en esa celda y usa
+#    **Entorno de ejecución → Ejecutar anteriores**.
 # 4. La primera celda crea los datos del caso *Tingua Domicilios S.A.S.*, una empresa **ficticia**
 #    (sus datos se inventan con una semilla fija y no corresponden a personas ni a empresas reales),
 #    y les da a las gráficas los colores del curso.
@@ -114,10 +115,10 @@ print(f"Valla de 3 RIC: {valla_ext:.1f} min ·",
 # ### Las vallas en el diagrama de caja
 #
 # El diagrama de caja de la sesión 3 usa esta misma regla. La **caja** va de $Q_1$ a $Q_3$ y la línea
-# es la mediana. Los **bigotes** llegan hasta el último pedido que **no** pasa la valla: a veces ese
-# pedido vale justo la valla, pero el bigote no se alarga hasta ella; y solo llega al mínimo o al
-# máximo del lado sin puntos sueltos. Los **puntos sueltos** son los que pasan la valla: los
-# candidatos. Varios pedidos con el mismo valor se dibujan como un solo punto.
+# es la mediana. Los **bigotes** no llegan hasta la valla, sino hasta el último pedido que **no** la
+# pasa: solo coinciden con ella si un pedido vale justo la valla. Un bigote llega al mínimo o al
+# máximo solo del lado en que no hay puntos sueltos. Los **puntos sueltos** son los que pasan la
+# valla: los candidatos. Varios pedidos con el mismo valor se dibujan como un solo punto.
 
 # %% caja_tiempo
 estilo_caja = dict(          # los colores de la caja, para todas las cajas
@@ -134,7 +135,6 @@ for valla in [valla_inf, valla_sup]:       # las dos vallas, con su valor
     ax.axhline(valla, color="#F46201", linewidth=2, linestyle="--")
     ax.text(1.48, valla + 2, f"valla: {valla:.2f}", ha="right")
 ax.set_xticks([1], ["Todos los pedidos"])
-ax.set_title("La caja del tiempo y sus vallas")
 ax.set_ylabel("Minutos")
 # Los bigotes llegan al último pedido que no pasa cada valla
 bigotes = [linea.get_ydata()[1] for linea in caja["whiskers"]]
@@ -142,6 +142,7 @@ print(f"Bigotes: de {bigotes[0]:.1f} a {bigotes[1]:.1f} min")
 sueltos = caja["fliers"][0].get_ydata()
 print("Fuera de los bigotes:", len(sueltos), "pedidos en",
       pd.Series(sueltos).nunique(), "puntos distintos")
+ax.set_title(f"{len(sueltos)} pedidos pasan las vallas")   # un título que afirma
 plt.show()
 
 # %% [markdown]
@@ -166,27 +167,37 @@ print(f"Media - 3s = {media - 3 * s:.1f} min")   # ningún tiempo es negativo
 # %% [markdown]
 # ### ¿Por qué z marca menos? El enmascaramiento
 #
-# z usa la media y la desviación, y los propios atípicos las inflan: así se esconden.
+# z usa la media y la desviación, y los propios candidatos las inflan: así se esconden.
 
 # %% enmascaramiento
 fuera = (tiempo < valla_inf) | (tiempo > valla_sup)
 print(f"s con todos los pedidos: {s:.2f} min")
-print(f"s sin los {fuera.sum()} atípicos: {tiempo[~fuera].std():.2f} min")
+print(f"s sin los {fuera.sum()} candidatos: {tiempo[~fuera].std():.2f} min")
 
 # %% [markdown]
 # ### Las dos reglas en el histograma
+#
+# La franja sombreada va de la valla superior a $z = 3$: son los pedidos que la valla marca y z no.
 
 # %% histograma_vallas
 z3 = media + 3 * s                 # el tiempo donde z vale 3
+entre = ((tiempo > valla_sup) & (tiempo <= z3)).sum()   # la valla sí, z no
+mas_alla = (tiempo > z3).sum()                          # las dos
 ax = tiempo.plot.hist(bins=range(0, 210, 5), color="#8A2E9E", alpha=0.45,
-                      edgecolor="white", label="Pedidos")
-ax.axvline(valla_sup, color="#F46201", linewidth=2.5,
-           label=f"Valla superior: {valla_sup:.2f} min")
-ax.axvline(z3, color="#3A0F47", linewidth=2.5, linestyle="--",
-           label=f"z = 3: {z3:.1f} min")
-ax.set_xlim(0, 140)   # la cola sigue hasta 201 min
-ax.legend()
-ax.set_title("Tiempo de entrega y dos reglas para atípicos")
+                      edgecolor="white")
+ax.axvspan(valla_sup, z3, color="#F46201", alpha=0.12)
+ax.axvline(valla_sup, color="#F46201", linewidth=2.5, linestyle="--")
+ax.axvline(z3, color="#3A0F47", linewidth=2.5, linestyle=":")
+alto = ax.get_ylim()[1]
+ax.text(valla_sup - 1.5, alto * 0.95, f"valla\n{valla_sup:.2f}",
+        ha="right", va="top")
+ax.text(z3 + 1.5, alto * 0.95, f"z = 3\n{z3:.1f}", ha="left", va="top")
+ax.text((valla_sup + z3) / 2, alto * 0.5, str(entre), ha="center",
+        fontweight="bold", color="#B84A00")
+ax.text(z3 + 2, alto * 0.35,
+        f"{mas_alla} más allá,\nhasta {tiempo.max():.1f} min", ha="left")
+ax.set_xlim(0, 140)   # la cola sigue más allá de 200 min
+ax.set_title(f"La valla superior marca {entre + mas_alla}; z = 3, solo {mas_alla}")
 ax.set_xlabel("Minutos")
 ax.set_ylabel("Pedidos")
 plt.show()
@@ -195,8 +206,8 @@ plt.show()
 # ### ¿Son raros todos los que marca la regla?
 #
 # En `n_productos` la regla marca muchos pedidos. Antes de creerle, miremos la gráfica: a la
-# izquierda, la caja; en el centro, todos los valores; a la derecha, ampliados los de más de 14
-# productos.
+# izquierda, la caja; en el centro, los pedidos de 1 a 17 productos, con los de fuera en un color
+# más claro; a la derecha, ampliados los de más de 14 productos.
 
 # %% productos_barras
 productos = pedidos["n_productos"]
@@ -213,15 +224,24 @@ print("En la caja:", len(sueltos), "pedidos en",
 caja_p.set_xticks([1], ["Caja"])
 caja_p.set_title("La caja", fontsize=12)
 caja_p.set_ylabel("Productos")
-izq.bar(conteo.index, conteo.values, color="#8A2E9E")
-izq.axvline(valla_p, color="#F46201", linewidth=2.5,
-            label=f"Valla superior: {valla_p:.0f}")
+fuera_p = conteo.index > valla_p       # «fuera» es estrictamente más de 6
+izq.axvline(valla_p, color="#F46201", linewidth=2.5, linestyle="--",
+            zorder=0, label=f"Valla superior: {valla_p:.0f}")   # detrás
+izq.bar(conteo.index[~fuera_p], conteo.values[~fuera_p], color="#8A2E9E")
+izq.bar(conteo.index[fuera_p], conteo.values[fuera_p], color="#8A2E9E",
+        alpha=0.45, label=f"Fuera: más de {valla_p:.0f}")
+izq.set_xlim(0, 18)                    # lo de más de 14, en la ampliación
 izq.legend()
-izq.set_title("Pedidos por número de productos")
+izq.set_title(f"La regla marca {(productos > valla_p).sum()} pedidos")
 izq.set_xlabel("Productos")
 izq.set_ylabel("Pedidos")
 grandes = conteo[conteo.index > 14]
-der.bar(grandes.index, grandes.values, color="#8A2E9E")
+corp = grandes.index >= 20             # el grupo aparte
+der.bar(grandes.index[~corp], grandes.values[~corp], color="#8A2E9E",
+        alpha=0.45)                    # fuera, como en el centro
+der.bar(grandes.index[corp], grandes.values[corp], color="#3A0F47")
+der.text(32, 4.6, f"{(productos >= 20).sum()} pedidos\nde 20 a {productos.max()}",
+         ha="center")
 der.set_title("Ampliado: más de 14", fontsize=12)
 der.set_xlabel("Productos")
 plt.show()
@@ -306,11 +326,10 @@ for nombre in ["Barranquilla", "Bucaramanga"]:
 orden = valla_c.sort_values().index     # de menor a mayor valla
 fig, ax = plt.subplots(figsize=(6.4, 4.2))
 ax.boxplot([tiempo[ciudad == c] for c in orden], **estilo_caja)
-ax.axhline(valla_sup, color="#F46201", linewidth=2, linestyle="--",
-           label=f"Valla global: {valla_sup:.2f} min")
+ax.axhline(valla_sup, color="#F46201", linewidth=2, linestyle="--")
 ax.set_xticks(range(1, len(orden) + 1), orden)
-ax.legend(loc="upper left")
-ax.set_title("Tiempo de entrega por ciudad y la valla global")
+# Sin leyenda: taparía los puntos más altos (el de 200.9 min)
+ax.set_title(f"Por ciudad; en naranja, la valla global ({valla_sup:.2f} min)")
 ax.set_ylabel("Minutos")
 plt.show()
 
@@ -339,7 +358,7 @@ ax.bar(conteo.index, conteo.values, width=0.08, color="#8A2E9E",
 ax.bar([14], [conteo[14.0]], width=0.08, color="#F46201",
        label="Exactamente 14.0 km")
 ax.legend()
-ax.set_title("Distancias de más de 8 km")
+ax.set_title(f"{conteo[14.0]} pedidos en el tope de 14 km")
 ax.set_xlabel("Kilómetros")
 ax.set_ylabel("Pedidos")
 plt.show()
@@ -349,11 +368,12 @@ plt.show()
 #
 # | Pregunta | Si la respuesta es sí | Qué se hace |
 # |---|---|---|
-# | ¿Es imposible? | Es un **error** | Se corrige en la fuente o se marca como faltante |
+# | ¿Es imposible o choca con otras columnas? | Es un **error** (seguro o probable) | Se corrige en la fuente o se marca como faltante |
 # | ¿Está en el tope del registro? | Es un dato **censurado** | Se marca; no se borra ni se trata como exacto |
-# | ¿Es real y raro? | Es un atípico **real** | Se conserva, se investiga y se informa con medidas robustas |
+# | ¿Es posible, coherente y no está en un tope? | Es un atípico **real** | Se conserva, se investiga y se informa con medidas robustas |
 #
-# Primero, ¿hay valores imposibles en Tingua?
+# Un valor posible también puede ser un error (un 20,9 escrito 200,9): por eso se mira si es
+# coherente con las demás columnas. Primero, ¿hay errores evidentes en Tingua?
 
 # %% errores
 print("Filas repetidas:", pedidos.duplicated().sum())
@@ -363,10 +383,10 @@ cantidades = ["n_productos", "valor_pedido", "distancia_km",
 print("Valores ≤ 0:", (pedidos[cantidades] <= 0).sum().sum())
 
 # %% [markdown]
-# ¿Y si borramos los atípicos y recalculamos las vallas?
+# ¿Y si borramos los candidatos y recalculamos las vallas?
 
 # %% cadena
-resto = tiempo[~fuera]                 # sin los atípicos de la valla
+resto = tiempo[~fuera]                 # sin los candidatos de la valla
 a, b = resto.quantile(0.25), resto.quantile(0.75)
 nuevos = (resto < a - 1.5 * (b - a)) | (resto > b + 1.5 * (b - a))
 print("Borrados:", fuera.sum(), "· atípicos nuevos:", nuevos.sum())
@@ -396,7 +416,9 @@ tabla.round(1)
 (tabla["Sí"] - tabla["No"]).round(1)
 
 # %% [markdown]
-# ¿En qué ciudades llueve en más pedidos? Es lo que explica la columna «Total».
+# En el total, Bogotá tarda 9,4 min más que Barranquilla; sin lluvia, 8,1. ¿Por qué se acorta la
+# diferencia? Porque la columna «Total» mezcla pedidos con y sin lluvia, y en Bogotá llueve en más
+# pedidos:
 
 # %% composicion
 con_lluvia = (pedidos["lluvia"] == "Sí").groupby(ciudad).mean()
@@ -405,8 +427,10 @@ con_lluvia = (pedidos["lluvia"] == "Sí").groupby(ciudad).mean()
 # %% [markdown]
 # ### Desglosar: los lentos, por distancia y lluvia
 #
-# Partimos la distancia en tramos con cortes explícitos. El 7,7 es la valla superior de la distancia,
-# y 26 pedidos la tienen exacta: con `right=True` quedan en el tramo del medio, no entre los lejanos.
+# Partimos la distancia en tramos con cortes explícitos. El 4,4 es $Q_3$ de la distancia. El 7,7 es
+# su valla superior, y 26 pedidos la tienen exacta: con `right=True` quedan en el tramo del medio, no
+# entre los lejanos. Un pedido es **lento** si pasa la valla de 59,15 min; la media de una columna de
+# 100 y 0 es el porcentaje.
 
 # %% desglose
 tramo = pd.cut(distancia, bins=[0, 4.4, 7.7, 14], right=True,
@@ -441,16 +465,16 @@ por_semana[~por_semana["completa"]]          # las incompletas
 # ---
 # # Práctica guiada
 #
-# Tres ejercicios; el tercero es **opcional** (o para la casa). Cada celda termina con un verificador
-# que dice qué está bien y, en lo demás, te da una pista sin darte la respuesta. Reemplaza cada `...`
-# y ejecuta; puedes repetir la celda las veces que quieras. Las respuestas escritas van al final, en
-# «Tus respuestas»: esas no las revisa ningún verificador.
+# Tres ejercicios; el tercero es **opcional**, para la casa. Cada ejercicio termina con un verificador
+# (la caja del ejercicio 1 no lo tiene) que dice qué está bien y, en lo demás, te da una pista sin
+# darte la respuesta. Reemplaza cada `...` y ejecuta; puedes repetir la celda las veces que quieras.
+# Las respuestas escritas van al final, en «Tus respuestas»: esas no las revisa ningún verificador.
 #
 # ## Ejercicio 1 · Los atípicos del valor del pedido
 #
 # Calcula las vallas de 1,5 RIC de `valor_pedido` y cuenta los pedidos **estrictamente** fuera de
-# ellas (`n_ric`). Después cuenta los que tienen $|z| > 3$ (`n_z`). Deja la última línea como está:
-# entrega cada valor con su nombre. Pista: las celdas [vallas] y [puntaje_z].
+# ellas (`n_ric`). Después cuenta los que tienen $|z| > 3$ (`n_z`). Deja como está la llamada final a
+# `revisar_atipicos`: entrega cada valor con su nombre. Pista: las celdas [vallas] y [puntaje_z].
 #
 # Después responde abajo: ¿por qué z marca menos pedidos que las vallas?
 
@@ -484,16 +508,15 @@ revisar_atipicos(valla_inferior=valla_inferior,
 
 # %% ej1_caja_solucion solucion
 fig, ax = plt.subplots()
-caja = ax.boxplot(valor, **estilo_caja)
-ax.axhline(valla_superior, color="#F46201", linewidth=2, linestyle="--",
-           label="Valla superior")
+caja = ax.boxplot(valor / 1000, **estilo_caja)      # en miles de pesos
+ax.axhline(valla_superior / 1000, color="#F46201", linewidth=2, linestyle="--",
+           label=f"Valla superior: {valla_superior / 1000:.1f}")
 ax.set_xticks([1], ["Todos los pedidos"])
-ax.ticklabel_format(axis="y", style="plain")
 ax.legend()
 ax.set_title("Valor del pedido")
-ax.set_ylabel("Pesos")
+ax.set_ylabel("Miles de pesos")
 bigotes = [linea.get_ydata()[1] for linea in caja["whiskers"]]
-print(f"Bigotes: de {bigotes[0]:.0f} a {bigotes[1]:.0f} pesos")
+print(f"Bigotes: de {bigotes[0]:.1f} a {bigotes[1]:.1f} miles de pesos")
 plt.show()
 
 # %% [markdown]
@@ -542,10 +565,19 @@ revisar_tope(mediana_30=mediana_30, media_30=media_30)
 #
 # *Doble clic para escribir aquí.*
 #
-# 1. Ejercicio 1: z marca menos pedidos que las vallas porque …; en la caja, el bigote superior termina en
-#    … porque …
+# 1. Ejercicio 1: z marca menos pedidos que las vallas porque …; el bigote superior termina en …, que
+#    (no) coincide con la valla porque …; el pedido que vale justo la valla no es un punto suelto
+#    porque …
 # 2. Ejercicio 2: la franja más lenta es … en …; (no) es la misma en todas porque …
 # 3. Ejercicio 3: la mediana …; la media …; de un dato censurado aprendo que …
+# 4. Autoevaluación. Para cada pedido, di su causa (error, real o censurado) y si es atípico respecto
+#    a todos, solo respecto a su grupo o a ninguno:
+#    - un pedido de 62 min en Bogotá (la valla de Bogotá es de 63,40 min): …
+#    - una ruta registrada con 14,0 km: …
+#    - un pedido de farmacia de 120 000 pesos (la valla de las farmacias es de 103 000; la de todos
+#      los pedidos, de 155 600): …
+#    - un tiempo de entrega de −5 min: …
+#    - un pedido de una empresa con 44 productos: …
 
 # %% cifras precalculo
 # Cifras que las diapositivas, sus notas y la página del proyecto citan (no va al notebook)
@@ -571,6 +603,9 @@ print(f"z: media {m_:.2f}, s {s_:.2f}; |z| > 3 {(zt.abs() > 3).sum()} pedidos "
       f"({(zt.abs() > 3).mean() * 100:.1f} %), por encima {(zt > 3).sum()}, por debajo {(zt < -3).sum()}; "
       f"media - 3s = {m_ - 3 * s_:.1f}, media + 3s = {m_ + 3 * s_:.1f}; "
       f"todos dentro de los de la valla {bool((t[zt.abs() > 3] > vs).all())}")
+print(f"|z| > 3 con s entre n − 1 y entre n: {(zt.abs() > 3).sum()} y "
+      f"{(((t - m_) / t.std(ddof=0)).abs() > 3).sum()}; entre la valla y z = 3 (la valla sí, z no): "
+      f"{((t > vs) & (t <= m_ + 3 * s_)).sum()}; más allá de z = 3: {(t > m_ + 3 * s_).sum()}")
 print(f"enmascaramiento: s con todos {s_:.2f}, sin los {fuera_t.sum()} {t[~fuera_t].std():.2f}; "
       f"media sin ellos {t[~fuera_t].mean():.1f}; con s sin atípicos, z > 3 marcaría "
       f"{((t - t[~fuera_t].mean()) / t[~fuera_t].std() > 3).sum()}")
@@ -583,6 +618,7 @@ print(f"productos: Q1 {pq1:.0f}, Q3 {pq3:.0f}, RIC {pq3 - pq1:.0f}, valla inferi
       f"{((p > vp) & (p <= 17)).sum()}; 20 o más: {(p >= 20).sum()} (de {p[p >= 20].min()} a "
       f"{p.max()}); entre 18 y 19: {p.between(18, 19).sum()}; el mayor por debajo del hueco "
       f"{p[p < 20].max()}; 1 a 3 productos {(p <= 3).mean() * 100:.1f} %")
+print("productos, pedidos con 15, 16 y 17:", p[p.between(15, 17)].value_counts().sort_index().to_dict())
 lent = datos[t > vs]
 for nombre, sub in [("moderados", datos[mod]), ("extremos", datos[ext]), ("todos", datos)]:
     print(f"{nombre}: n {len(sub)}, km mediana {sub['distancia_km'].median():.2f}, "
@@ -596,11 +632,21 @@ cal_todos = datos["calificacion"].dropna()
 print(f"todos los calificados {len(cal_todos)}: con 1 estrella {(cal_todos == 1).mean() * 100:.1f} %, "
       f"con 4 o 5 {(cal_todos >= 4).mean() * 100:.1f} %; de {n}, calificados "
       f"{len(cal_todos) / n * 100:.1f} %")
+print(f"extremos: calificados {len(cal_ext)} de {ext.sum()}, el {len(cal_ext) / ext.sum() * 100:.1f} %, "
+      f"frente al {len(cal_todos) / n * 100:.1f} % de todos los pedidos")
 lento_max = datos.loc[t.idxmax()]
 print(f"z del más lento: {(t.max() - m_) / s_:.1f}")
 print("el más lento:", lento_max[["id_pedido", "fecha", "ciudad", "distancia_km", "lluvia",
                                   "tiempo_entrega_min", "calificacion"]].to_dict())
 print("atípicos (global) por ciudad:", lent["ciudad"].value_counts().to_dict())
+pct_propia = {}
+for c, x in datos.groupby("ciudad")["tiempo_entrega_min"]:
+    a_, b_ = x.quantile(0.25), x.quantile(0.75)
+    pct_propia[c] = (x > b_ + 1.5 * (b_ - a_)).mean() * 100
+print(f"Bogotá: {(datos['ciudad'] == 'Bogotá').mean() * 100:.1f} % de los pedidos y "
+      f"{(lent['ciudad'] == 'Bogotá').mean() * 100:.1f} % de los {len(lent)} lentos (valla global); "
+      f"con su valla, {pct_propia['Bogotá']:.1f} %; sobre su valla propia, las ciudades van de "
+      f"{min(pct_propia.values()):.1f} a {max(pct_propia.values()):.1f} %")
 for c, x in datos.groupby("ciudad")["tiempo_entrega_min"]:
     a_, b_ = x.quantile(0.25), x.quantile(0.75)
     vc = b_ + 1.5 * (b_ - a_)
@@ -627,11 +673,22 @@ ra, rb = r_.quantile(0.25), r_.quantile(0.75)
 print(f"cadena: borrados {fuera_t.sum()}, vallas nuevas {ra - 1.5 * (rb - ra):.2f} y "
       f"{rb + 1.5 * (rb - ra):.2f}, atípicos nuevos "
       f"{((r_ < ra - 1.5 * (rb - ra)) | (r_ > rb + 1.5 * (rb - ra))).sum()}")
+resto_, rondas = t.copy(), []
+while True:                          # la cadena repetida hasta que no aparezcan nuevos
+    ra, rb = resto_.quantile(0.25), resto_.quantile(0.75)
+    f_r = (resto_ < ra - 1.5 * (rb - ra)) | (resto_ > rb + 1.5 * (rb - ra))
+    rondas.append(int(f_r.sum()))
+    if f_r.sum() == 0:
+        break
+    resto_ = resto_[~f_r]
+print(f"cadena repetida: {' → '.join(map(str, rondas))} por ronda; se detiene en la ronda "
+      f"{len(rondas)}; borrados {sum(rondas)} ({sum(rondas) / n * 100:.1f} %)")
 tab = pd.pivot_table(datos, values="tiempo_entrega_min", index="ciudad", columns="lluvia",
                      aggfunc="median", observed=True, margins=True, margins_name="Total")
 dif = tab["Sí"] - tab["No"]
 print(f"tabla dinámica: la lluvia suma de {dif.drop('Total').min():.1f} a "
-      f"{dif.drop('Total').max():.1f} min por ciudad y {dif['Total']:.1f} en el total (medianas)")
+      f"{dif.drop('Total').max():.1f} min por ciudad (entre {dif.drop('Total').min():.0f} y "
+      f"{dif.drop('Total').max():.0f}) y {dif['Total']:.1f} en el total (medianas)")
 print(f"composición (medianas de la tabla): Bogotá − Barranquilla en Total "
       f"{tab.loc['Bogotá', 'Total'] - tab.loc['Barranquilla', 'Total']:.1f}, sin lluvia "
       f"{tab.loc['Bogotá', 'No'] - tab.loc['Barranquilla', 'No']:.1f}, con lluvia "
@@ -662,6 +719,17 @@ print(f"valor (clave del ejercicio 1): Q1 {vq1:.0f}, Q3 {vq3:.0f}, RIC {vq3 - vq
       f"|z| > 3: {(zv1.abs() > 3).sum()} (n − 1) y {(zv0.abs() > 3).sum()} (N); "
       f"media − 3s = {v.mean() - 3 * v.std():.0f}, media + 3s = {v.mean() + 3 * v.std():.0f}; "
       f"máximo {v.max()}")
+bog = t[datos["ciudad"] == "Bogotá"]
+vb = bog.quantile(0.75) + 1.5 * (bog.quantile(0.75) - bog.quantile(0.25))
+entre_b = bog[(bog > vs) & (bog <= vb)]
+farm = datos.loc[datos["categoria"] == "Farmacia", "valor_pedido"]
+vf = farm.quantile(0.75) + 1.5 * (farm.quantile(0.75) - farm.quantile(0.25))
+entre_f = farm[(farm > vf) & (farm <= vvs)]
+print(f"autoevaluación: valla de Bogotá {vb:.2f}; pedidos de Bogotá entre {vs:.2f} y {vb:.2f}: "
+      f"{len(entre_b)}, de 61.5 a 62.5 min: {entre_b.between(61.5, 62.5).sum()}; valla superior de "
+      f"las farmacias {vf:.0f} (la de todos los pedidos, {vvs:.0f}); farmacias entre las dos: "
+      f"{len(entre_f)}, la más cercana a 120 000: {entre_f.iloc[(entre_f - 120000).abs().argmin()]}; "
+      f"valla de la distancia {dq3 + 1.5 * (dq3 - dq1):.1f}; valla de productos {vp:.0f}")
 fr = pd.pivot_table(datos.assign(franja=pd.Categorical(datos["franja"], franjas, ordered=True)),
                     values="tiempo_entrega_min", index="ciudad", columns="franja",
                     aggfunc="median", observed=True)

@@ -181,6 +181,11 @@ def revisar_atipicos(*sueltos, valla_inferior=..., valla_superior=..., n_ric=...
     z0 = ((v - v.mean()) / v.std(ddof=0)).abs()
     n_z_bien = {int((z1 > 3).sum()), int((z0 > 3).sum())}
     media, s = v.mean(), v.std()
+    # z mal armado: dividido entre el RIC, o centrado con la mediana (en valor_pedido dan lo mismo)
+    z_mal = {int((((v - media) / ric).abs() > 3).sum()), int((((v - v.median()) / s).abs() > 3).sum()),
+             int((((v - v.median()) / ric).abs() > 3).sum())}
+    # los pedidos que pueden confundirse con una valla: el mínimo, el máximo y el final de un bigote
+    de_los_datos = (v.min(), v.max(), v[v >= vi].min(), v[v <= vs].max())
     # lo mismo con el tiempo de entrega: la columna de las celdas [vallas] y [puntaje_z]
     t = original["tiempo_entrega_min"]
     ti, ts, tq1, tq3 = _vallas(t)
@@ -224,6 +229,9 @@ def revisar_atipicos(*sueltos, valla_inferior=..., valla_superior=..., n_ric=...
             print(f"✗  {nombre}: esa es la valla de 3 RIC; aquí se pide la de 1,5 RIC")
         elif _relativo(val, media + 3 * s, tol) or _relativo(val, media - 3 * s, tol):
             print(f"✗  {nombre}: ese es el límite de |z| > 3; la valla usa los cuartiles y el RIC")
+        elif any(_relativo(val, c, tol) for c in de_los_datos):
+            print(f"✗  {nombre}: ese es un pedido de los datos (el mínimo, el máximo o el final de un "
+                  "bigote); la valla se calcula con la fórmula y puede no ser ningún pedido")
         elif _relativo(val, verdad, 0.02):
             print(f"✗  {nombre}: casi: revisa los cuartiles (sin redondear) y el 1,5 RIC")
         else:
@@ -265,8 +273,8 @@ def revisar_atipicos(*sueltos, valla_inferior=..., valla_superior=..., n_ric=...
             elif val in del_tiempo_conteos:
                 print("✗  n_ric: ese conteo es del tiempo de entrega: ¿copiaste la columna del ejemplo?")
             elif val == 0:
-                print("✗  n_ric: salió cero: un pedido queda fuera si está por debajo de la inferior "
-                      "o por encima de la superior: cuenta los dos lados y únelos con | («o»), no con & («y»)")
+                print("✗  n_ric: salió cero. Un pedido queda fuera si está por debajo de la inferior o "
+                      "por encima de la superior: cuenta los dos lados y únelos con | («o»), no con & («y»)")
             elif val == n:
                 print("✗  n_ric: son todos los pedidos: ¿comparaste valor_pedido con sus propias vallas?")
             else:
@@ -286,15 +294,21 @@ def revisar_atipicos(*sueltos, valla_inferior=..., valla_superior=..., n_ric=...
                 print("✗  n_z: marca todos los pedidos: ¿faltan los paréntesis? z = (valor − media) / desviación")
             elif val in {n - k for k in n_z_bien}:
                 print("✗  n_z: esos son los de dentro (|z| ≤ 3); se piden los de |z| > 3")
+            elif val in z_mal:
+                print("✗  n_z: z se centra con la media y se divide entre la desviación estándar, "
+                      "std(): ¿usaste el RIC o la mediana?")
             elif val > max(n_z_bien):
-                print("✗  n_z: marca de más: ¿el límite es 3 y centraste con la media (no con la mediana)?")
+                print("✗  n_z: marca de más: revisa el límite (3), el centro (la media) y el divisor "
+                      "(la desviación, std())")
             else:
                 print("✗  n_z: no cuadra: z = (valor − media) / desviación, y se cuentan los de |z| > 3")
 
     if bien == 4:
-        tabla = pd.DataFrame({"valor_pedido": [vi, vs, fuera, max(n_z_bien)]},
+        tabla = pd.DataFrame({"valor_pedido": [vi, vs, fuera, (v < vi).sum(), (v > vs).sum(),
+                                               max(n_z_bien)]},
                              index=["valla inferior (pesos)", "valla superior (pesos)",
-                                    "fuera de las vallas", "con |z| > 3"])
+                                    "fuera de las vallas", "· por debajo de la inferior",
+                                    "· por encima de la superior", "con |z| > 3"])
         _mostrar(tabla.round(0).astype(int))
         print("✓  Los cuatro cuadran. Responde abajo: ¿por qué z marca menos pedidos que las vallas?")
 
@@ -562,6 +576,9 @@ def revisar_tope(*sueltos, mediana_30=..., media_30=..., **otros):
             elif any(_cerca(val, round(verdad["media_30"], k), 1e-9) for k in (0, 1)):
                 print("✗  media_30: casi: aquí la diferencia está en las centésimas; deja al "
                       "menos dos decimales")
+            elif _cerca(val, 30, tol) or _cerca(val, 14, tol):
+                print("✗  media_30: esa es la distancia de los 20 pedidos; la media es la de los "
+                      "12 000, con esos 20 cambiados")
             elif val > verdad["media_30"]:
                 print("✗  media_30: salió de más: ¿cambiaste solo los pedidos de exactamente 14 km, "
                       "y por 30?")

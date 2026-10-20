@@ -31,6 +31,7 @@ SESIONES = {
     2: "sesion-2-de-las-filas-a-la-distribucion.ipynb",
     3: "sesion-3-lo-tipico-y-lo-variable.ipynb",
     4: "sesion-4-lo-que-se-sale-de-lo-normal.ipynb",
+    5: "sesion-5-la-muestra-que-se-eligio-sola.ipynb",
 }
 
 # Al ejecutar (no en el notebook del estudiante): las gráficas salen en SVG con texto real,

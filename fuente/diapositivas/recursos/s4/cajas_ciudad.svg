@@ -649,31 +649,7 @@ L 461.99952 284.118583
 " style="fill: none; stroke: #94a3b8; stroke-width: 0.8; stroke-linejoin: miter; stroke-linecap: square"/>
    </g>
    <g id="text_16">
-    <text style="font-weight: 700; font-size: 14px; font-family: Roboto, 'Helvetica Neue', Arial, sans-serif; text-anchor: start; fill: #1e293b" x="53.105938" y="17.837812" transform="rotate(-0 53.105938 17.837812)">Tiempo de entrega por ciudad y la valla global</text>
-   </g>
-   <g id="legend_1">
-    <g id="patch_10">
-     <path d="M 61.505938 51.43875 
-L 237.622812 51.43875 
-Q 240.022812 51.43875 240.022812 49.03875 
-L 240.022812 32.237812 
-Q 240.022812 29.837812 237.622812 29.837812 
-L 61.505938 29.837812 
-Q 59.105938 29.837812 59.105938 32.237812 
-L 59.105938 49.03875 
-Q 59.105938 51.43875 61.505938 51.43875 
-z
-" style="fill: #ffffff; opacity: 0.8; stroke: #cccccc; stroke-linejoin: miter"/>
-    </g>
-    <g id="line2d_46">
-     <path d="M 63.905938 39.555937 
-L 75.905938 39.555937 
-L 87.905938 39.555937 
-" style="fill: none; stroke-dasharray: 7.4,3.2; stroke-dashoffset: 0; stroke: #f46201; stroke-width: 2"/>
-    </g>
-    <g id="text_17">
-     <text style="font-size: 12px; font-family: Roboto, 'Helvetica Neue', Arial, sans-serif; text-anchor: start; fill: #1e293b" x="97.505938" y="43.755937" transform="rotate(-0 97.505938 43.755937)">Valla global: 59.15 min</text>
-    </g>
+    <text style="font-weight: 700; font-size: 14px; font-family: Roboto, 'Helvetica Neue', Arial, sans-serif; text-anchor: start; fill: #1e293b" x="53.105938" y="17.837812" transform="rotate(-0 53.105938 17.837812)">Por ciudad; en naranja, la valla global (59.15 min)</text>
    </g>
   </g>
  </g>
